@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Alex y Alejandra | Nuestra Boda</title>
+  <style>
+    :root {
+      --bg: #f8f4ef;
+      --card: #fffaf6;
+      --text: #3d342f;
+      --muted: #7a6b63;
+      --accent: #b8816b;
+      --accent-dark: #9c6853;
+      --line: #eadfd6;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: linear-gradient(to bottom, #fcf8f4, #f5ede6);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    img {
+      max-width: 100%;
+      display: block;
+    }
+
+    .container {
+      width: min(1100px, 92%);
+      margin: 0 auto;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      background: rgba(252, 248, 244, 0.94);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--line);
+      z-index: 20;
+    }
+
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 0;
+      gap: 16px;
+    }
+
+    .brand {
+      font-size: 1.05rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-align: center;
+    }
+
+    .nav-links {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 14px;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: var(--text);
+      font-size: 0.95rem;
+    }
+
+    .hero {
+      min-height: 88vh;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      padding: 56px 0;
+    }
+
+    .hero-card {
+      background: rgba(255, 250, 246, 0.84);
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      padding: 40px 28px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+      max-width: 780px;
+      width: 100%;
+    }
+
+    .eyebrow {
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: var(--muted);
+      font-size: 0.78rem;
+      margin-bottom: 10px;
+    }
+
+    h1 {
+      font-size: clamp(2.4rem, 8vw, 5rem);
+      line-height: 1.05;
+      margin: 0;
+    }
+
+    .subtitle {
+      font-size: 1.08rem;
+      color: var(--muted);
+      max-width: 650px;
+      margin: 18px auto 28px;
+    }
+
+    .hero-actions {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 12px 20px;
+      border-radius: 999px;
+      text-decoration: none;
+      border: 1px solid var(--accent);
+      transition: 0.2s ease;
+      font-weight: 700;
+      text-align: center;
+      min-width: 150px;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: white;
+    }
+
+    .btn-primary:hover { background: var(--accent-dark); }
+
+    .btn-secondary {
+      color: var(--accent-dark);
+      background: transparent;
+    }
+
+    section {
+      padding: 72px 0;
+      scroll-margin-top: 90px;
+    }
+
+    .section-title {
+      text-align: center;
+      font-size: clamp(1.8rem, 4vw, 2.2rem);
+      margin-bottom: 12px;
+    }
+
+    .section-copy {
+      text-align: center;
+      color: var(--muted);
+      max-width: 700px;
+      margin: 0 auto 36px;
+    }
+
+    .grid {
+      display: grid;
+      gap: 22px;
+    }
+
+    .grid-2 {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .grid-3 {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      padding: 24px;
+      box-shadow: 0 10px 24px rgba(0,0,0,0.04);
+      min-width: 0;
+    }
+
+    .card h3 {
+      margin-top: 0;
+      margin-bottom: 10px;
+      font-size: 1.15rem;
+    }
+
+    .details-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .details-list li {
+      padding: 10px 0;
+      border-bottom: 1px solid var(--line);
+      word-wrap: break-word;
+    }
+
+    .details-list li:last-child {
+      border-bottom: none;
+    }
+
+    .schedule-item {
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .schedule-item:last-child { border-bottom: none; }
+
+    .time {
+      min-width: 92px;
+      font-weight: 700;
+      color: var(--accent-dark);
+      flex-shrink: 0;
+    }
+
+    .gallery-placeholder {
+      min-height: 220px;
+      border-radius: 20px;
+      border: 1px dashed var(--accent);
+      display: grid;
+      place-items: center;
+      color: var(--muted);
+      background: #fff;
+      text-align: center;
+      padding: 20px;
+    }
+
+    .countdown {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-top: 28px;
+    }
+
+    .count-box {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      min-width: 100px;
+      padding: 16px;
+      text-align: center;
+      flex: 1 1 100px;
+      max-width: 130px;
+    }
+
+    .count-box span {
+      display: block;
+      font-size: 2rem;
+      font-weight: 700;
+      line-height: 1.1;
+      margin-bottom: 4px;
+    }
+
+    footer {
+      padding: 32px 0 60px;
+      text-align: center;
+      color: var(--muted);
+    }
+
+    @media (max-width: 800px) {
+      .grid-2, .grid-3 {
+        grid-template-columns: 1fr;
+      }
+
+      nav {
+        flex-direction: column;
+        padding: 12px 0;
+      }
+
+      .hero {
+        min-height: auto;
+        padding: 32px 0 48px;
+      }
+
+      .hero-card {
+        padding: 28px 18px;
+        border-radius: 22px;
+      }
+
+      .subtitle {
+        font-size: 1rem;
+      }
+
+      .btn {
+        width: 100%;
+        max-width: 320px;
+      }
+
+      .schedule-item {
+        flex-direction: column;
+        gap: 4px;
+      }
+
+      .time {
+        min-width: auto;
+      }
+
+      .gallery-placeholder {
+        min-height: 180px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        width: min(100%, 94%);
+      }
+
+      .nav-links {
+        gap: 10px 12px;
+      }
+
+      .nav-links a {
+        font-size: 0.9rem;
+      }
+
+      section {
+        padding: 56px 0;
+      }
+
+      .card {
+        padding: 18px;
+        border-radius: 20px;
+      }
+
+      .count-box {
+        min-width: 78px;
+        padding: 14px 10px;
+      }
+
+      .count-box span {
+        font-size: 1.6rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <nav>
+        <div class="brand">Alex y Alejandra</div>
+        <div class="nav-links">
+          <a href="#historia">Nuestra historia</a>
+          <a href="#detalles">Detalles</a>
+          <a href="#itinerario">Itinerario</a>
+          <a href="#viaje">Viaje</a>
+          <a href="#rsvp">Confirmar</a>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container">
+        <div class="hero-card">
+          <div class="eyebrow">¡Nos casamos!</div>
+          <h1>Alex<br>y Alejandra</h1>
+          <p class="subtitle">
+            Con mucha alegría queremos compartir este día tan especial con nuestra familia y amigos. Gracias por acompañarnos en el comienzo de esta nueva etapa.
+          </p>
+          <p><strong>Sábado, 10 de octubre de 2026</strong><br>Scottsdale, Arizona</p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#rsvp">Confirmar asistencia</a>
+            <a class="btn btn-secondary" href="#detalles">Ver detalles</a>
+          </div>
+          <div class="countdown" id="countdown">
+            <div class="count-box"><span id="days">--</span>Días</div>
+            <div class="count-box"><span id="hours">--</span>Horas</div>
+            <div class="count-box"><span id="minutes">--</span>Min</div>
+            <div class="count-box"><span id="seconds">--</span>Seg</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="historia">
+      <div class="container">
+        <h2 class="section-title">Nuestra historia</h2>
+        <p class="section-copy">
+          Aquí puedes agregar cómo se conocieron, cómo fue creciendo su historia y algún mensaje bonito para sus invitados.
+        </p>
+        <div class="grid grid-2">
+          <div class="card">
+            <h3>Cómo nos conocimos</h3>
+            <p>
+              Reemplaza este texto con su historia. Lo ideal es que sea breve, cálida y personal.
+            </p>
+          </div>
+          <div class="card">
+            <h3>La propuesta</h3>
+            <p>
+              Aquí pueden contar cómo fue la propuesta o compartir unas palabras sobre lo emocionados que están por celebrar este momento.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="detalles">
+      <div class="container">
+        <h2 class="section-title">Detalles de la boda</h2>
+        <p class="section-copy">Actualiza esta sección con la información real del evento.</p>
+        <div class="grid grid-3">
+          <div class="card">
+            <h3>Ceremonia</h3>
+            <ul class="details-list">
+              <li><strong>Fecha:</strong> 10 de octubre de 2026</li>
+              <li><strong>Hora:</strong> 4:00 PM</li>
+              <li><strong>Lugar:</strong> Nombre del lugar de la ceremonia</li>
+              <li><strong>Dirección:</strong> 1234 Venue Street, Scottsdale, AZ</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>Recepción</h3>
+            <ul class="details-list">
+              <li><strong>Hora:</strong> 6:00 PM</li>
+              <li><strong>Lugar:</strong> Nombre del lugar de la recepción</li>
+              <li><strong>Dirección:</strong> 1234 Venue Street, Scottsdale, AZ</li>
+              <li><strong>Código de vestimenta:</strong> Formal / Semiformal</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>Mesa de regalos</h3>
+            <p>
+              Aquí puedes agregar el enlace de su mesa de regalos cuando lo tengan listo.
+            </p>
+            <p>
+              <a href="#" class="btn btn-secondary">Ver regalo</a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="itinerario">
+      <div class="container">
+        <h2 class="section-title">Itinerario</h2>
+        <p class="section-copy">Una línea de tiempo sencilla ayuda a que sus invitados sepan qué esperar.</p>
+        <div class="card">
+          <div class="schedule-item">
+            <div class="time">3:30 PM</div>
+            <div>Llegada de invitados</div>
+          </div>
+          <div class="schedule-item">
+            <div class="time">4:00 PM</div>
+            <div>Inicio de la ceremonia</div>
+          </div>
+          <div class="schedule-item">
+            <div class="time">5:00 PM</div>
+            <div>Cóctel</div>
+          </div>
+          <div class="schedule-item">
+            <div class="time">6:00 PM</div>
+            <div>Cena y recepción</div>
+          </div>
+          <div class="schedule-item">
+            <div class="time">9:00 PM</div>
+            <div>Baile y celebración</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="viaje">
+      <div class="container">
+        <h2 class="section-title">Viaje y hospedaje</h2>
+        <p class="section-copy">Aquí puedes agregar hoteles, aeropuerto, estacionamiento y recomendaciones para sus invitados.</p>
+        <div class="grid grid-2">
+          <div class="card">
+            <h3>Opciones de hotel</h3>
+            <p>Hotel 1 — a 10 minutos del lugar</p>
+            <p>Hotel 2 — tarifa especial para invitados</p>
+            <p>Hotel 3 — opción económica</p>
+          </div>
+          <div class="card">
+            <h3>Información útil</h3>
+            <p>Aeropuerto más cercano: Phoenix Sky Harbor International Airport</p>
+            <p>Estacionamiento: Disponible en el lugar</p>
+            <p>Clima: Tarde cálida, se recomienda llevar una capa ligera</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="container">
+        <h2 class="section-title">Fotos</h2>
+        <p class="section-copy">Después puedes reemplazar estos espacios con sus fotos de compromiso o fotos favoritas.</p>
+        <div class="grid grid-3">
+          <div class="gallery-placeholder">Agrega aquí una foto de compromiso</div>
+          <div class="gallery-placeholder">Agrega aquí una foto del lugar</div>
+          <div class="gallery-placeholder">Agrega aquí otra foto especial</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="rsvp">
+      <div class="container">
+        <h2 class="section-title">Confirmación de asistencia</h2>
+        <p class="section-copy">
+          Por ahora este botón puede dirigir a su correo, a un formulario de Google o a una futura página de confirmación.
+        </p>
+        <div class="card" style="text-align:center;">
+          <p>Favor de confirmar antes del <strong>1 de septiembre de 2026</strong>.</p>
+          <a class="btn btn-primary" href="mailto:youremail@example.com?subject=Confirmaci%C3%B3n%20de%20asistencia%20boda">Confirmar por correo</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      Hecho con mucho amor para nuestra familia y amigos.<br>
+      Alex y Alejandra
+    </div>
+  </footer>
+
+  <script>
+    const weddingDate = new Date("2026-10-10T16:00:00").getTime();
+
+    function updateCountdown() {
+      const now = new Date().getTime();
+      const distance = weddingDate - now;
+
+      if (distance <= 0) {
+        document.getElementById("countdown").innerHTML = "<div class='count-box'><span>Hoy</span>¡Nos casamos!</div>";
+        return;
+      }
+
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+      document.getElementById("days").textContent = days;
+      document.getElementById("hours").textContent = hours;
+      document.getElementById("minutes").textContent = minutes;
+      document.getElementById("seconds").textContent = seconds;
+    }
+
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+  </script>
+</body>
+</html>
