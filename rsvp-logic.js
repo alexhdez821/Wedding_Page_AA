@@ -100,22 +100,23 @@ export function initRsvpFlow() {
         return;
       }
 
-      const guest = (possibleGuests || []).find(
+      const exactMatchedGuests = (possibleGuests || []).filter(
         (entry) =>
           normalizeName(entry.first_name || "") === normalizedFirstName &&
           normalizeName(entry.last_name || "") === normalizedLastName
       );
 
-      if (!guest) {
+      if (!exactMatchedGuests.length) {
         setLookupNotFound(resultContainer);
         return;
       }
 
-      // NOTE: Duplicate RSVP detection relies on SELECT access to rsvp_responses under RLS.
+      const matchedGuestIds = exactMatchedGuests.map((entry) => entry.id);
       const { data: existingResponse, error: responseError } = await supabase
         .from("rsvp_responses")
         .select("id")
-        .eq("guest_id", guest.id)
+        .in("guest_id", matchedGuestIds)
+        .limit(1)
         .maybeSingle();
 
       if (responseError) {
@@ -135,6 +136,7 @@ export function initRsvpFlow() {
         return;
       }
 
+      const guest = exactMatchedGuests[0];
       const maxGuests = Math.max(1, Number(guest.max_guests) || 1);
       const maxGuestCount = guest.allowed_plus_one ? maxGuests : 1;
 
