@@ -568,7 +568,7 @@
           <a href="#detalles">Detalles</a>
           <a href="#itinerario">Itinerario</a>
           <a href="#viaje">Viaje</a>
-          <a href="#rsvp">Confirmar</a>
+          <a href="rsvp.html">Confirmar</a>
         </div>
       </nav>
     </div>
@@ -585,7 +585,7 @@
           </p>
           <p class="hero-meta">Sábado, 17 de octubre de 2026 · Scottsdale, Arizona</p>
           <div class="hero-actions">
-            <a class="btn btn-primary" href="#rsvp">Confirmar asistencia</a>
+            <a class="btn btn-primary" href="rsvp.html">Confirmar asistencia</a>
             <a class="btn btn-secondary" href="#detalles">Ver detalles</a>
           </div>
           <div class="countdown" id="countdown">
@@ -719,31 +719,7 @@
       </div>
     </section>
 
-    <section id="rsvp" class="fade-in">
-      <div class="container">
-        <h2 class="section-title">RSVP</h2>
-        <p class="section-copy">Please confirm before <strong>September 1st, 2026</strong>. The form below will find your invitation and guide you through your party response.</p>
-        <div class="rsvp-shell">
-          <form id="lookupForm" class="rsvp-form" novalidate>
-            <h3>Find your invitation</h3>
-            <p class="inline-note">Enter the first and last name exactly as shown on your invitation.</p>
-            <div class="form-grid">
-              <div>
-                <label for="lookupFirstName">First name</label>
-                <input id="lookupFirstName" name="lookupFirstName" type="text" autocomplete="given-name" required>
-              </div>
-              <div>
-                <label for="lookupLastName">Last name</label>
-                <input id="lookupLastName" name="lookupLastName" type="text" autocomplete="family-name" required>
-              </div>
-            </div>
-            <button class="btn btn-primary" type="submit">Find invitation</button>
-            <p id="lookupError" class="form-error" aria-live="polite"></p>
-          </form>
-          <div id="rsvpResult" style="margin-top:16px;"></div>
-        </div>
-      </div>
-    </section>
+    
   </main>
 
   <footer>
@@ -754,8 +730,6 @@
   </footer>
 
   <script type="module">
-    import { initRsvpFlow } from "./rsvp-logic.js";
-
     const weddingDate = new Date("2026-10-17T16:00:00").getTime();
 
     function updateCountdown() {
@@ -790,7 +764,6 @@
     document.querySelectorAll(".fade-in").forEach((item) => observer.observe(item));
 
     updateCountdown();
-    initRsvpFlow();
     setInterval(updateCountdown, 1000);
   </script>
 </body>
