@@ -51,6 +51,11 @@ function renderAlreadySubmittedMessage(resultContainer) {
   `;
 }
 
+function clearLookupFields(lookupForm) {
+  lookupForm.reset();
+  lookupForm.hidden = true;
+}
+
 export function initRsvpFlow() {
   const supabase = window.supabaseClient;
 
@@ -131,6 +136,7 @@ export function initRsvpFlow() {
       }
 
       if (existingResponse) {
+        clearLookupFields(lookupForm);
         renderAlreadySubmittedMessage(resultContainer);
         return;
       }
@@ -263,6 +269,7 @@ export function initRsvpFlow() {
         }
 
         if (duplicateResponse) {
+          clearLookupFields(lookupForm);
           renderAlreadySubmittedMessage(resultContainer);
           return;
         }
@@ -292,6 +299,7 @@ export function initRsvpFlow() {
             <p>We received your response and look forward to celebrating with you.</p>
           </div>
         `;
+        clearLookupFields(lookupForm);
       });
     } catch {
       lookupError.textContent = "We could not connect to the RSVP service right now. Please try again in a moment.";
