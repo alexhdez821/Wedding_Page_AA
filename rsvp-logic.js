@@ -26,6 +26,23 @@ function getFriendlyLookupError(error) {
   return "Could not search for your invitation right now.";
 }
 
+function isRsvpLookupPermissionIssue(error) {
+  const code = String(error?.code ?? "").toUpperCase();
+  const message = String(error?.message ?? "").toLowerCase();
+  const details = String(error?.details ?? "").toLowerCase();
+  const hint = String(error?.hint ?? "").toLowerCase();
+  const status = Number(error?.status);
+
+  return (
+    status === 401 ||
+    status === 403 ||
+    code === "42501" ||
+    message.includes("permission") ||
+    details.includes("permission") ||
+    hint.includes("policy")
+  );
+}
+
 function renderAlreadySubmittedMessage(resultContainer) {
   resultContainer.innerHTML = `
     <div class="result-card warning" role="status" aria-live="polite">
@@ -94,6 +111,7 @@ export function initRsvpFlow() {
         return;
       }
 
+      // NOTE: Duplicate RSVP detection relies on SELECT access to rsvp_responses under RLS.
       const { data: existingResponse, error: responseError } = await supabase
         .from("rsvp_responses")
         .select("id")
@@ -102,6 +120,12 @@ export function initRsvpFlow() {
 
       if (responseError) {
         console.error("Existing RSVP lookup failed", responseError);
+        if (isRsvpLookupPermissionIssue(responseError)) {
+          console.warn(
+            "RSVP duplicate check could not read rsvp_responses. Verify an RLS SELECT policy exists for this query.",
+            responseError
+          );
+        }
         lookupError.textContent = "Could not verify RSVP status right now.";
         return;
       }
@@ -218,6 +242,12 @@ export function initRsvpFlow() {
 
         if (duplicateLookupError) {
           console.error("Duplicate RSVP lookup failed", duplicateLookupError);
+          if (isRsvpLookupPermissionIssue(duplicateLookupError)) {
+            console.warn(
+              "RSVP duplicate check could not read rsvp_responses. Verify an RLS SELECT policy exists for this query.",
+              duplicateLookupError
+            );
+          }
           submitError.textContent = "Could not verify RSVP status right now. Please try again.";
           return;
         }
