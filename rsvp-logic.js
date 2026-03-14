@@ -293,10 +293,17 @@ export function initRsvpFlow() {
           return;
         }
 
+        const responseHeading = isAttending
+          ? "Thank you! Your RSVP has been saved."
+          : "Thank you for letting us know 💛";
+        const responseCopy = isAttending
+          ? "We received your response and look forward to celebrating with you."
+          : "We will miss you on our big day, but we are so grateful for your love and good wishes.";
+
         resultContainer.innerHTML = `
           <div class="result-card success" role="status" aria-live="polite">
-            <h3>Thank you! Your RSVP has been saved.</h3>
-            <p>We received your response and look forward to celebrating with you.</p>
+            <h3>${responseHeading}</h3>
+            <p>${responseCopy}</p>
           </div>
         `;
         clearLookupFields(lookupForm);
