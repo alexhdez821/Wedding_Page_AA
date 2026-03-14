@@ -338,6 +338,152 @@
       transform: translateY(0);
     }
 
+
+
+    .rsvp-shell {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow);
+      padding: clamp(1.2rem, 3vw, 2rem);
+      max-width: 860px;
+      margin: 0 auto;
+    }
+
+    .rsvp-shell h3 {
+      margin: 0 0 14px;
+      font-size: 1.5rem;
+    }
+
+    .rsvp-form {
+      display: grid;
+      gap: 16px;
+    }
+
+    .form-grid {
+      display: grid;
+      gap: 12px;
+      grid-template-columns: 1fr;
+    }
+
+    .rsvp-form label {
+      display: block;
+      font-size: 0.94rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: #5a4a42;
+    }
+
+    .rsvp-form input {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1px solid #d8c8bb;
+      border-radius: 12px;
+      background: #fff;
+      color: var(--text);
+      font-size: 1rem;
+    }
+
+    .rsvp-form input:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(156, 104, 83, 0.14);
+    }
+
+    .inline-note {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .result-card {
+      border-radius: 14px;
+      padding: 14px;
+      border: 1px solid;
+      margin-bottom: 14px;
+      background: #fff;
+    }
+
+    .result-card h3 {
+      margin: 0 0 5px;
+      font-size: 1.35rem;
+    }
+
+    .result-card p {
+      margin: 0;
+      color: #5e5048;
+    }
+
+    .result-card.success {
+      border-color: #cfdfcf;
+      background: #f6fbf5;
+    }
+
+    .result-card.error {
+      border-color: #ead0cf;
+      background: #fff7f7;
+    }
+
+    .result-card.warning {
+      border-color: #eadfb5;
+      background: #fffcf0;
+    }
+
+    .invited-list {
+      margin: 10px 0 0;
+      padding-left: 18px;
+      color: #5c4d45;
+    }
+
+    .person-row {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 12px;
+      background: #fff;
+    }
+
+    .person-label {
+      margin-bottom: 8px;
+      font-weight: 700;
+      color: #4f4038;
+    }
+
+    .person-options {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 14px;
+      align-items: center;
+    }
+
+    .person-options label {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin: 0;
+      font-weight: 500;
+    }
+
+    .person-options input {
+      width: auto;
+      margin: 0;
+      padding: 0;
+    }
+
+    .plus-one-block {
+      border-top: 1px solid var(--line);
+      padding-top: 10px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .form-error {
+      min-height: 1.3em;
+      margin: 0;
+      color: #b14d49;
+      font-size: 0.92rem;
+      font-weight: 500;
+    }
+
     footer {
       padding: 30px 0 56px;
       text-align: center;
@@ -349,6 +495,11 @@
     @media (max-width: 860px) {
       .grid-2, .grid-3, .photo-grid {
         grid-template-columns: 1fr;
+      }
+
+      .person-options {
+        flex-direction: column;
+        align-items: flex-start;
       }
 
       nav {
@@ -399,6 +550,10 @@
 
       .count-box span {
         font-size: 1.4rem;
+      }
+
+      .rsvp-shell {
+        padding: 1rem;
       }
     }
   </style>
@@ -566,13 +721,26 @@
 
     <section id="rsvp" class="fade-in">
       <div class="container">
-        <h2 class="section-title">Confirmación de asistencia</h2>
-        <p class="section-copy">
-          Por ahora este botón puede dirigir a su correo, a un formulario de Google o a una futura página de confirmación.
-        </p>
-        <div class="card" style="text-align:center; max-width: 760px; margin: 0 auto;">
-          <p>Favor de confirmar antes del <strong>1 de septiembre de 2026</strong>.</p>
-          <a class="btn btn-primary" href="mailto:youremail@example.com?subject=Confirmaci%C3%B3n%20de%20asistencia%20boda">Confirmar por correo</a>
+        <h2 class="section-title">RSVP</h2>
+        <p class="section-copy">Please confirm before <strong>September 1st, 2026</strong>. The form below will find your invitation and guide you through your party response.</p>
+        <div class="rsvp-shell">
+          <form id="lookupForm" class="rsvp-form" novalidate>
+            <h3>Find your invitation</h3>
+            <p class="inline-note">Enter the first and last name exactly as shown on your invitation.</p>
+            <div class="form-grid">
+              <div>
+                <label for="lookupFirstName">First name</label>
+                <input id="lookupFirstName" name="lookupFirstName" type="text" autocomplete="given-name" required>
+              </div>
+              <div>
+                <label for="lookupLastName">Last name</label>
+                <input id="lookupLastName" name="lookupLastName" type="text" autocomplete="family-name" required>
+              </div>
+            </div>
+            <button class="btn btn-primary" type="submit">Find invitation</button>
+            <p id="lookupError" class="form-error" aria-live="polite"></p>
+          </form>
+          <div id="rsvpResult" style="margin-top:16px;"></div>
         </div>
       </div>
     </section>
@@ -585,7 +753,9 @@
     </div>
   </footer>
 
-  <script>
+  <script type="module">
+    import { initRsvpFlow } from "./rsvp-logic.js";
+
     const weddingDate = new Date("2026-10-17T16:00:00").getTime();
 
     function updateCountdown() {
@@ -620,6 +790,7 @@
     document.querySelectorAll(".fade-in").forEach((item) => observer.observe(item));
 
     updateCountdown();
+    initRsvpFlow();
     setInterval(updateCountdown, 1000);
   </script>
 </body>
