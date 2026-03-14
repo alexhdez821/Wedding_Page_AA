@@ -135,9 +135,6 @@ export function initRsvpFlow() {
         return;
       }
 
-      const maxGuests = Math.max(1, Number(guest.max_guests) || 1);
-      const maxGuestCount = guest.allowed_plus_one ? maxGuests : 1;
-
       const plusOneField = guest.allowed_plus_one
         ? `
           <div id="plusOneQuestionWrap" class="plus-one-block" hidden>
@@ -173,19 +170,6 @@ export function initRsvpFlow() {
             </div>
           </div>
 
-          <div id="guestCountWrap" hidden>
-            <label for="guestCount">Number of guests</label>
-            <input
-              id="guestCount"
-              name="guestCount"
-              type="number"
-              min="1"
-              max="${maxGuestCount}"
-              value="1"
-              required
-            />
-          </div>
-
           ${plusOneField}
 
           <button class="btn btn-primary" type="submit">Submit RSVP</button>
@@ -195,14 +179,12 @@ export function initRsvpFlow() {
 
       const responseForm = document.getElementById("responseForm");
       const submitError = document.getElementById("submitError");
-      const guestCountInput = document.getElementById("guestCount");
-      const guestCountWrap = document.getElementById("guestCountWrap");
       const plusOneQuestionWrap = document.getElementById("plusOneQuestionWrap");
       const plusOneWrap = document.getElementById("plusOneWrap");
       const plusOneNameInput = document.getElementById("plusOneName");
       const attendanceInputs = responseForm?.querySelectorAll('input[name="attending"]');
 
-      if (!responseForm || !submitError || !guestCountInput || !guestCountWrap) {
+      if (!responseForm || !submitError) {
         lookupError.textContent = "RSVP form is temporarily unavailable. Please refresh and try again.";
         return;
       }
@@ -210,13 +192,6 @@ export function initRsvpFlow() {
       const updateConditionalFields = () => {
         const attendingValue = responseForm.querySelector('input[name="attending"]:checked')?.value;
         const isAttending = attendingValue === "true";
-
-        guestCountWrap.hidden = !isAttending;
-        guestCountInput.required = isAttending;
-
-        if (!isAttending) {
-          guestCountInput.value = "1";
-        }
 
         if (plusOneQuestionWrap) {
           plusOneQuestionWrap.hidden = !isAttending;
@@ -249,38 +224,18 @@ export function initRsvpFlow() {
 
         const attendingValue = responseForm.querySelector('input[name="attending"]:checked')?.value;
         const isAttending = attendingValue === "true";
-        const guestCount = isAttending ? Number(guestCountInput.value || 1) : 1;
         const needsPlusOneValue = responseForm.querySelector('input[name="needsPlusOne"]:checked')?.value;
         const needsPlusOne = needsPlusOneValue === "true";
         const plusOneName = plusOneNameInput?.value?.trim() || null;
+        const guestCount = isAttending ? (guest.allowed_plus_one && needsPlusOne ? 2 : 1) : 0;
 
         if (attendingValue === undefined) {
           submitError.textContent = "Please select whether you will attend.";
           return;
         }
 
-        if (isAttending && (!Number.isInteger(guestCount) || guestCount < 1 || guestCount > maxGuestCount)) {
-          submitError.textContent = `Guest count must be between 1 and ${maxGuestCount}.`;
-          return;
-        }
-
-        if (!guest.allowed_plus_one && guestCount > 1) {
-          submitError.textContent = "This invitation does not allow a plus one.";
-          return;
-        }
-
         if (guest.allowed_plus_one && isAttending && needsPlusOneValue === undefined) {
           submitError.textContent = "Please tell us if you need a plus one.";
-          return;
-        }
-
-        if (guest.allowed_plus_one && isAttending && !needsPlusOne && guestCount > 1) {
-          submitError.textContent = "Guest count must be 1 if you do not need a plus one.";
-          return;
-        }
-
-        if (guest.allowed_plus_one && isAttending && needsPlusOne && guestCount < 2) {
-          submitError.textContent = "Please set guest count to 2 if you need a plus one.";
           return;
         }
 
