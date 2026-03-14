@@ -1,69 +1,85 @@
 # RSVP System Integration Notes
 
 ## File placement
-This implementation is already wired for a simple static site setup:
+This implementation is wired for a static front-end + optional Supabase backend:
 
 - `index.html`
-  - Contains the RSVP section markup and styling.
-  - Loads RSVP logic via `<script type="module">`.
+  - Main wedding landing page.
+  - Contains RSVP button links to `rsvp.html`.
+- `rsvp.html`
+  - Dedicated RSVP page and form UI.
+  - Loads RSVP behavior via `<script type="module">`.
 - `rsvp-data.js`
-  - Mock guest list dataset.
-  - Includes RSVP status constants.
+  - Local/mock guest list fallback when backend is not configured.
+- `rsvp-config.js`
+  - Backend config values (`supabaseUrl`, `supabaseAnonKey`, and table names).
 - `rsvp-logic.js`
   - Guest lookup flow.
   - Party-based RSVP form rendering.
-  - LocalStorage save logic (mock persistence).
+  - Backend save/check logic (Supabase REST API).
+  - LocalStorage fallback for local testing.
 
 ## How the flow works
-1. Guest clicks the `RSVP` link/button in navigation or hero and lands on `#rsvp`.
+1. Guest clicks RSVP from the main page and opens `rsvp.html`.
 2. Guest enters first + last name in the lookup form.
-3. `findGuestParty(firstName, lastName)` searches the mock dataset.
-4. If found:
-   - invited party members are displayed,
-   - attendance choices are required per invited person,
-   - plus-one fields appear when allowed,
-   - optional dietary restrictions + message can be added.
-5. If not found, a polite error message is shown.
-6. Submission is saved in `localStorage` for now.
-7. Duplicate submissions are blocked per `partyId`.
+3. If `rsvp-config.js` is configured, lookup uses Supabase table data.
+4. If not configured, lookup falls back to `rsvp-data.js` mock data.
+5. Submission is stored in Supabase when configured.
+6. Duplicate submissions are blocked by checking existing `party_id` responses.
 
-## Guest record shape
-Each top-level guest object follows this shape:
+## Backend setup (Supabase)
 
-```js
-{
-  id: "g-102",
-  firstName: "Daniel",
-  lastName: "Martinez",
-  partyId: "p-200",
-  invitedGuests: [
-    { id: "p-200-1", firstName: "Daniel", lastName: "Martinez", rsvpStatus: "pending" }
-  ],
-  canBringPlusOne: true,
-  plusOneName: "",
-  rsvpStatus: "pending"
-}
+### 1) Create tables
+Run this SQL in your Supabase SQL editor:
+
+```sql
+create table if not exists guest_parties (
+  id text primary key,
+  first_name text not null,
+  last_name text not null,
+  party_id text not null unique,
+  invited_guests jsonb not null default '[]'::jsonb,
+  can_bring_plus_one boolean not null default false,
+  plus_one_name text,
+  rsvp_status text not null default 'pending'
+);
+
+create table if not exists rsvp_responses (
+  party_id text primary key,
+  guest_id text not null,
+  submitted_at timestamptz not null,
+  invited_guests jsonb not null,
+  can_bring_plus_one boolean not null,
+  plus_one jsonb,
+  dietary_restrictions text,
+  guest_message text,
+  rsvp_status text not null
+);
 ```
 
-## Later: connect to backend / Google Sheets
-You can keep the current UI and replace only data calls in `rsvp-logic.js`.
+### 2) Add initial guest data
+Use `insert` statements with the same guest shape mapped to snake_case columns.
 
-### Option A: API + database
-- Replace `findGuestParty()` with a server request.
-  - Example: `GET /api/guest-lookup?firstName=...&lastName=...`
-- Replace `rsvpStorage.save()` with a server request.
-  - Example: `POST /api/rsvp` with JSON payload.
-- Enforce duplicate prevention server-side with unique constraint on `partyId`.
+### 3) Configure front-end keys
+Open `rsvp-config.js` and set:
 
-### Option B: Google Sheets
-- Create a Google Apps Script web app endpoint.
-- Use one sheet for guest list and one for RSVP responses.
-- In frontend:
-  - call Apps Script for lookup (GET),
-  - call Apps Script for save (POST).
-- Keep response payload format close to current `submission` object for easy migration.
+- `supabaseUrl`
+- `supabaseAnonKey`
+- table names if you changed them
 
-## Quick customization tips
-- Edit labels and messages in `rsvp-logic.js` for your tone.
-- Update sample guest names in `rsvp-data.js`.
-- Adjust colors and spacing for RSVP UI in `index.html` (styles under `.rsvp-*` selectors).
+### 4) Set Row Level Security policies
+You must add policies so the RSVP page can read guests and create/update responses.
+At minimum:
+
+- `select` on `guest_parties`
+- `select`, `insert`, and `update` on `rsvp_responses`
+
+> Important: keep guest table columns limited to RSVP-safe fields because anon users can query lookup data.
+
+## Local fallback behavior
+If backend config is empty, the app uses:
+
+- `rsvp-data.js` for guest lookup
+- browser `localStorage` for response storage
+
+This is useful for development, but not for production tracking.
