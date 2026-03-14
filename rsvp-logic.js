@@ -1,3 +1,31 @@
+function normalizeName(value) {
+  return value
+    .trim()
+    .replace(/\s+/g, " ")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase();
+}
+
+function setLookupNotFound(resultContainer) {
+  resultContainer.innerHTML = `
+    <div class="result-card error" role="status" aria-live="polite">
+      <h3>We could not find your invitation.</h3>
+      <p>Please check the spelling and try again.</p>
+    </div>
+  `;
+}
+
+function getFriendlyLookupError(error) {
+  const status = error?.status ?? error?.code;
+
+  if (status === 401 || status === 403) {
+    return "RSVP lookup is temporarily unavailable. Please try again later.";
+  }
+
+  return "Could not search for your invitation right now.";
+}
+
 export function initRsvpFlow() {
   const supabase = window.supabaseClient;
 
@@ -7,41 +35,58 @@ export function initRsvpFlow() {
 
   if (!lookupForm || !resultContainer || !lookupError) return;
 
+  if (!supabase) {
+    lookupError.textContent = "RSVP service is not available right now. Please try again later.";
+    return;
+  }
+
   lookupForm.addEventListener("submit", async (event) => {
     event.preventDefault();
 
     lookupError.textContent = "";
     resultContainer.innerHTML = "";
 
-    const firstName = document.getElementById("lookupFirstName")?.value.trim();
-    const lastName = document.getElementById("lookupLastName")?.value.trim();
+    const firstNameInput = document.getElementById("lookupFirstName");
+    const lastNameInput = document.getElementById("lookupLastName");
+
+    const firstName = firstNameInput?.value?.trim() ?? "";
+    const lastName = lastNameInput?.value?.trim() ?? "";
 
     if (!firstName || !lastName) {
       lookupError.textContent = "Please enter both first and last name.";
       return;
     }
 
+    const normalizedFirstName = normalizeName(firstName);
+    const normalizedLastName = normalizeName(lastName);
+
     try {
-      const { data: guest, error: guestError } = await supabase
+      const { data: possibleGuests, error: guestError } = await supabase
         .from("guest_list")
-        .select("*")
-        .ilike("first_name", firstName)
-        .ilike("last_name", lastName)
+        .select("id, first_name, last_name, allowed_plus_one, max_guests")
         .eq("invited", true)
-        .maybeSingle();
+        .limit(500);
 
       if (guestError) {
-        lookupError.textContent = "Could not search for your invitation right now.";
+        console.error("Guest lookup failed", guestError);
+        if (String(guestError?.message || "").toLowerCase().includes("apikey") ||
+            String(guestError?.message || "").toLowerCase().includes("invalid") ||
+            String(guestError?.message || "").toLowerCase().includes("jwt")) {
+          lookupError.textContent = "RSVP is temporarily unavailable due to configuration. Please try again later.";
+          return;
+        }
+        lookupError.textContent = getFriendlyLookupError(guestError);
         return;
       }
 
+      const guest = (possibleGuests || []).find(
+        (entry) =>
+          normalizeName(entry.first_name || "") === normalizedFirstName &&
+          normalizeName(entry.last_name || "") === normalizedLastName
+      );
+
       if (!guest) {
-        resultContainer.innerHTML = `
-          <div class="result-card error" role="status" aria-live="polite">
-            <h3>We could not find your invitation.</h3>
-            <p>Please check the spelling and try again.</p>
-          </div>
-        `;
+        setLookupNotFound(resultContainer);
         return;
       }
 
@@ -49,9 +94,11 @@ export function initRsvpFlow() {
         .from("rsvp_responses")
         .select("id")
         .eq("guest_id", guest.id)
+        .limit(1)
         .maybeSingle();
 
       if (responseError) {
+        console.error("Existing RSVP lookup failed", responseError);
         lookupError.textContent = "Could not verify RSVP status right now.";
         return;
       }
@@ -66,9 +113,12 @@ export function initRsvpFlow() {
         return;
       }
 
+      const maxGuests = Math.max(1, Number(guest.max_guests) || 1);
+      const maxGuestCount = guest.allowed_plus_one ? maxGuests : 1;
+
       const plusOneField = guest.allowed_plus_one
         ? `
-          <div class="plus-one-block">
+          <div id="plusOneWrap" class="plus-one-block" hidden>
             <div>
               <label for="plusOneName">Plus one name</label>
               <input id="plusOneName" name="plusOneName" type="text" placeholder="Full name" />
@@ -99,7 +149,7 @@ export function initRsvpFlow() {
               name="guestCount"
               type="number"
               min="1"
-              max="${guest.max_guests || 1}"
+              max="${maxGuestCount}"
               value="1"
               required
             />
@@ -114,24 +164,39 @@ export function initRsvpFlow() {
 
       const responseForm = document.getElementById("responseForm");
       const submitError = document.getElementById("submitError");
+      const guestCountInput = document.getElementById("guestCount");
+      const plusOneWrap = document.getElementById("plusOneWrap");
 
-      if (!responseForm || !submitError) return;
+      if (!responseForm || !submitError || !guestCountInput) {
+        lookupError.textContent = "RSVP form is temporarily unavailable. Please refresh and try again.";
+        return;
+      }
+
+      const updatePlusOneVisibility = () => {
+        if (!plusOneWrap) return;
+        const currentGuestCount = Number(guestCountInput.value) || 1;
+        plusOneWrap.hidden = currentGuestCount !== 2;
+      };
+
+      guestCountInput.addEventListener("input", updatePlusOneVisibility);
+      updatePlusOneVisibility();
 
       responseForm.addEventListener("submit", async (submitEvent) => {
         submitEvent.preventDefault();
         submitError.textContent = "";
 
         const attendingValue = responseForm.querySelector('input[name="attending"]:checked')?.value;
-        const guestCount = Number(document.getElementById("guestCount")?.value || 1);
-        const plusOneName = document.getElementById("plusOneName")?.value.trim() || null;
+        const guestCount = Number(guestCountInput.value || 1);
+        const plusOneNameInput = document.getElementById("plusOneName");
+        const plusOneName = plusOneNameInput?.value?.trim() || null;
 
         if (attendingValue === undefined) {
           submitError.textContent = "Please select whether you will attend.";
           return;
         }
 
-        if (guestCount < 1 || guestCount > (guest.max_guests || 1)) {
-          submitError.textContent = `Guest count must be between 1 and ${guest.max_guests || 1}.`;
+        if (!Number.isInteger(guestCount) || guestCount < 1 || guestCount > maxGuestCount) {
+          submitError.textContent = `Guest count must be between 1 and ${maxGuestCount}.`;
           return;
         }
 
@@ -145,19 +210,18 @@ export function initRsvpFlow() {
           return;
         }
 
-        const { error: insertError } = await supabase
-          .from("rsvp_responses")
-          .insert([
-            {
-              guest_id: guest.id,
-              attending: attendingValue === "true",
-              guest_count: guestCount,
-              plus_one_name: plusOneName,
-              submitted_at: new Date().toISOString()
-            }
-          ]);
+        const { error: insertError } = await supabase.from("rsvp_responses").insert([
+          {
+            guest_id: guest.id,
+            attending: attendingValue === "true",
+            guest_count: guestCount,
+            plus_one_name: guest.allowed_plus_one && guestCount === 2 ? plusOneName : null,
+            submitted_at: new Date().toISOString()
+          }
+        ]);
 
         if (insertError) {
+          console.error("RSVP insert failed", insertError);
           submitError.textContent = "We could not save your RSVP right now. Please try again.";
           return;
         }
