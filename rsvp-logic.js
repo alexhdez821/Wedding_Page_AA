@@ -1,4 +1,5 @@
 import { guestList, RSVP_STATUS } from "./rsvp-data.js";
+import { RSVP_BACKEND, isBackendConfigured } from "./rsvp-config.js";
 
 const rsvpStorage = {
   key: "wedding-rsvp-responses",
@@ -23,8 +24,102 @@ function normalizeName(value) {
   return value.trim().toLowerCase();
 }
 
+function supabaseHeaders(includeJson = false) {
+  const headers = {
+    apikey: RSVP_BACKEND.supabaseAnonKey,
+    Authorization: `Bearer ${RSVP_BACKEND.supabaseAnonKey}`
+  };
+
+  if (includeJson) {
+    headers["Content-Type"] = "application/json";
+  }
+
+  return headers;
+}
+
+function mapBackendGuest(record) {
+  return {
+    id: record.id,
+    firstName: record.first_name,
+    lastName: record.last_name,
+    partyId: record.party_id,
+    invitedGuests: record.invited_guests || [],
+    canBringPlusOne: Boolean(record.can_bring_plus_one),
+    plusOneName: record.plus_one_name || "",
+    rsvpStatus: record.rsvp_status || RSVP_STATUS.PENDING
+  };
+}
+
+async function findGuestPartyFromBackend(firstName, lastName) {
+  const url = new URL(`${RSVP_BACKEND.supabaseUrl}/rest/v1/${RSVP_BACKEND.tables.guestParties}`);
+  url.searchParams.set("select", "*");
+  url.searchParams.set("first_name", `ilike.${firstName}`);
+  url.searchParams.set("last_name", `ilike.${lastName}`);
+  url.searchParams.set("limit", "1");
+
+  const response = await fetch(url.toString(), {
+    headers: supabaseHeaders()
+  });
+
+  if (!response.ok) {
+    throw new Error("Guest lookup failed");
+  }
+
+  const [record] = await response.json();
+  return record ? mapBackendGuest(record) : null;
+}
+
+async function backendResponseExists(partyId) {
+  const url = new URL(`${RSVP_BACKEND.supabaseUrl}/rest/v1/${RSVP_BACKEND.tables.responses}`);
+  url.searchParams.set("select", "party_id");
+  url.searchParams.set("party_id", `eq.${partyId}`);
+  url.searchParams.set("limit", "1");
+
+  const response = await fetch(url.toString(), {
+    headers: supabaseHeaders()
+  });
+
+  if (!response.ok) {
+    throw new Error("RSVP status lookup failed");
+  }
+
+  const rows = await response.json();
+  return rows.length > 0;
+}
+
+async function saveResponseToBackend(submission) {
+  const payload = {
+    party_id: submission.partyId,
+    guest_id: submission.id,
+    submitted_at: submission.submittedAt,
+    invited_guests: submission.invitedGuests,
+    can_bring_plus_one: submission.canBringPlusOne,
+    plus_one: submission.plusOne,
+    dietary_restrictions: submission.dietaryRestrictions,
+    guest_message: submission.guestMessage,
+    rsvp_status: submission.rsvpStatus
+  };
+
+  const response = await fetch(`${RSVP_BACKEND.supabaseUrl}/rest/v1/${RSVP_BACKEND.tables.responses}`, {
+    method: "POST",
+    headers: {
+      ...supabaseHeaders(true),
+      Prefer: "resolution=merge-duplicates,return=minimal"
+    },
+    body: JSON.stringify(payload)
+  });
+
+  if (!response.ok) {
+    throw new Error("RSVP save failed");
+  }
+}
+
 // Lookup by guest first + last name and return complete party record.
-export function findGuestParty(firstName, lastName) {
+export async function findGuestParty(firstName, lastName) {
+  if (isBackendConfigured()) {
+    return findGuestPartyFromBackend(firstName, lastName);
+  }
+
   const cleanFirst = normalizeName(firstName);
   const cleanLast = normalizeName(lastName);
 
@@ -33,6 +128,22 @@ export function findGuestParty(firstName, lastName) {
     const recordLast = normalizeName(guest.lastName);
     return cleanFirst === recordFirst && cleanLast === recordLast;
   }) || null;
+}
+
+async function responseExists(partyId) {
+  if (isBackendConfigured()) {
+    return backendResponseExists(partyId);
+  }
+
+  return rsvpStorage.exists(partyId);
+}
+
+async function saveResponse(submission) {
+  if (isBackendConfigured()) {
+    return saveResponseToBackend(submission);
+  }
+
+  rsvpStorage.save(submission);
 }
 
 function getOverallStatus(invitedGuests) {
@@ -156,32 +267,37 @@ function attachPartyFormHandler(guest, resultContainer) {
   const partyRsvpForm = document.getElementById("partyRsvpForm");
   if (!partyRsvpForm) return;
 
-  partyRsvpForm.addEventListener("submit", (event) => {
+  partyRsvpForm.addEventListener("submit", async (event) => {
     event.preventDefault();
     const submitError = document.getElementById("submitError");
+    submitError.textContent = "";
 
-    if (rsvpStorage.exists(guest.partyId)) {
-      submitError.textContent = "An RSVP was already submitted for this invitation. Please contact us if you need changes.";
-      return;
+    try {
+      if (await responseExists(guest.partyId)) {
+        submitError.textContent = "An RSVP was already submitted for this invitation. Please contact us if you need changes.";
+        return;
+      }
+
+      const formData = new FormData(partyRsvpForm);
+      const missingStatus = guest.invitedGuests.some((_, index) => !formData.get(`member-${index}`));
+
+      if (missingStatus) {
+        submitError.textContent = "Please select attendance for each invited guest.";
+        return;
+      }
+
+      const submission = getPartySubmission(guest, formData);
+      await saveResponse(submission);
+
+      resultContainer.innerHTML = `
+        <div class="result-card success" role="status" aria-live="polite">
+          <h3>Thank you! Your RSVP has been saved.</h3>
+          <p>We received your response and look forward to celebrating with you.</p>
+        </div>
+      `;
+    } catch {
+      submitError.textContent = "We could not save your RSVP right now. Please try again in a moment.";
     }
-
-    const formData = new FormData(partyRsvpForm);
-    const missingStatus = guest.invitedGuests.some((_, index) => !formData.get(`member-${index}`));
-
-    if (missingStatus) {
-      submitError.textContent = "Please select attendance for each invited guest.";
-      return;
-    }
-
-    const submission = getPartySubmission(guest, formData);
-    rsvpStorage.save(submission);
-
-    resultContainer.innerHTML = `
-      <div class="result-card success" role="status" aria-live="polite">
-        <h3>Thank you! Your RSVP has been saved.</h3>
-        <p>We received your response and look forward to celebrating with you.</p>
-      </div>
-    `;
   });
 }
 
@@ -191,7 +307,7 @@ export function initRsvpFlow() {
 
   if (!lookupForm || !resultContainer) return;
 
-  lookupForm.addEventListener("submit", (event) => {
+  lookupForm.addEventListener("submit", async (event) => {
     event.preventDefault();
 
     const firstNameInput = document.getElementById("lookupFirstName");
@@ -209,29 +325,28 @@ export function initRsvpFlow() {
       return;
     }
 
-    const guest = findGuestParty(firstName, lastName);
+    try {
+      const guest = await findGuestParty(firstName, lastName);
 
-    if (!guest) {
-      resultContainer.innerHTML = renderNotFound();
-      return;
+      if (!guest) {
+        resultContainer.innerHTML = renderNotFound();
+        return;
+      }
+
+      if (await responseExists(guest.partyId)) {
+        resultContainer.innerHTML = `
+          <div class="result-card warning" role="status" aria-live="polite">
+            <h3>RSVP already received</h3>
+            <p>We already have a response for this invitation. Contact us if you need to make updates.</p>
+          </div>
+        `;
+        return;
+      }
+
+      resultContainer.innerHTML = renderFoundParty(guest);
+      attachPartyFormHandler(guest, resultContainer);
+    } catch {
+      lookupError.textContent = "We could not connect to the RSVP service right now. Please try again in a moment.";
     }
-
-    if (rsvpStorage.exists(guest.partyId)) {
-      resultContainer.innerHTML = `
-        <div class="result-card warning" role="status" aria-live="polite">
-          <h3>RSVP already received</h3>
-          <p>We already have a response for this invitation. Contact us if you need to make updates.</p>
-        </div>
-      `;
-      return;
-    }
-
-    resultContainer.innerHTML = renderFoundParty(guest);
-    attachPartyFormHandler(guest, resultContainer);
   });
 }
-
-// Backend integration path:
-// 1) Replace findGuestParty with API call: GET /api/guest-lookup?firstName=...&lastName=...
-// 2) Replace rsvpStorage.save with POST /api/rsvp
-// 3) Keep this UI unchanged; only swap data access layer.
