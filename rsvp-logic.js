@@ -16,6 +16,16 @@ function setLookupNotFound(resultContainer) {
   `;
 }
 
+function getFriendlyLookupError(error) {
+  const status = error?.status ?? error?.code;
+
+  if (status === 401 || status === 403) {
+    return "RSVP lookup is temporarily unavailable. Please try again later.";
+  }
+
+  return "Could not search for your invitation right now.";
+}
+
 export function initRsvpFlow() {
   const supabase = window.supabaseClient;
 
@@ -60,7 +70,8 @@ export function initRsvpFlow() {
         .limit(10);
 
       if (guestError) {
-        lookupError.textContent = "Could not search for your invitation right now.";
+        console.error("Guest lookup failed", guestError);
+        lookupError.textContent = getFriendlyLookupError(guestError);
         return;
       }
 
@@ -83,6 +94,7 @@ export function initRsvpFlow() {
         .maybeSingle();
 
       if (responseError) {
+        console.error("Existing RSVP lookup failed", responseError);
         lookupError.textContent = "Could not verify RSVP status right now.";
         return;
       }
@@ -205,6 +217,7 @@ export function initRsvpFlow() {
         ]);
 
         if (insertError) {
+          console.error("RSVP insert failed", insertError);
           submitError.textContent = "We could not save your RSVP right now. Please try again.";
           return;
         }
