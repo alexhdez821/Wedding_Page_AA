@@ -26,6 +26,14 @@ function getFriendlyLookupError(error) {
   return "Could not search for your invitation right now.";
 }
 
+function renderAlreadySubmittedMessage(resultContainer) {
+  resultContainer.innerHTML = `
+    <div class="result-card warning" role="status" aria-live="polite">
+      <p>RSVP already received. If you need to make changes please contact us.</p>
+    </div>
+  `;
+}
+
 export function initRsvpFlow() {
   const supabase = window.supabaseClient;
 
@@ -90,7 +98,6 @@ export function initRsvpFlow() {
         .from("rsvp_responses")
         .select("id")
         .eq("guest_id", guest.id)
-        .limit(1)
         .maybeSingle();
 
       if (responseError) {
@@ -100,12 +107,7 @@ export function initRsvpFlow() {
       }
 
       if (existingResponse) {
-        resultContainer.innerHTML = `
-          <div class="result-card warning" role="status" aria-live="polite">
-            <h3>RSVP already received</h3>
-            <p>We already have a response for this invitation. Please contact us if you need to make changes.</p>
-          </div>
-        `;
+        renderAlreadySubmittedMessage(resultContainer);
         return;
       }
 
@@ -181,6 +183,8 @@ export function initRsvpFlow() {
         submitEvent.preventDefault();
         submitError.textContent = "";
 
+        const submitButton = responseForm.querySelector('button[type="submit"]');
+
         const attendingValue = responseForm.querySelector('input[name="attending"]:checked')?.value;
         const guestCount = Number(guestCountInput.value || 1);
         const plusOneNameInput = document.getElementById("plusOneName");
@@ -206,6 +210,25 @@ export function initRsvpFlow() {
           return;
         }
 
+        const { data: duplicateResponse, error: duplicateLookupError } = await supabase
+          .from("rsvp_responses")
+          .select("id")
+          .eq("guest_id", guest.id)
+          .maybeSingle();
+
+        if (duplicateLookupError) {
+          console.error("Duplicate RSVP lookup failed", duplicateLookupError);
+          submitError.textContent = "Could not verify RSVP status right now. Please try again.";
+          return;
+        }
+
+        if (duplicateResponse) {
+          renderAlreadySubmittedMessage(resultContainer);
+          return;
+        }
+
+        if (submitButton) submitButton.disabled = true;
+
         const { error: insertError } = await supabase.from("rsvp_responses").insert([
           {
             guest_id: guest.id,
@@ -219,6 +242,7 @@ export function initRsvpFlow() {
         if (insertError) {
           console.error("RSVP insert failed", insertError);
           submitError.textContent = "We could not save your RSVP right now. Please try again.";
+          if (submitButton) submitButton.disabled = false;
           return;
         }
 
