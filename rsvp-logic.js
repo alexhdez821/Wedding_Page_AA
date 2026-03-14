@@ -10,8 +10,8 @@ function normalizeName(value) {
 function setLookupNotFound(resultContainer) {
   resultContainer.innerHTML = `
     <div class="result-card error" role="status" aria-live="polite">
-      <h3>We could not find your invitation.</h3>
-      <p>Please check the spelling and try again.</p>
+      <h3>No pudimos encontrar tu invitación.</h3>
+      <p>Por favor revisa la ortografía e inténtalo de nuevo.</p>
     </div>
   `;
 }
@@ -20,10 +20,10 @@ function getFriendlyLookupError(error) {
   const status = error?.status ?? error?.code;
 
   if (status === 401 || status === 403) {
-    return "RSVP lookup is temporarily unavailable. Please try again later.";
+    return "La búsqueda de RSVP no está disponible temporalmente. Inténtalo más tarde.";
   }
 
-  return "Could not search for your invitation right now.";
+  return "No se pudo buscar tu invitación en este momento.";
 }
 
 function isRsvpLookupPermissionIssue(error) {
@@ -46,7 +46,7 @@ function isRsvpLookupPermissionIssue(error) {
 function renderAlreadySubmittedMessage(resultContainer) {
   resultContainer.innerHTML = `
     <div class="result-card warning" role="status" aria-live="polite">
-      <p>RSVP already received. If you need to make changes please contact us.</p>
+      <p>Tu RSVP ya fue recibido. Si necesitas hacer cambios, por favor contáctanos.</p>
     </div>
   `;
 }
@@ -66,7 +66,7 @@ export function initRsvpFlow() {
   if (!lookupForm || !resultContainer || !lookupError) return;
 
   if (!supabase) {
-    lookupError.textContent = "RSVP service is not available right now. Please try again later.";
+    lookupError.textContent = "El servicio de RSVP no está disponible en este momento. Inténtalo más tarde.";
     return;
   }
 
@@ -83,7 +83,7 @@ export function initRsvpFlow() {
     const lastName = lastNameInput?.value?.trim() ?? "";
 
     if (!firstName || !lastName) {
-      lookupError.textContent = "Please enter both first and last name.";
+      lookupError.textContent = "Por favor ingresa nombre y apellido.";
       return;
     }
 
@@ -131,7 +131,7 @@ export function initRsvpFlow() {
             responseError
           );
         }
-        lookupError.textContent = "Could not verify RSVP status right now.";
+        lookupError.textContent = "No se pudo verificar el estado de tu RSVP en este momento.";
         return;
       }
 
@@ -145,17 +145,17 @@ export function initRsvpFlow() {
         ? `
           <div id="plusOneQuestionWrap" class="plus-one-block" hidden>
             <div>
-              <div class="person-label">Do you need a plus one?</div>
-              <div class="person-options" role="radiogroup" aria-label="Plus one needed">
-                <label><input type="radio" name="needsPlusOne" value="true"> Yes</label>
+              <div class="person-label">¿Necesitas acompañante?</div>
+              <div class="person-options" role="radiogroup" aria-label="Necesita acompañante">
+                <label><input type="radio" name="needsPlusOne" value="true"> Sí</label>
                 <label><input type="radio" name="needsPlusOne" value="false"> No</label>
               </div>
             </div>
           </div>
           <div id="plusOneWrap" class="plus-one-block" hidden>
             <div>
-              <label for="plusOneName">Plus one name</label>
-              <input id="plusOneName" name="plusOneName" type="text" placeholder="Full name" />
+              <label for="plusOneName">Nombre de tu acompañante</label>
+              <input id="plusOneName" name="plusOneName" type="text" placeholder="Nombre completo" />
             </div>
           </div>
         `
@@ -163,22 +163,22 @@ export function initRsvpFlow() {
 
       resultContainer.innerHTML = `
         <div class="result-card success">
-          <h3>We found your invitation ✨</h3>
+          <h3>Encontramos tu invitación ✨</h3>
           <p>${guest.first_name} ${guest.last_name}</p>
         </div>
 
         <form id="responseForm" class="rsvp-form" novalidate>
           <div class="person-row">
-            <div class="person-label">Will you be attending?</div>
-            <div class="person-options" role="radiogroup" aria-label="Attendance">
-              <label><input type="radio" name="attending" value="true" required> Attending</label>
-              <label><input type="radio" name="attending" value="false" required> Not attending</label>
+            <div class="person-label">¿Asistirás?</div>
+            <div class="person-options" role="radiogroup" aria-label="Asistencia">
+              <label><input type="radio" name="attending" value="true" required> Asistiré</label>
+              <label><input type="radio" name="attending" value="false" required> No asistiré</label>
             </div>
           </div>
 
           ${plusOneField}
 
-          <button class="btn btn-primary" type="submit">Submit RSVP</button>
+          <button class="btn btn-primary" type="submit">Enviar RSVP</button>
           <p id="submitError" class="form-error" aria-live="polite"></p>
         </form>
       `;
@@ -191,7 +191,7 @@ export function initRsvpFlow() {
       const attendanceInputs = responseForm?.querySelectorAll('input[name="attending"]');
 
       if (!responseForm || !submitError) {
-        lookupError.textContent = "RSVP form is temporarily unavailable. Please refresh and try again.";
+        lookupError.textContent = "El formulario de RSVP no está disponible temporalmente. Recarga la página e inténtalo de nuevo.";
         return;
       }
 
@@ -236,17 +236,17 @@ export function initRsvpFlow() {
         const guestCount = isAttending ? (guest.allowed_plus_one && needsPlusOne ? 2 : 1) : 0;
 
         if (attendingValue === undefined) {
-          submitError.textContent = "Please select whether you will attend.";
+          submitError.textContent = "Por favor selecciona si asistirás.";
           return;
         }
 
         if (guest.allowed_plus_one && isAttending && needsPlusOneValue === undefined) {
-          submitError.textContent = "Please tell us if you need a plus one.";
+          submitError.textContent = "Por favor indícanos si necesitas acompañante.";
           return;
         }
 
         if (guest.allowed_plus_one && isAttending && needsPlusOne && !plusOneName) {
-          submitError.textContent = "Please enter your plus one's name.";
+          submitError.textContent = "Por favor ingresa el nombre de tu acompañante.";
           return;
         }
 
@@ -264,7 +264,7 @@ export function initRsvpFlow() {
               duplicateLookupError
             );
           }
-          submitError.textContent = "Could not verify RSVP status right now. Please try again.";
+          submitError.textContent = "No se pudo verificar el estado de tu RSVP en este momento. Inténtalo de nuevo.";
           return;
         }
 
@@ -288,17 +288,17 @@ export function initRsvpFlow() {
 
         if (insertError) {
           console.error("RSVP insert failed", insertError);
-          submitError.textContent = "We could not save your RSVP right now. Please try again.";
+          submitError.textContent = "No pudimos guardar tu RSVP en este momento. Inténtalo de nuevo.";
           if (submitButton) submitButton.disabled = false;
           return;
         }
 
         const responseHeading = isAttending
-          ? "Thank you! Your RSVP has been saved."
-          : "Thank you for letting us know 💛";
+          ? "¡Gracias! Tu RSVP ha sido guardado."
+          : "Gracias por avisarnos 💛";
         const responseCopy = isAttending
-          ? "We received your response and look forward to celebrating with you."
-          : "We will miss you on our big day, but we are so grateful for your love and good wishes.";
+          ? "Recibimos tu respuesta y esperamos celebrar contigo."
+          : "Te vamos a extrañar en nuestro gran día, pero agradecemos mucho tu cariño y buenos deseos.";
 
         resultContainer.innerHTML = `
           <div class="result-card success" role="status" aria-live="polite">
@@ -309,7 +309,7 @@ export function initRsvpFlow() {
         clearLookupFields(lookupForm);
       });
     } catch {
-      lookupError.textContent = "We could not connect to the RSVP service right now. Please try again in a moment.";
+      lookupError.textContent = "No pudimos conectarnos al servicio de RSVP en este momento. Inténtalo de nuevo en un momento.";
     }
   });
 }
