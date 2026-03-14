@@ -1,324 +1,20 @@
-import { guestList, RSVP_STATUS } from "./rsvp-data.js";
-import { RSVP_BACKEND, isBackendConfigured } from "./rsvp-config.js";
-
-const rsvpStorage = {
-  key: "wedding-rsvp-responses",
-  save(response) {
-    const current = this.getAll();
-    current[response.partyId] = response;
-    localStorage.setItem(this.key, JSON.stringify(current));
-  },
-  getAll() {
-    try {
-      return JSON.parse(localStorage.getItem(this.key)) || {};
-    } catch {
-      return {};
-    }
-  },
-  exists(partyId) {
-    return Boolean(this.getAll()[partyId]);
-  }
-};
-
-function normalizeName(value) {
-  return value.trim().toLowerCase();
-}
-
-function supabaseHeaders(includeJson = false) {
-  const headers = {
-    apikey: RSVP_BACKEND.supabaseAnonKey,
-    Authorization: `Bearer ${RSVP_BACKEND.supabaseAnonKey}`
-  };
-
-  if (includeJson) {
-    headers["Content-Type"] = "application/json";
-  }
-
-  return headers;
-}
-
-function mapBackendGuest(record) {
-  return {
-    id: record.id,
-    firstName: record.first_name,
-    lastName: record.last_name,
-    partyId: record.party_id,
-    invitedGuests: record.invited_guests || [],
-    canBringPlusOne: Boolean(record.can_bring_plus_one),
-    plusOneName: record.plus_one_name || "",
-    rsvpStatus: record.rsvp_status || RSVP_STATUS.PENDING
-  };
-}
-
-async function findGuestPartyFromBackend(firstName, lastName) {
-  const url = new URL(`${RSVP_BACKEND.supabaseUrl}/rest/v1/${RSVP_BACKEND.tables.guestParties}`);
-  url.searchParams.set("select", "*");
-  url.searchParams.set("first_name", `ilike.${firstName}`);
-  url.searchParams.set("last_name", `ilike.${lastName}`);
-  url.searchParams.set("limit", "1");
-
-  const response = await fetch(url.toString(), {
-    headers: supabaseHeaders()
-  });
-
-  if (!response.ok) {
-    throw new Error("Guest lookup failed");
-  }
-
-  const [record] = await response.json();
-  return record ? mapBackendGuest(record) : null;
-}
-
-async function backendResponseExists(partyId) {
-  const url = new URL(`${RSVP_BACKEND.supabaseUrl}/rest/v1/${RSVP_BACKEND.tables.responses}`);
-  url.searchParams.set("select", "party_id");
-  url.searchParams.set("party_id", `eq.${partyId}`);
-  url.searchParams.set("limit", "1");
-
-  const response = await fetch(url.toString(), {
-    headers: supabaseHeaders()
-  });
-
-  if (!response.ok) {
-    throw new Error("RSVP status lookup failed");
-  }
-
-  const rows = await response.json();
-  return rows.length > 0;
-}
-
-async function saveResponseToBackend(submission) {
-  const payload = {
-    party_id: submission.partyId,
-    guest_id: submission.id,
-    submitted_at: submission.submittedAt,
-    invited_guests: submission.invitedGuests,
-    can_bring_plus_one: submission.canBringPlusOne,
-    plus_one: submission.plusOne,
-    dietary_restrictions: submission.dietaryRestrictions,
-    guest_message: submission.guestMessage,
-    rsvp_status: submission.rsvpStatus
-  };
-
-  const response = await fetch(`${RSVP_BACKEND.supabaseUrl}/rest/v1/${RSVP_BACKEND.tables.responses}`, {
-    method: "POST",
-    headers: {
-      ...supabaseHeaders(true),
-      Prefer: "resolution=merge-duplicates,return=minimal"
-    },
-    body: JSON.stringify(payload)
-  });
-
-  if (!response.ok) {
-    throw new Error("RSVP save failed");
-  }
-}
-
-// Lookup by guest first + last name and return complete party record.
-export async function findGuestParty(firstName, lastName) {
-  if (isBackendConfigured()) {
-    return findGuestPartyFromBackend(firstName, lastName);
-  }
-
-  const cleanFirst = normalizeName(firstName);
-  const cleanLast = normalizeName(lastName);
-
-  return guestList.find((guest) => {
-    const recordFirst = normalizeName(guest.firstName);
-    const recordLast = normalizeName(guest.lastName);
-    return cleanFirst === recordFirst && cleanLast === recordLast;
-  }) || null;
-}
-
-async function responseExists(partyId) {
-  if (isBackendConfigured()) {
-    return backendResponseExists(partyId);
-  }
-
-  return rsvpStorage.exists(partyId);
-}
-
-async function saveResponse(submission) {
-  if (isBackendConfigured()) {
-    return saveResponseToBackend(submission);
-  }
-
-  rsvpStorage.save(submission);
-}
-
-function getOverallStatus(invitedGuests) {
-  const hasAttending = invitedGuests.some((g) => g.rsvpStatus === RSVP_STATUS.ATTENDING);
-  return hasAttending ? RSVP_STATUS.ATTENDING : RSVP_STATUS.NOT_ATTENDING;
-}
-
-function createPartyMemberRow(member, index) {
-  return `
-    <div class="person-row">
-      <label class="person-label">${member.firstName} ${member.lastName}</label>
-      <div class="person-options" role="radiogroup" aria-label="Attendance for ${member.firstName} ${member.lastName}">
-        <label><input type="radio" name="member-${index}" value="${RSVP_STATUS.ATTENDING}" required> Attending</label>
-        <label><input type="radio" name="member-${index}" value="${RSVP_STATUS.NOT_ATTENDING}" required> Not attending</label>
-      </div>
-    </div>
-  `;
-}
-
-function renderFoundParty(guest) {
-  const partyNames = guest.invitedGuests
-    .map((person, idx) => createPartyMemberRow(person, idx))
-    .join("");
-
-  const plusOneField = guest.canBringPlusOne
-    ? `
-      <div class="plus-one-block">
-        <h4>Your plus one</h4>
-        <p class="inline-note">You may include one additional guest.</p>
-        <div class="form-grid">
-          <div>
-            <label for="plusOneFirstName">Plus one first name</label>
-            <input id="plusOneFirstName" name="plusOneFirstName" type="text" placeholder="First name" />
-          </div>
-          <div>
-            <label for="plusOneLastName">Plus one last name</label>
-            <input id="plusOneLastName" name="plusOneLastName" type="text" placeholder="Last name" />
-          </div>
-        </div>
-        <div class="person-options" role="radiogroup" aria-label="Attendance for plus one">
-          <label><input type="radio" name="plusOneStatus" value="${RSVP_STATUS.ATTENDING}"> Attending</label>
-          <label><input type="radio" name="plusOneStatus" value="${RSVP_STATUS.NOT_ATTENDING}"> Not attending</label>
-        </div>
-      </div>
-    `
-    : "";
-
-  return `
-    <div class="result-card success">
-      <h3>We found your invitation ✨</h3>
-      <p>We are excited to celebrate with your party. Please confirm each invited guest below.</p>
-      <ul class="invited-list">
-        ${guest.invitedGuests.map((p) => `<li>${p.firstName} ${p.lastName}</li>`).join("")}
-      </ul>
-    </div>
-    <form id="partyRsvpForm" class="rsvp-form" novalidate>
-      <h4>Attendance by person</h4>
-      ${partyNames}
-      ${plusOneField}
-      <div class="form-grid">
-        <div>
-          <label for="dietaryRestrictions">Dietary restrictions (optional)</label>
-          <input id="dietaryRestrictions" name="dietaryRestrictions" type="text" placeholder="Vegetarian, allergies, etc." />
-        </div>
-        <div>
-          <label for="guestMessage">Message for the couple (optional)</label>
-          <input id="guestMessage" name="guestMessage" type="text" maxlength="160" placeholder="We can't wait to celebrate with you!" />
-        </div>
-      </div>
-      <button class="btn btn-primary" type="submit">Submit RSVP</button>
-      <p id="submitError" class="form-error" aria-live="polite"></p>
-    </form>
-  `;
-}
-
-function renderNotFound() {
-  return `
-    <div class="result-card error" role="status" aria-live="polite">
-      <h3>We could not find your invitation.</h3>
-      <p>Please contact us and we will happily help.</p>
-    </div>
-  `;
-}
-
-function getPartySubmission(guest, formData) {
-  const invitedGuests = guest.invitedGuests.map((person, index) => ({
-    ...person,
-    rsvpStatus: formData.get(`member-${index}`)
-  }));
-
-  let plusOne = null;
-  if (guest.canBringPlusOne) {
-    const plusOneFirstName = formData.get("plusOneFirstName")?.trim() || "";
-    const plusOneLastName = formData.get("plusOneLastName")?.trim() || "";
-    const plusOneStatus = formData.get("plusOneStatus") || RSVP_STATUS.PENDING;
-
-    // Only save plus one when one of the fields is completed.
-    if (plusOneFirstName || plusOneLastName || plusOneStatus !== RSVP_STATUS.PENDING) {
-      plusOne = {
-        firstName: plusOneFirstName,
-        lastName: plusOneLastName,
-        rsvpStatus: plusOneStatus
-      };
-    }
-  }
-
-  return {
-    id: guest.id,
-    partyId: guest.partyId,
-    submittedAt: new Date().toISOString(),
-    invitedGuests,
-    canBringPlusOne: guest.canBringPlusOne,
-    plusOne,
-    dietaryRestrictions: formData.get("dietaryRestrictions")?.trim() || "",
-    guestMessage: formData.get("guestMessage")?.trim() || "",
-    rsvpStatus: getOverallStatus(invitedGuests)
-  };
-}
-
-function attachPartyFormHandler(guest, resultContainer) {
-  const partyRsvpForm = document.getElementById("partyRsvpForm");
-  if (!partyRsvpForm) return;
-
-  partyRsvpForm.addEventListener("submit", async (event) => {
-    event.preventDefault();
-    const submitError = document.getElementById("submitError");
-    submitError.textContent = "";
-
-    try {
-      if (await responseExists(guest.partyId)) {
-        submitError.textContent = "An RSVP was already submitted for this invitation. Please contact us if you need changes.";
-        return;
-      }
-
-      const formData = new FormData(partyRsvpForm);
-      const missingStatus = guest.invitedGuests.some((_, index) => !formData.get(`member-${index}`));
-
-      if (missingStatus) {
-        submitError.textContent = "Please select attendance for each invited guest.";
-        return;
-      }
-
-      const submission = getPartySubmission(guest, formData);
-      await saveResponse(submission);
-
-      resultContainer.innerHTML = `
-        <div class="result-card success" role="status" aria-live="polite">
-          <h3>Thank you! Your RSVP has been saved.</h3>
-          <p>We received your response and look forward to celebrating with you.</p>
-        </div>
-      `;
-    } catch {
-      submitError.textContent = "We could not save your RSVP right now. Please try again in a moment.";
-    }
-  });
-}
-
 export function initRsvpFlow() {
+  const supabase = window.supabaseClient;
+
   const lookupForm = document.getElementById("lookupForm");
   const resultContainer = document.getElementById("rsvpResult");
+  const lookupError = document.getElementById("lookupError");
 
-  if (!lookupForm || !resultContainer) return;
+  if (!lookupForm || !resultContainer || !lookupError) return;
 
   lookupForm.addEventListener("submit", async (event) => {
     event.preventDefault();
 
-    const firstNameInput = document.getElementById("lookupFirstName");
-    const lastNameInput = document.getElementById("lookupLastName");
-    const lookupError = document.getElementById("lookupError");
-
-    const firstName = firstNameInput.value.trim();
-    const lastName = lastNameInput.value.trim();
-
     lookupError.textContent = "";
     resultContainer.innerHTML = "";
+
+    const firstName = document.getElementById("lookupFirstName")?.value.trim();
+    const lastName = document.getElementById("lookupLastName")?.value.trim();
 
     if (!firstName || !lastName) {
       lookupError.textContent = "Please enter both first and last name.";
@@ -326,25 +22,153 @@ export function initRsvpFlow() {
     }
 
     try {
-      const guest = await findGuestParty(firstName, lastName);
+      const { data: guest, error: guestError } = await supabase
+        .from("guest_list")
+        .select("*")
+        .ilike("first_name", firstName)
+        .ilike("last_name", lastName)
+        .eq("invited", true)
+        .maybeSingle();
 
-      if (!guest) {
-        resultContainer.innerHTML = renderNotFound();
+      if (guestError) {
+        lookupError.textContent = "Could not search for your invitation right now.";
         return;
       }
 
-      if (await responseExists(guest.partyId)) {
+      if (!guest) {
         resultContainer.innerHTML = `
-          <div class="result-card warning" role="status" aria-live="polite">
-            <h3>RSVP already received</h3>
-            <p>We already have a response for this invitation. Contact us if you need to make updates.</p>
+          <div class="result-card error" role="status" aria-live="polite">
+            <h3>We could not find your invitation.</h3>
+            <p>Please check the spelling and try again.</p>
           </div>
         `;
         return;
       }
 
-      resultContainer.innerHTML = renderFoundParty(guest);
-      attachPartyFormHandler(guest, resultContainer);
+      const { data: existingResponse, error: responseError } = await supabase
+        .from("rsvp_responses")
+        .select("id")
+        .eq("guest_id", guest.id)
+        .maybeSingle();
+
+      if (responseError) {
+        lookupError.textContent = "Could not verify RSVP status right now.";
+        return;
+      }
+
+      if (existingResponse) {
+        resultContainer.innerHTML = `
+          <div class="result-card warning" role="status" aria-live="polite">
+            <h3>RSVP already received</h3>
+            <p>We already have a response for this invitation. Please contact us if you need to make changes.</p>
+          </div>
+        `;
+        return;
+      }
+
+      const plusOneField = guest.allowed_plus_one
+        ? `
+          <div class="plus-one-block">
+            <div>
+              <label for="plusOneName">Plus one name</label>
+              <input id="plusOneName" name="plusOneName" type="text" placeholder="Full name" />
+            </div>
+          </div>
+        `
+        : "";
+
+      resultContainer.innerHTML = `
+        <div class="result-card success">
+          <h3>We found your invitation ✨</h3>
+          <p>${guest.first_name} ${guest.last_name}</p>
+        </div>
+
+        <form id="responseForm" class="rsvp-form" novalidate>
+          <div class="person-row">
+            <div class="person-label">Will you be attending?</div>
+            <div class="person-options" role="radiogroup" aria-label="Attendance">
+              <label><input type="radio" name="attending" value="true" required> Attending</label>
+              <label><input type="radio" name="attending" value="false" required> Not attending</label>
+            </div>
+          </div>
+
+          <div>
+            <label for="guestCount">Number of guests</label>
+            <input
+              id="guestCount"
+              name="guestCount"
+              type="number"
+              min="1"
+              max="${guest.max_guests || 1}"
+              value="1"
+              required
+            />
+          </div>
+
+          ${plusOneField}
+
+          <button class="btn btn-primary" type="submit">Submit RSVP</button>
+          <p id="submitError" class="form-error" aria-live="polite"></p>
+        </form>
+      `;
+
+      const responseForm = document.getElementById("responseForm");
+      const submitError = document.getElementById("submitError");
+
+      if (!responseForm || !submitError) return;
+
+      responseForm.addEventListener("submit", async (submitEvent) => {
+        submitEvent.preventDefault();
+        submitError.textContent = "";
+
+        const attendingValue = responseForm.querySelector('input[name="attending"]:checked')?.value;
+        const guestCount = Number(document.getElementById("guestCount")?.value || 1);
+        const plusOneName = document.getElementById("plusOneName")?.value.trim() || null;
+
+        if (attendingValue === undefined) {
+          submitError.textContent = "Please select whether you will attend.";
+          return;
+        }
+
+        if (guestCount < 1 || guestCount > (guest.max_guests || 1)) {
+          submitError.textContent = `Guest count must be between 1 and ${guest.max_guests || 1}.`;
+          return;
+        }
+
+        if (!guest.allowed_plus_one && guestCount > 1) {
+          submitError.textContent = "This invitation does not allow a plus one.";
+          return;
+        }
+
+        if (guest.allowed_plus_one && guestCount === 2 && !plusOneName) {
+          submitError.textContent = "Please enter your plus one's name.";
+          return;
+        }
+
+        const { error: insertError } = await supabase
+          .from("rsvp_responses")
+          .insert([
+            {
+              guest_id: guest.id,
+              attending: attendingValue === "true",
+              guest_count: guestCount,
+              plus_one_name: plusOneName,
+              submitted_at: new Date().toISOString()
+            }
+          ]);
+
+        if (insertError) {
+          submitError.textContent = "We could not save your RSVP right now. Please try again.";
+          return;
+        }
+
+        resultContainer.innerHTML = `
+          <div class="result-card success" role="status" aria-live="polite">
+            <h3>Thank you! Your RSVP has been saved.</h3>
+            <p>We received your response and look forward to celebrating with you.</p>
+          </div>
+        `;
+      });
     } catch {
       lookupError.textContent = "We could not connect to the RSVP service right now. Please try again in a moment.";
     }
