@@ -140,6 +140,15 @@ export function initRsvpFlow() {
 
       const plusOneField = guest.allowed_plus_one
         ? `
+          <div id="plusOneQuestionWrap" class="plus-one-block" hidden>
+            <div>
+              <div class="person-label">Do you need a plus one?</div>
+              <div class="person-options" role="radiogroup" aria-label="Plus one needed">
+                <label><input type="radio" name="needsPlusOne" value="true"> Yes</label>
+                <label><input type="radio" name="needsPlusOne" value="false"> No</label>
+              </div>
+            </div>
+          </div>
           <div id="plusOneWrap" class="plus-one-block" hidden>
             <div>
               <label for="plusOneName">Plus one name</label>
@@ -164,7 +173,7 @@ export function initRsvpFlow() {
             </div>
           </div>
 
-          <div>
+          <div id="guestCountWrap" hidden>
             <label for="guestCount">Number of guests</label>
             <input
               id="guestCount"
@@ -187,21 +196,50 @@ export function initRsvpFlow() {
       const responseForm = document.getElementById("responseForm");
       const submitError = document.getElementById("submitError");
       const guestCountInput = document.getElementById("guestCount");
+      const guestCountWrap = document.getElementById("guestCountWrap");
+      const plusOneQuestionWrap = document.getElementById("plusOneQuestionWrap");
       const plusOneWrap = document.getElementById("plusOneWrap");
+      const plusOneNameInput = document.getElementById("plusOneName");
+      const attendanceInputs = responseForm?.querySelectorAll('input[name="attending"]');
 
-      if (!responseForm || !submitError || !guestCountInput) {
+      if (!responseForm || !submitError || !guestCountInput || !guestCountWrap) {
         lookupError.textContent = "RSVP form is temporarily unavailable. Please refresh and try again.";
         return;
       }
 
-      const updatePlusOneVisibility = () => {
-        if (!plusOneWrap) return;
-        const currentGuestCount = Number(guestCountInput.value) || 1;
-        plusOneWrap.hidden = currentGuestCount !== 2;
+      const updateConditionalFields = () => {
+        const attendingValue = responseForm.querySelector('input[name="attending"]:checked')?.value;
+        const isAttending = attendingValue === "true";
+
+        guestCountWrap.hidden = !isAttending;
+        guestCountInput.required = isAttending;
+
+        if (!isAttending) {
+          guestCountInput.value = "1";
+        }
+
+        if (plusOneQuestionWrap) {
+          plusOneQuestionWrap.hidden = !isAttending;
+        }
+
+        if (plusOneWrap) {
+          const plusOneSelectedValue = responseForm.querySelector('input[name="needsPlusOne"]:checked')?.value;
+          const showPlusOneName = isAttending && plusOneSelectedValue === "true";
+
+          plusOneWrap.hidden = !showPlusOneName;
+
+          if (plusOneNameInput) {
+            plusOneNameInput.required = showPlusOneName;
+            if (!showPlusOneName) plusOneNameInput.value = "";
+          }
+        }
       };
 
-      guestCountInput.addEventListener("input", updatePlusOneVisibility);
-      updatePlusOneVisibility();
+      attendanceInputs?.forEach((input) => input.addEventListener("change", updateConditionalFields));
+      responseForm
+        .querySelectorAll('input[name="needsPlusOne"]')
+        .forEach((input) => input.addEventListener("change", updateConditionalFields));
+      updateConditionalFields();
 
       responseForm.addEventListener("submit", async (submitEvent) => {
         submitEvent.preventDefault();
@@ -210,8 +248,10 @@ export function initRsvpFlow() {
         const submitButton = responseForm.querySelector('button[type="submit"]');
 
         const attendingValue = responseForm.querySelector('input[name="attending"]:checked')?.value;
-        const guestCount = Number(guestCountInput.value || 1);
-        const plusOneNameInput = document.getElementById("plusOneName");
+        const isAttending = attendingValue === "true";
+        const guestCount = isAttending ? Number(guestCountInput.value || 1) : 1;
+        const needsPlusOneValue = responseForm.querySelector('input[name="needsPlusOne"]:checked')?.value;
+        const needsPlusOne = needsPlusOneValue === "true";
         const plusOneName = plusOneNameInput?.value?.trim() || null;
 
         if (attendingValue === undefined) {
@@ -219,7 +259,7 @@ export function initRsvpFlow() {
           return;
         }
 
-        if (!Number.isInteger(guestCount) || guestCount < 1 || guestCount > maxGuestCount) {
+        if (isAttending && (!Number.isInteger(guestCount) || guestCount < 1 || guestCount > maxGuestCount)) {
           submitError.textContent = `Guest count must be between 1 and ${maxGuestCount}.`;
           return;
         }
@@ -229,7 +269,22 @@ export function initRsvpFlow() {
           return;
         }
 
-        if (guest.allowed_plus_one && guestCount === 2 && !plusOneName) {
+        if (guest.allowed_plus_one && isAttending && needsPlusOneValue === undefined) {
+          submitError.textContent = "Please tell us if you need a plus one.";
+          return;
+        }
+
+        if (guest.allowed_plus_one && isAttending && !needsPlusOne && guestCount > 1) {
+          submitError.textContent = "Guest count must be 1 if you do not need a plus one.";
+          return;
+        }
+
+        if (guest.allowed_plus_one && isAttending && needsPlusOne && guestCount < 2) {
+          submitError.textContent = "Please set guest count to 2 if you need a plus one.";
+          return;
+        }
+
+        if (guest.allowed_plus_one && isAttending && needsPlusOne && !plusOneName) {
           submitError.textContent = "Please enter your plus one's name.";
           return;
         }
@@ -262,9 +317,9 @@ export function initRsvpFlow() {
         const { error: insertError } = await supabase.from("rsvp_responses").insert([
           {
             guest_id: guest.id,
-            attending: attendingValue === "true",
+            attending: isAttending,
             guest_count: guestCount,
-            plus_one_name: guest.allowed_plus_one && guestCount === 2 ? plusOneName : null,
+            plus_one_name: guest.allowed_plus_one && isAttending && needsPlusOne ? plusOneName : null,
             submitted_at: new Date().toISOString()
           }
         ]);
