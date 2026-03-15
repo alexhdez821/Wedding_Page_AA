@@ -55,6 +55,23 @@ function clearLookupFields(lookupForm) {
   lookupForm.hidden = true;
 }
 
+function isPhoneViewport() {
+  return window.matchMedia("(max-width: 768px)").matches;
+}
+
+function focusRevealedQuestion(container, preferredInput) {
+  if (!container || container.hidden || !isPhoneViewport()) return;
+
+  container.scrollIntoView({ behavior: "smooth", block: "start" });
+
+  const targetInput = preferredInput || container.querySelector("input, select, textarea, button");
+  if (!targetInput) return;
+
+  requestAnimationFrame(() => {
+    targetInput.focus({ preventScroll: true });
+  });
+}
+
 function hideDeadlineNote() {
   const deadlineNote = document.getElementById("rsvpDeadlineNote");
   if (deadlineNote) deadlineNote.hidden = true;
@@ -294,8 +311,17 @@ export function initRsvpFlow() {
         const attendingValue = responseForm.querySelector('input[name="attending"]:checked')?.value;
         const isAttending = attendingValue === "true";
 
+        const wasPlusOneQuestionHidden = plusOneQuestionWrap?.hidden;
+        const wasPlusOneHidden = plusOneWrap?.hidden;
+        const wasEmailHidden = rsvpEmailWrap?.hidden;
+
         if (plusOneQuestionWrap) {
           plusOneQuestionWrap.hidden = !isAttending;
+
+          if (wasPlusOneQuestionHidden && !plusOneQuestionWrap.hidden) {
+            const plusOneQuestionInput = responseForm.querySelector('input[name="needsPlusOne"]');
+            focusRevealedQuestion(plusOneQuestionWrap, plusOneQuestionInput);
+          }
         }
 
         if (plusOneWrap) {
@@ -308,6 +334,10 @@ export function initRsvpFlow() {
             plusOneNameInput.required = showPlusOneName;
             if (!showPlusOneName) plusOneNameInput.value = "";
           }
+
+          if (wasPlusOneHidden && !plusOneWrap.hidden) {
+            focusRevealedQuestion(plusOneWrap, plusOneNameInput);
+          }
         }
 
         if (rsvpEmailWrap && rsvpEmailInput) {
@@ -316,6 +346,10 @@ export function initRsvpFlow() {
 
           if (!isAttending) {
             rsvpEmailInput.value = "";
+          }
+
+          if (wasEmailHidden && !rsvpEmailWrap.hidden && (!plusOneWrap || plusOneWrap.hidden)) {
+            focusRevealedQuestion(rsvpEmailWrap, rsvpEmailInput);
           }
         }
       };
