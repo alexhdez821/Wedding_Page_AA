@@ -257,9 +257,9 @@ export function initRsvpFlow() {
 
           ${plusOneField}
 
-          <div>
+          <div id="rsvpEmailWrap" hidden>
             <label for="rsvpEmail">Correo para validar tu RSVP más adelante</label>
-            <input id="rsvpEmail" name="rsvpEmail" type="email" autocomplete="email" required placeholder="tu-correo@ejemplo.com" />
+            <input id="rsvpEmail" name="rsvpEmail" type="email" autocomplete="email" placeholder="tu-correo@ejemplo.com" />
           </div>
 
           <button class="btn btn-primary" type="submit">Enviar RSVP</button>
@@ -272,6 +272,7 @@ export function initRsvpFlow() {
       const plusOneQuestionWrap = document.getElementById("plusOneQuestionWrap");
       const plusOneWrap = document.getElementById("plusOneWrap");
       const plusOneNameInput = document.getElementById("plusOneName");
+      const rsvpEmailWrap = document.getElementById("rsvpEmailWrap");
       const rsvpEmailInput = document.getElementById("rsvpEmail");
       const attendanceInputs = responseForm?.querySelectorAll('input[name="attending"]');
 
@@ -297,6 +298,15 @@ export function initRsvpFlow() {
           if (plusOneNameInput) {
             plusOneNameInput.required = showPlusOneName;
             if (!showPlusOneName) plusOneNameInput.value = "";
+          }
+        }
+
+        if (rsvpEmailWrap && rsvpEmailInput) {
+          rsvpEmailWrap.hidden = !isAttending;
+          rsvpEmailInput.required = isAttending;
+
+          if (!isAttending) {
+            rsvpEmailInput.value = "";
           }
         }
       };
@@ -336,7 +346,7 @@ export function initRsvpFlow() {
           return;
         }
 
-        if (!rsvpEmail || !rsvpEmail.includes("@")) {
+        if (isAttending && (!rsvpEmail || !rsvpEmail.includes("@"))) {
           submitError.textContent = "Por favor ingresa un correo válido.";
           return;
         }
@@ -374,7 +384,7 @@ export function initRsvpFlow() {
             attending: isAttending,
             guest_count: guestCount,
             plus_one_name: guest.allowed_plus_one && isAttending && needsPlusOne ? plusOneName : null,
-            email: rsvpEmail,
+            email: isAttending ? rsvpEmail : null,
             submitted_at: new Date().toISOString()
           }
         ]);
