@@ -56,6 +56,11 @@ function clearLookupFields(lookupForm) {
   lookupForm.hidden = true;
 }
 
+function hideDeadlineNote() {
+  const deadlineNote = document.getElementById("rsvpDeadlineNote");
+  if (deadlineNote) deadlineNote.hidden = true;
+}
+
 export function initRsvpFlow() {
   const supabase = window.supabaseClient;
 
@@ -136,6 +141,7 @@ export function initRsvpFlow() {
       }
 
       if (existingResponse) {
+        hideDeadlineNote();
         clearLookupFields(lookupForm);
         renderAlreadySubmittedMessage(resultContainer);
         return;
@@ -269,6 +275,7 @@ export function initRsvpFlow() {
         }
 
         if (duplicateResponse) {
+          hideDeadlineNote();
           clearLookupFields(lookupForm);
           renderAlreadySubmittedMessage(resultContainer);
           return;
@@ -306,6 +313,7 @@ export function initRsvpFlow() {
             <p>${responseCopy}</p>
           </div>
         `;
+        hideDeadlineNote();
         clearLookupFields(lookupForm);
       });
     } catch {
