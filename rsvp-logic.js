@@ -1,4 +1,5 @@
-const WEDDING_DETAILS_IMAGE_URL = "https://images.unsplash.com/photo-1522673607200-164d1b6ce486?auto=format&fit=crop&w=1400&q=80";
+const WEDDING_DETAILS_IMAGE_URL_ES = "https://images.unsplash.com/photo-1522673607200-164d1b6ce486?auto=format&fit=crop&w=1400&q=80";
+const WEDDING_DETAILS_IMAGE_URL_EN = "https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=1400&q=80";
 
 function normalizeName(value) {
   return value
@@ -59,14 +60,22 @@ function hideDeadlineNote() {
   if (deadlineNote) deadlineNote.hidden = true;
 }
 
+function getDetailsButtonsMarkup() {
+  return `
+    <div class="details-actions">
+      <a class="btn btn-primary" href="${WEDDING_DETAILS_IMAGE_URL_ES}" target="_blank" rel="noopener noreferrer" download="detalles-boda-es.jpg">Ver detalles</a>
+      <a class="btn btn-secondary" href="${WEDDING_DETAILS_IMAGE_URL_EN}" target="_blank" rel="noopener noreferrer" download="wedding-details-en.jpg">See details</a>
+    </div>
+    <p class="details-help">Se abrirá la imagen para que puedas guardarla en tu librería de fotos (you can save it to your photo library).</p>
+  `;
+}
+
 function renderVerifiedDetailsCard(resultContainer) {
   resultContainer.innerHTML += `
     <div class="result-card success" role="status" aria-live="polite">
       <h3>✅ Correo verificado</h3>
-      <p>Aquí tienes la imagen con los detalles de la boda.</p>
-      <div class="details-image-wrap">
-        <img src="${WEDDING_DETAILS_IMAGE_URL}" alt="Detalles de la boda" loading="lazy" />
-      </div>
+      <p>Ya puedes abrir los detalles en español o en inglés.</p>
+      ${getDetailsButtonsMarkup()}
     </div>
   `;
 }
@@ -83,7 +92,7 @@ function renderAlreadySubmittedMessage(resultContainer, guest, responseRecord, s
         <label for="verificationEmail">Correo electrónico</label>
         <input id="verificationEmail" name="verificationEmail" type="email" autocomplete="email" required placeholder="tu-correo@ejemplo.com" />
       </div>
-      <button class="btn btn-primary" type="submit">Validar correo y mostrar imagen</button>
+      <button class="btn btn-primary" type="submit">Validar correo y mostrar detalles</button>
       <p id="verificationError" class="form-error" aria-live="polite"></p>
     </form>
   `;
@@ -403,11 +412,22 @@ export function initRsvpFlow() {
           ? "Recibimos tu respuesta y usamos tu correo para validar el acceso a los detalles."
           : "Te vamos a extrañar en nuestro gran día, pero agradecemos mucho tu cariño y buenos deseos.";
 
+        const detailsButtons = isAttending
+          ? `
+            <div class="result-card success" role="status" aria-live="polite">
+              <h3>Detalles de la boda</h3>
+              <p>Elige tu idioma para abrir la imagen y guardarla en tu librería de fotos.</p>
+              ${getDetailsButtonsMarkup()}
+            </div>
+          `
+          : "";
+
         resultContainer.innerHTML = `
           <div class="result-card success" role="status" aria-live="polite">
             <h3>${responseHeading}</h3>
             <p>${responseCopy}</p>
           </div>
+          ${detailsButtons}
         `;
         hideDeadlineNote();
         clearLookupFields(lookupForm);
