@@ -83,3 +83,16 @@ If backend config is empty, the app uses:
 - browser `localStorage` for response storage
 
 This is useful for development, but not for production tracking.
+
+
+## New email verification requirement
+
+To support secure repeat lookups, the RSVP flow now stores an `email` in `rsvp_responses` and verifies it before showing the wedding-details image.
+
+If your table does not already include this column, run:
+
+```sql
+alter table rsvp_responses add column if not exists email text;
+```
+
+The details image URL is currently configured in `rsvp-logic.js` as `WEDDING_DETAILS_IMAGE_URL`. Replace it with your private hosted invitation image.
