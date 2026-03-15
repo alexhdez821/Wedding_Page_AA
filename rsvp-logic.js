@@ -145,7 +145,7 @@ export function initRsvpFlow() {
         ? `
           <div id="plusOneQuestionWrap" class="plus-one-block" hidden>
             <div>
-              <div class="person-label">¿Necesitas acompañante?</div>
+              <div class="person-label">¿Desea incluir un acompañante?</div>
               <div class="person-options" role="radiogroup" aria-label="Necesita acompañante">
                 <label><input type="radio" name="needsPlusOne" value="true"> Sí</label>
                 <label><input type="radio" name="needsPlusOne" value="false"> No</label>
