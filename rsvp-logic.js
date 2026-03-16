@@ -64,6 +64,15 @@ function focusLookupSuccessMessage(resultContainer) {
   target.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
+function focusLookupNotFoundMessage(resultContainer) {
+  if (!resultContainer) return;
+
+  const notFoundCard = resultContainer.querySelector(".result-card.error");
+  const target = notFoundCard || resultContainer;
+
+  target.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
 function isPhoneViewport() {
   return window.matchMedia("(max-width: 768px)").matches;
 }
@@ -227,6 +236,7 @@ export function initRsvpFlow() {
 
       if (!guest) {
         setLookupNotFound(resultContainer);
+        focusLookupNotFoundMessage(resultContainer);
         return;
       }
 
