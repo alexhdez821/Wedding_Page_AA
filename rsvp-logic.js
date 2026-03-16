@@ -282,8 +282,6 @@ export function initRsvpFlow() {
         </div>
 
         <form id="responseForm" class="rsvp-form" novalidate>
-          <p class="invite-confirmation"><strong>Encontramos tu invitación para ${guest.first_name} ${guest.last_name}.</strong> Completa las preguntas para enviar tu RSVP.</p>
-
           <div class="person-row">
             <div class="person-label">¿Asistirás?</div>
             <div class="person-options" role="radiogroup" aria-label="Asistencia">
