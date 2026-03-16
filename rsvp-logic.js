@@ -55,6 +55,15 @@ function clearLookupFields(lookupForm) {
   lookupForm.hidden = true;
 }
 
+function focusLookupSuccessMessage(resultContainer) {
+  if (!resultContainer) return;
+
+  const successCard = resultContainer.querySelector(".result-card.success");
+  const target = successCard || resultContainer;
+
+  target.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
 function isPhoneViewport() {
   return window.matchMedia("(max-width: 768px)").matches;
 }
@@ -294,6 +303,8 @@ export function initRsvpFlow() {
           <p id="submitError" class="form-error" aria-live="polite"></p>
         </form>
       `;
+
+      focusLookupSuccessMessage(resultContainer);
 
       const responseForm = document.getElementById("responseForm");
       const submitError = document.getElementById("submitError");
