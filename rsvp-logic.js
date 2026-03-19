@@ -14,6 +14,12 @@ function normalizeEmail(value) {
   return value.trim().toLowerCase();
 }
 
+function getResponseGroupKey(guest) {
+  const pairId = (guest?.rsvp_pair_id || "").trim();
+  if (pairId) return `pair:${pairId}`;
+  return `guest:${guest.id}`;
+}
+
 function setLookupNotFound(resultContainer) {
   resultContainer.innerHTML = `
     <div class="result-card error" role="status" aria-live="polite">
@@ -155,8 +161,7 @@ function renderAlreadySubmittedMessage(resultContainer, guest, responseRecord, s
       const { error: updateError } = await supabase
         .from("rsvp_responses")
         .update({ email })
-        .eq("id", responseRecord.id)
-        .eq("guest_id", guest.id);
+        .eq("id", responseRecord.id);
 
       if (updateError) {
         console.error("Email registration for existing RSVP failed", updateError);
@@ -216,7 +221,7 @@ export function initRsvpFlow() {
     try {
       const { data: possibleGuests, error: guestError } = await supabase
         .from("guest_list")
-        .select("id, first_name, last_name, allowed_plus_one, max_guests")
+        .select("id, first_name, last_name, allowed_plus_one, max_guests, rsvp_pair_id")
         .eq("invited", true)
         .ilike("first_name", firstName)
         .ilike("last_name", lastName)
@@ -240,10 +245,12 @@ export function initRsvpFlow() {
         return;
       }
 
+      const responseGroup = getResponseGroupKey(guest);
+
       const { data: existingResponse, error: responseError } = await supabase
         .from("rsvp_responses")
         .select("id, guest_id, email")
-        .eq("guest_id", guest.id)
+        .eq("response_group", responseGroup)
         .maybeSingle();
 
       if (responseError) {
@@ -418,7 +425,7 @@ export function initRsvpFlow() {
         const { data: duplicateResponse, error: duplicateLookupError } = await supabase
           .from("rsvp_responses")
           .select("id, guest_id, email")
-          .eq("guest_id", guest.id)
+          .eq("response_group", responseGroup)
           .maybeSingle();
 
         if (duplicateLookupError) {
@@ -445,6 +452,7 @@ export function initRsvpFlow() {
         const { error: insertError } = await supabase.from("rsvp_responses").insert([
           {
             guest_id: guest.id,
+            response_group: responseGroup,
             attending: isAttending,
             guest_count: guestCount,
             plus_one_name: guest.allowed_plus_one && isAttending && needsPlusOne ? plusOneName : null,

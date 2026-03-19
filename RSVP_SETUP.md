@@ -96,3 +96,58 @@ alter table rsvp_responses add column if not exists email text;
 ```
 
 The details image URL is currently configured in `rsvp-logic.js` as `WEDDING_DETAILS_IMAGE_URL`. Replace it with your private hosted invitation image.
+
+## New party-of-2 shared RSVP requirement
+
+If you want either person in a known pair to submit one shared RSVP (party size of 2 max), add a shared key to both guests and store responses by that key.
+
+### 1) Add shared pair key to guest list
+
+```sql
+alter table guest_list add column if not exists rsvp_pair_id text;
+```
+
+For each known pair, assign the same `rsvp_pair_id` value to both rows. Leave it `null` for individual invites.
+
+Example:
+
+```sql
+update guest_list set rsvp_pair_id = 'pair-ana-luis' where id in ('guest_a_id', 'guest_b_id');
+```
+
+> If you see `22P02: invalid input syntax for type uuid`, your `rsvp_pair_id` column is `uuid` (not `text`).
+> In that case either:
+>
+> 1) use a real UUID value for each pair, for example:
+>
+> ```sql
+> update guest_list
+> set rsvp_pair_id = '8f1d3a57-35a4-4f8a-a557-2f2f4e5b9d10'
+> where id in ('guest_a_id', 'guest_b_id');
+> ```
+>
+> 2) or change the column type to `text` if you prefer human-readable IDs:
+>
+> ```sql
+> alter table guest_list alter column rsvp_pair_id type text using rsvp_pair_id::text;
+> ```
+
+### 2) Store responses by response group
+
+```sql
+alter table rsvp_responses add column if not exists response_group text;
+
+update rsvp_responses
+set response_group = coalesce(response_group, 'guest:' || guest_id);
+
+alter table rsvp_responses alter column response_group set not null;
+
+create unique index if not exists rsvp_responses_response_group_idx
+  on rsvp_responses (response_group);
+```
+
+The front-end now computes:
+- `pair:<rsvp_pair_id>` for linked guests
+- `guest:<guest_id>` for solo guests
+
+This allows either member of a linked pair to find the invitation and submit once, while still limiting one final RSVP per pair.
