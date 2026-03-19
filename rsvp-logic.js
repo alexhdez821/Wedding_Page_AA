@@ -20,6 +20,10 @@ function getResponseGroupKey(guest) {
   return `guest:${guest.id}`;
 }
 
+function getGuestDisplayName(guest) {
+  return `${guest?.first_name || ""} ${guest?.last_name || ""}`.trim();
+}
+
 function setLookupNotFound(resultContainer) {
   resultContainer.innerHTML = `
     <div class="result-card error" role="status" aria-live="polite">
@@ -245,6 +249,28 @@ export function initRsvpFlow() {
         return;
       }
 
+      let invitedParty = [guest];
+      const pairId = (guest.rsvp_pair_id || "").trim();
+      if (pairId) {
+        const { data: pairedGuests, error: pairedGuestsError } = await supabase
+          .from("guest_list")
+          .select("id, first_name, last_name, allowed_plus_one, max_guests, rsvp_pair_id")
+          .eq("invited", true)
+          .eq("rsvp_pair_id", pairId)
+          .order("first_name", { ascending: true });
+
+        if (pairedGuestsError) {
+          console.error("Paired guest lookup failed", pairedGuestsError);
+          lookupError.textContent = getFriendlyLookupError(pairedGuestsError);
+          return;
+        }
+
+        invitedParty = (pairedGuests || []).length ? pairedGuests : [guest];
+      }
+
+      const pairInviteGuests = invitedParty.filter((entry) => (entry?.rsvp_pair_id || "").trim() === pairId);
+      const isPairInvite = Boolean(pairId) && pairInviteGuests.length >= 2;
+      const normalizedPairGuests = isPairInvite ? pairInviteGuests.slice(0, 2) : [guest];
       const responseGroup = getResponseGroupKey(guest);
 
       const { data: existingResponse, error: responseError } = await supabase
@@ -272,44 +298,65 @@ export function initRsvpFlow() {
         return;
       }
 
-      const plusOneField = guest.allowed_plus_one
+      const plusOneField = guest.allowed_plus_one && !isPairInvite
         ? `
-          <div id="plusOneQuestionWrap" class="plus-one-block" hidden>
-            <div>
-              <div class="person-label">¿Desea incluir un acompañante?</div>
-              <div class="person-options" role="radiogroup" aria-label="Necesita acompañante">
-                <label><input type="radio" name="needsPlusOne" value="true"> Sí</label>
-                <label><input type="radio" name="needsPlusOne" value="false"> No</label>
+            <div id="plusOneQuestionWrap" class="plus-one-block" hidden>
+              <div>
+                <div class="person-label">¿Desea incluir un acompañante?</div>
+                <div class="person-options" role="radiogroup" aria-label="Necesita acompañante">
+                  <label><input type="radio" name="needsPlusOne" value="true"> Sí</label>
+                  <label><input type="radio" name="needsPlusOne" value="false"> No</label>
+                </div>
               </div>
             </div>
-          </div>
-          <div id="plusOneWrap" class="plus-one-block" hidden>
-            <div>
-              <label for="plusOneName">Nombre de tu acompañante</label>
-              <input id="plusOneName" name="plusOneName" type="text" placeholder="Nombre completo" />
+            <div id="plusOneWrap" class="plus-one-block" hidden>
+              <div>
+                <label for="plusOneName">Nombre de tu acompañante</label>
+                <input id="plusOneName" name="plusOneName" type="text" placeholder="Nombre completo" />
+              </div>
             </div>
-          </div>
-        `
+          `
         : "";
+
+      const pairInviteHeading = isPairInvite
+        ? `Encontramos la invitación para ${normalizedPairGuests.map(getGuestDisplayName).join(" y ")} ✨`
+        : "Encontramos tu invitación ✨";
+      const pairAttendanceFields = isPairInvite
+        ? normalizedPairGuests
+            .map(
+              (entry, index) => `
+                <div class="person-row">
+                  <div class="person-label">¿Asistirá ${getGuestDisplayName(entry)}?</div>
+                  <div class="person-options" role="radiogroup" aria-label="Asistencia de ${getGuestDisplayName(entry)}">
+                    <label><input type="radio" name="pairAttending${index}" value="true" required> Sí</label>
+                    <label><input type="radio" name="pairAttending${index}" value="false" required> No</label>
+                  </div>
+                </div>
+              `
+            )
+            .join("")
+        : `
+            <div class="person-row">
+              <div class="person-label">¿Asistirás?</div>
+              <div class="person-options" role="radiogroup" aria-label="Asistencia">
+                <label><input type="radio" name="attending" value="true" required> Asistiré</label>
+                <label><input type="radio" name="attending" value="false" required> No asistiré</label>
+              </div>
+            </div>
+          `;
 
       resultContainer.innerHTML = `
         <div class="result-card success">
-          <h3>Encontramos tu invitación ✨</h3>
-          <p>${guest.first_name} ${guest.last_name}</p>
+          <h3>${pairInviteHeading}</h3>
+          <p>${isPairInvite ? normalizedPairGuests.map(getGuestDisplayName).join(" & ") : getGuestDisplayName(guest)}</p>
         </div>
 
         <form id="responseForm" class="rsvp-form" novalidate>
-          <div class="person-row">
-            <div class="person-label">¿Asistirás?</div>
-            <div class="person-options" role="radiogroup" aria-label="Asistencia">
-              <label><input type="radio" name="attending" value="true" required> Asistiré</label>
-              <label><input type="radio" name="attending" value="false" required> No asistiré</label>
-            </div>
-          </div>
+          ${pairAttendanceFields}
 
           ${plusOneField}
 
-          <div id="rsvpEmailWrap" hidden>
+          <div id="rsvpEmailWrap" ${isPairInvite ? "" : "hidden"}>
             <label for="rsvpEmail">Correo para validar tu RSVP más adelante</label>
             <input id="rsvpEmail" name="rsvpEmail" type="email" autocomplete="email" placeholder="tu-correo@ejemplo.com" />
           </div>
@@ -329,6 +376,9 @@ export function initRsvpFlow() {
       const rsvpEmailWrap = document.getElementById("rsvpEmailWrap");
       const rsvpEmailInput = document.getElementById("rsvpEmail");
       const attendanceInputs = responseForm?.querySelectorAll('input[name="attending"]');
+      const pairAttendanceInputSets = normalizedPairGuests.map((_, index) =>
+        responseForm?.querySelectorAll(`input[name="pairAttending${index}"]`)
+      );
 
       if (!responseForm || !submitError || !rsvpEmailInput) {
         lookupError.textContent = "El formulario de RSVP no está disponible temporalmente. Recarga la página e inténtalo de nuevo.";
@@ -336,6 +386,14 @@ export function initRsvpFlow() {
       }
 
       const updateConditionalFields = () => {
+        if (isPairInvite) {
+          if (rsvpEmailWrap && rsvpEmailInput) {
+            rsvpEmailWrap.hidden = false;
+            rsvpEmailInput.required = true;
+          }
+          return;
+        }
+
         const attendingValue = responseForm.querySelector('input[name="attending"]:checked')?.value;
         const isAttending = attendingValue === "true";
 
@@ -383,6 +441,9 @@ export function initRsvpFlow() {
       };
 
       attendanceInputs?.forEach((input) => input.addEventListener("change", updateConditionalFields));
+      pairAttendanceInputSets.forEach((inputs) =>
+        inputs?.forEach((input) => input.addEventListener("change", updateConditionalFields))
+      );
       responseForm
         .querySelectorAll('input[name="needsPlusOne"]')
         .forEach((input) => input.addEventListener("change", updateConditionalFields));
@@ -399,25 +460,39 @@ export function initRsvpFlow() {
         const needsPlusOneValue = responseForm.querySelector('input[name="needsPlusOne"]:checked')?.value;
         const needsPlusOne = needsPlusOneValue === "true";
         const plusOneName = plusOneNameInput?.value?.trim() || null;
-        const guestCount = isAttending ? (guest.allowed_plus_one && needsPlusOne ? 2 : 1) : 0;
+        let guestCount = isAttending ? (guest.allowed_plus_one && needsPlusOne ? 2 : 1) : 0;
+        let normalizedAttending = isAttending;
         const rsvpEmail = normalizeEmail(rsvpEmailInput.value || "");
 
-        if (attendingValue === undefined) {
-          submitError.textContent = "Por favor selecciona si asistirás.";
-          return;
+        if (isPairInvite) {
+          const pairSelections = normalizedPairGuests.map((_, index) =>
+            responseForm.querySelector(`input[name="pairAttending${index}"]:checked`)?.value
+          );
+          if (pairSelections.some((entry) => entry === undefined)) {
+            submitError.textContent = "Por favor indícanos la asistencia de cada persona.";
+            return;
+          }
+
+          guestCount = pairSelections.filter((entry) => entry === "true").length;
+          normalizedAttending = guestCount > 0;
+        } else {
+          if (attendingValue === undefined) {
+            submitError.textContent = "Por favor selecciona si asistirás.";
+            return;
+          }
+
+          if (guest.allowed_plus_one && isAttending && needsPlusOneValue === undefined) {
+            submitError.textContent = "Por favor indícanos si necesitas acompañante.";
+            return;
+          }
+
+          if (guest.allowed_plus_one && isAttending && needsPlusOne && !plusOneName) {
+            submitError.textContent = "Por favor ingresa el nombre de tu acompañante.";
+            return;
+          }
         }
 
-        if (guest.allowed_plus_one && isAttending && needsPlusOneValue === undefined) {
-          submitError.textContent = "Por favor indícanos si necesitas acompañante.";
-          return;
-        }
-
-        if (guest.allowed_plus_one && isAttending && needsPlusOne && !plusOneName) {
-          submitError.textContent = "Por favor ingresa el nombre de tu acompañante.";
-          return;
-        }
-
-        if (isAttending && (!rsvpEmail || !rsvpEmail.includes("@"))) {
+        if ((!rsvpEmail || !rsvpEmail.includes("@")) && (isPairInvite || normalizedAttending)) {
           submitError.textContent = "Por favor ingresa un correo válido.";
           return;
         }
@@ -453,10 +528,10 @@ export function initRsvpFlow() {
           {
             guest_id: guest.id,
             response_group: responseGroup,
-            attending: isAttending,
+            attending: normalizedAttending,
             guest_count: guestCount,
-            plus_one_name: guest.allowed_plus_one && isAttending && needsPlusOne ? plusOneName : null,
-            email: isAttending ? rsvpEmail : null,
+            plus_one_name: guest.allowed_plus_one && !isPairInvite && normalizedAttending && needsPlusOne ? plusOneName : null,
+            email: normalizedAttending || isPairInvite ? rsvpEmail : null,
             submitted_at: new Date().toISOString()
           }
         ]);
@@ -468,14 +543,14 @@ export function initRsvpFlow() {
           return;
         }
 
-        const responseHeading = isAttending
+        const responseHeading = normalizedAttending
           ? "¡Gracias! Tu RSVP ha sido guardado."
           : "Gracias por avisarnos 💛";
-        const responseCopy = isAttending
+        const responseCopy = normalizedAttending
           ? "Recibimos tu respuesta y usamos tu correo para validar el acceso a los detalles."
           : "Te vamos a extrañar en nuestro gran día, pero agradecemos mucho tu cariño y buenos deseos.";
 
-        const detailsButtons = isAttending
+        const detailsButtons = normalizedAttending
           ? `
             <div class="result-card success" role="status" aria-live="polite">
               <h3>Detalles de la boda</h3>
