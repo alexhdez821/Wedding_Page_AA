@@ -342,6 +342,22 @@
       background: var(--bg);
     }
 
+    .greeting-section {
+      min-height: auto;
+      background: #ffffff;
+      color: #000000;
+      text-align: center;
+      padding: 88px 0;
+    }
+
+    .greeting-message {
+      max-width: 760px;
+      margin: 0 auto;
+      font-size: clamp(1.2rem, 2.6vw, 1.9rem);
+      line-height: 1.6;
+      color: #000000;
+    }
+
     .content-inner {
       max-width: 900px;
       margin: 0 auto;
@@ -539,6 +555,7 @@
 
       <nav class="menu-links">
         <a href="#hero">Inicio</a>
+        <a href="#saludo">Mensaje</a>
         <a href="#countdown">Cuenta regresiva</a>
         <a href="#historia">Historia</a>
         <a href="#itinerario">Itinerario</a>
@@ -555,6 +572,15 @@
         <div class="hero-content">
           <img class="hero-logo" src="./images/hero_logo.png" alt="Monograma de Alejandro y Alejandra" />
         </div>
+      </div>
+    </section>
+
+
+    <section class="section greeting-section" id="saludo">
+      <div class="container">
+        <p class="greeting-message">
+          Con muchísima alegría, queremos compartirles que nos vamos a casar y nos encantaría celebrar este momento tan especial junto a ustedes.
+        </p>
       </div>
     </section>
 
