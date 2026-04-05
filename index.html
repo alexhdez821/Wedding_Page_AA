@@ -310,32 +310,73 @@
     }
 
     .count-grid {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 16px;
-      max-width: 760px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      flex-wrap: nowrap;
+      gap: clamp(0.4rem, 1.25vw, 1rem);
       margin: 0 auto;
+      width: min(1060px, 100%);
+      font-family: "Cormorant Garamond", serif;
     }
 
-    .count-card {
-      background: rgba(255,255,255,0.13);
-      border: 1px solid rgba(255,255,255,0.18);
-      border-radius: 20px;
-      padding: 18px 12px;
-      backdrop-filter: blur(10px);
+    .count-unit {
+      min-width: 0;
+      text-align: center;
     }
 
     .count-number {
       display: block;
-      font-size: clamp(2rem, 5vw, 3.2rem);
-      margin-bottom: 8px;
+      font-size: clamp(2.7rem, 11vw, 8.4rem);
+      line-height: 0.94;
+      letter-spacing: 0.02em;
+      font-weight: 500;
+      text-shadow: 0 1px 12px rgba(0, 0, 0, 0.2);
     }
 
     .count-label {
-      font-size: 0.9rem;
-      letter-spacing: 0.08em;
+      margin-top: clamp(0.45rem, 1.2vw, 0.9rem);
+      font-size: clamp(0.68rem, 1.35vw, 0.98rem);
+      letter-spacing: 0.15em;
       text-transform: uppercase;
-      color: rgba(255,255,255,0.82);
+      color: rgba(255,255,255,0.76);
+    }
+
+    .count-separator {
+      font-family: "Cormorant Garamond", serif;
+      font-size: clamp(1.7rem, 6vw, 4.6rem);
+      line-height: 1;
+      font-weight: 400;
+      color: rgba(255,255,255,0.58);
+      align-self: flex-start;
+      padding-top: clamp(0.18rem, 0.9vw, 0.7rem);
+      text-shadow: 0 1px 8px rgba(0, 0, 0, 0.15);
+    }
+
+    .count-finished {
+      font-family: "Cormorant Garamond", serif;
+      font-size: clamp(2.1rem, 7vw, 4.4rem);
+      letter-spacing: 0.04em;
+      text-shadow: 0 1px 10px rgba(0, 0, 0, 0.2);
+    }
+
+
+    @media (max-width: 900px) {
+      .count-grid {
+        gap: clamp(0.25rem, 1.8vw, 0.65rem);
+      }
+
+      .count-number {
+        font-size: clamp(2.3rem, 12vw, 5.3rem);
+      }
+
+      .count-separator {
+        font-size: clamp(1.45rem, 7vw, 3rem);
+      }
+
+      .count-label {
+        letter-spacing: 0.12em;
+      }
     }
 
     .content-section {
@@ -517,10 +558,6 @@
       .photo-grid {
         grid-template-columns: 1fr;
       }
-
-      .count-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
     }
 
     @media (max-width: 640px) {
@@ -560,11 +597,7 @@
       }
 
       .count-grid {
-        gap: 12px;
-      }
-
-      .count-card {
-        padding: 16px 10px;
+        gap: clamp(0.2rem, 1.4vw, 0.5rem);
       }
 
       .section-title {
@@ -693,20 +726,23 @@
             Estamos contando los días para celebrar este momento tan especial con ustedes.
           </p>
 
-          <div class="count-grid" id="countdownGrid">
-            <div class="count-card">
+          <div class="count-grid" id="countdownGrid" aria-label="Cuenta regresiva para la boda">
+            <div class="count-unit">
               <span class="count-number" id="days">--</span>
               <div class="count-label">Días</div>
             </div>
-            <div class="count-card">
+            <span class="count-separator" aria-hidden="true">:</span>
+            <div class="count-unit">
               <span class="count-number" id="hours">--</span>
               <div class="count-label">Horas</div>
             </div>
-            <div class="count-card">
+            <span class="count-separator" aria-hidden="true">:</span>
+            <div class="count-unit">
               <span class="count-number" id="minutes">--</span>
               <div class="count-label">Minutos</div>
             </div>
-            <div class="count-card">
+            <span class="count-separator" aria-hidden="true">:</span>
+            <div class="count-unit">
               <span class="count-number" id="seconds">--</span>
               <div class="count-label">Segundos</div>
             </div>
@@ -869,10 +905,7 @@
 
       if (distance <= 0) {
         document.getElementById("countdownGrid").innerHTML = `
-          <div class="count-card" style="grid-column: 1 / -1;">
-            <span class="count-number">Hoy</span>
-            <div class="count-label">¡Nos casamos!</div>
-          </div>
+          <div class="count-finished">Hoy — ¡Nos casamos!</div>
         `;
         return;
       }
