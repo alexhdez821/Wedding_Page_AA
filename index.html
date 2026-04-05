@@ -64,12 +64,29 @@
       text-decoration: none;
     }
 
-    
-
-    .site-header.header-hidden {
-      transform: translateY(calc(-100% - 6px));
+    .site-header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      min-height: var(--header-h);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 10px 16px;
+      z-index: 1000;
+      background: rgba(255, 250, 245, 0.78);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--line);
+      box-shadow: 0 8px 26px rgba(70, 52, 43, 0.08);
+      transform: translateY(-120%);
       opacity: 0;
-      pointer-events: none;
+      transition: transform 0.35s ease, opacity 0.3s ease;
+    }
+
+    .site-header.show {
+      transform: translateY(0);
+      opacity: 1;
     }
 
     .header-inner {
@@ -195,7 +212,10 @@
       color: var(--text);
     }
 
-    
+    main {
+      padding-top: 0;
+    }
+
     .section {
       position: relative;
       min-height: 100svh;
@@ -656,6 +676,19 @@
   </style>
 </head>
 <body>
+  <header class="site-header">
+    <div class="header-inner">
+      <button class="menu-btn" id="menuToggle" aria-label="Abrir menú" type="button">
+        <span class="menu-icon" aria-hidden="true">
+          <span></span>
+          <span></span>
+          <span></span>
+        </span>
+      </button>
+      <div class="brand">Alejandro &amp; Alejandra</div>
+      <div class="header-spacer" aria-hidden="true"></div>
+    </div>
+  </header>
 
   <div class="menu-panel" id="menuPanel" aria-hidden="true">
     <div class="menu-backdrop" id="menuBackdrop"></div>
@@ -855,24 +888,24 @@
     const menuClose = document.getElementById("menuClose");
     const menuBackdrop = document.getElementById("menuBackdrop");
     const menuLinks = document.querySelectorAll(".menu-links a");
-    const siteHeader = document.querySelector(".site-header");
-    const heroSection = document.getElementById("hero");
 
     function openMenu() {
+      if (!menuPanel) return;
       menuPanel.classList.add("active");
       menuPanel.setAttribute("aria-hidden", "false");
     }
 
     function closeMenu() {
+      if (!menuPanel) return;
       menuPanel.classList.remove("active");
       menuPanel.setAttribute("aria-hidden", "true");
     }
 
-    menuToggle.addEventListener("click", openMenu);
-    menuClose.addEventListener("click", closeMenu);
-    menuBackdrop.addEventListener("click", closeMenu);
+    if (menuToggle) menuToggle.addEventListener("click", openMenu);
+    if (menuClose) menuClose.addEventListener("click", closeMenu);
+    if (menuBackdrop) menuBackdrop.addEventListener("click", closeMenu);
 
-    menuLinks.forEach(link => {
+    menuLinks.forEach((link) => {
       link.addEventListener("click", closeMenu);
     });
 
@@ -882,31 +915,22 @@
       }
     });
 
-    let lastScrollY = window.scrollY;
-    const scrollDeltaThreshold = 6;
+    const header = document.querySelector(".site-header");
+    const hero = document.getElementById("hero");
 
     function updateHeaderVisibility() {
-      const currentScrollY = window.scrollY;
-      const scrollingUp = currentScrollY < lastScrollY;
-      const scrollDelta = Math.abs(currentScrollY - lastScrollY);
-      const heroBottom = heroSection.offsetTop + heroSection.offsetHeight;
-      const isBelowFrontPage = currentScrollY > heroBottom - 4;
+      if (!header || !hero) return;
 
-      if (scrollDelta < scrollDeltaThreshold) {
-        lastScrollY = currentScrollY;
-        return;
-      }
+      const heroBottom = hero.offsetHeight;
 
-      if (scrollingUp && isBelowFrontPage) {
-        siteHeader.classList.remove("header-hidden");
+      if (window.scrollY > heroBottom - 50) {
+        header.classList.add("show");
       } else {
-        siteHeader.classList.add("header-hidden");
+        header.classList.remove("show");
       }
-
-      lastScrollY = currentScrollY;
     }
 
-    siteHeader.classList.add("header-hidden");
+    updateHeaderVisibility();
     window.addEventListener("scroll", updateHeaderVisibility, { passive: true });
     window.addEventListener("resize", updateHeaderVisibility);
 
