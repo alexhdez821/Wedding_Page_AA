@@ -7,7 +7,7 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Great+Vibes&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 
   <style>
     :root {
@@ -343,19 +343,51 @@
     }
 
     .greeting-section {
-      min-height: auto;
+      min-height: calc(100svh - var(--header-h));
+      display: flex;
+      align-items: center;
       background: #ffffff;
-      color: #000000;
       text-align: center;
-      padding: 88px 0;
+      padding: clamp(6rem, 12vh, 9rem) 0;
     }
 
-    .greeting-message {
-      max-width: 760px;
+    .greeting-section .container {
+      width: min(800px, 92%);
       margin: 0 auto;
-      font-size: clamp(1.2rem, 2.6vw, 1.9rem);
-      line-height: 1.6;
-      color: #000000;
+    }
+
+    .greeting-title {
+      font-family: "Great Vibes", cursive;
+      font-weight: 400;
+      font-size: clamp(3.2rem, 9vw, 6rem);
+      line-height: 1;
+      color: #53453e;
+      margin-bottom: clamp(1.2rem, 3vw, 2rem);
+    }
+
+    .greeting-text {
+      max-width: 700px;
+      margin: 0 auto;
+      font-family: "Inter", sans-serif;
+      font-size: clamp(1.05rem, 2.1vw, 1.35rem);
+      line-height: 1.8;
+      color: #4c4039;
+    }
+
+    .greeting-date {
+      margin-top: clamp(2rem, 4vw, 2.9rem);
+      font-family: "Cormorant Garamond", serif;
+      font-weight: 600;
+      font-size: clamp(1.45rem, 3.6vw, 2.25rem);
+      letter-spacing: 0.055em;
+      color: #3f312b;
+    }
+
+    .greeting-time {
+      margin-top: 0.7rem;
+      font-size: clamp(0.95rem, 1.8vw, 1.05rem);
+      letter-spacing: 0.02em;
+      color: #84746b;
     }
 
     .content-inner {
@@ -519,6 +551,30 @@
         font-size: clamp(2rem, 10vw, 3rem);
       }
 
+      .greeting-section {
+        min-height: auto;
+        padding: 84px 0 68px;
+      }
+
+      .greeting-title {
+        font-size: clamp(2.8rem, 14vw, 4rem);
+        margin-bottom: 1rem;
+      }
+
+      .greeting-text {
+        font-size: 1rem;
+        line-height: 1.7;
+      }
+
+      .greeting-date {
+        margin-top: 1.6rem;
+        font-size: clamp(1.28rem, 6.2vw, 1.72rem);
+      }
+
+      .greeting-time {
+        font-size: 0.92rem;
+      }
+
       .section-copy {
         font-size: 0.98rem;
       }
@@ -578,9 +634,12 @@
 
     <section class="section greeting-section" id="saludo">
       <div class="container">
-        <p class="greeting-message">
-          Con muchísima alegría, queremos compartirles que nos vamos a casar y nos encantaría celebrar este momento tan especial junto a ustedes.
+        <h2 class="greeting-title">Estas invitado!</h2>
+        <p class="greeting-text">
+          Junto a nuestros seres queridos, nosotros, Alejandro y Alejandra, queremos invitarte a celebrar el santo sacramento de nuestro matrimonio.
         </p>
+        <p class="greeting-date">Sábado 17 de Octubre de 2026</p>
+        <p class="greeting-time">La ceremonia empieza a la 1pm</p>
       </div>
     </section>
 
