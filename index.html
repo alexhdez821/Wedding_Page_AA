@@ -281,12 +281,12 @@
       z-index: 3;
       padding: clamp(1rem, 3vw, 2rem);
       padding-top: 1vh;
-
-      transform: translateY(-60px); /* 👈 add this */
+      overflow: visible;
+      transform: translateY(-20px);
     }
 
     .hero-logo {
-      width: min(96vw, 760px);
+      width: clamp(320px, 88vw, 900px);
       max-width: 100%;
       height: auto;
       object-fit: contain;
@@ -613,10 +613,7 @@
       .hero-content {
         min-height: calc(100svh - var(--header-h));
         padding-inline: clamp(0.75rem, 5vw, 1.25rem);
-      }
-
-      .hero-logo {
-        width: min(132vw, 560px);
+        transform: translateY(0);
       }
 
       .count-grid {
