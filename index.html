@@ -262,8 +262,22 @@
       background-image: url("https://images.unsplash.com/photo-1520854221256-17451cc331bf?auto=format&fit=crop&w=1800&q=80");
     }
 
-    .hero-empty {
-      min-height: 40vh;
+    .hero-content {
+      min-height: calc(100svh - var(--header-h));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      position: relative;
+      z-index: 3;
+      padding: clamp(1rem, 3vw, 2rem);
+    }
+
+    .hero-logo {
+      width: min(78vw, 540px);
+      max-width: 100%;
+      height: auto;
+      object-fit: contain;
     }
 
     .countdown-shell {
@@ -465,6 +479,15 @@
         min-height: calc(100svh - var(--header-h));
       }
 
+      .hero-content {
+        min-height: calc(100svh - var(--header-h));
+        padding-inline: clamp(0.75rem, 5vw, 1.25rem);
+      }
+
+      .hero-logo {
+        width: min(84vw, 430px);
+      }
+
       .count-grid {
         gap: 12px;
       }
@@ -526,7 +549,9 @@
   <main>
     <section class="section hero" id="hero">
       <div class="container">
-        <div class="hero-empty"></div>
+        <div class="hero-content">
+          <img class="hero-logo" src="./images/hero_logo.png" alt="Monograma de Alejandro y Alejandra" />
+        </div>
       </div>
     </section>
 
