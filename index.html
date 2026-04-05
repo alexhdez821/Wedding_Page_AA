@@ -78,6 +78,16 @@
       background: rgba(247, 243, 238, 0.72);
       backdrop-filter: blur(14px);
       border-bottom: 1px solid var(--line);
+      transform: translateY(0);
+      opacity: 1;
+      pointer-events: auto;
+      transition: transform 0.28s ease, opacity 0.2s ease;
+    }
+
+    .site-header.header-hidden {
+      transform: translateY(calc(-100% - 6px));
+      opacity: 0;
+      pointer-events: none;
     }
 
     .header-inner {
@@ -880,6 +890,8 @@
     const menuClose = document.getElementById("menuClose");
     const menuBackdrop = document.getElementById("menuBackdrop");
     const menuLinks = document.querySelectorAll(".menu-links a");
+    const siteHeader = document.querySelector(".site-header");
+    const heroSection = document.getElementById("hero");
 
     function openMenu() {
       menuPanel.classList.add("active");
@@ -904,6 +916,34 @@
         closeMenu();
       }
     });
+
+    let lastScrollY = window.scrollY;
+    const scrollDeltaThreshold = 6;
+
+    function updateHeaderVisibility() {
+      const currentScrollY = window.scrollY;
+      const scrollingUp = currentScrollY < lastScrollY;
+      const scrollDelta = Math.abs(currentScrollY - lastScrollY);
+      const heroBottom = heroSection.offsetTop + heroSection.offsetHeight;
+      const isBelowFrontPage = currentScrollY > heroBottom - 4;
+
+      if (scrollDelta < scrollDeltaThreshold) {
+        lastScrollY = currentScrollY;
+        return;
+      }
+
+      if (scrollingUp && isBelowFrontPage) {
+        siteHeader.classList.remove("header-hidden");
+      } else {
+        siteHeader.classList.add("header-hidden");
+      }
+
+      lastScrollY = currentScrollY;
+    }
+
+    siteHeader.classList.add("header-hidden");
+    window.addEventListener("scroll", updateHeaderVisibility, { passive: true });
+    window.addEventListener("resize", updateHeaderVisibility);
 
     const weddingDate = new Date("2026-10-17T16:00:00").getTime();
 
