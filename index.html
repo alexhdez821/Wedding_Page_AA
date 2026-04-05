@@ -734,10 +734,25 @@
     <section class="section countdown-section" id="countdown">
       <div class="container">
         <div class="countdown-shell">
-          <div class="count-grid days-only" id="countdownGrid" aria-label="Días restantes para la boda">
+          <div class="count-grid" id="countdownGrid" aria-label="Tiempo restante para la boda">
             <div class="count-unit">
               <span class="count-number" id="days">--</span>
               <div class="count-label">Días</div>
+            </div>
+            <span class="count-separator" aria-hidden="true">:</span>
+            <div class="count-unit">
+              <span class="count-number" id="hours">--</span>
+              <div class="count-label">Horas</div>
+            </div>
+            <span class="count-separator" aria-hidden="true">:</span>
+            <div class="count-unit">
+              <span class="count-number" id="minutes">--</span>
+              <div class="count-label">Minutos</div>
+            </div>
+            <span class="count-separator" aria-hidden="true">:</span>
+            <div class="count-unit">
+              <span class="count-number" id="seconds">--</span>
+              <div class="count-label">Segundos</div>
             </div>
           </div>
         </div>
@@ -904,8 +919,14 @@
       }
 
       const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((distance / (1000 * 60 * 60)) % 24);
+      const minutes = Math.floor((distance / (1000 * 60)) % 60);
+      const seconds = Math.floor((distance / 1000) % 60);
 
       document.getElementById("days").textContent = days;
+      document.getElementById("hours").textContent = String(hours).padStart(2, "0");
+      document.getElementById("minutes").textContent = String(minutes).padStart(2, "0");
+      document.getElementById("seconds").textContent = String(seconds).padStart(2, "0");
     }
 
     updateCountdown();
