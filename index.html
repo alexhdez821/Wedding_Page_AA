@@ -354,7 +354,7 @@
 
     .greeting-wrapper {
       display: grid;
-      grid-template-columns: minmax(280px, 0.95fr) minmax(320px, 1fr);
+      grid-template-columns: minmax(320px, 1fr) minmax(280px, 0.95fr);
       align-items: center;
       column-gap: clamp(2.5rem, 6vw, 6rem);
       row-gap: 2rem;
@@ -581,12 +581,7 @@
         row-gap: 2.2rem;
       }
 
-      .greeting-image {
-        order: 1;
-      }
-
       .greeting-content {
-        order: 2;
         max-width: 100%;
       }
 
@@ -674,9 +669,6 @@
     <section class="section greeting-section" id="saludo">
       <div class="container">
         <div class="greeting-wrapper">
-          <figure class="greeting-image">
-            <img src="./images/greeting_photo.jpg" alt="Alejandro y Alejandra" />
-          </figure>
           <div class="greeting-content">
             <h2 class="greeting-title">Estas invitado!</h2>
             <p class="greeting-text">
@@ -685,6 +677,9 @@
             <p class="greeting-date">Sábado 17 de Octubre de 2026</p>
             <p class="greeting-time">La ceremonia empieza a la 1pm</p>
           </div>
+          <figure class="greeting-image">
+            <img src="./images/greeting_photo.jpg" alt="Alejandro y Alejandra" />
+          </figure>
         </div>
       </div>
     </section>
