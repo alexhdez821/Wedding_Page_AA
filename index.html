@@ -20,6 +20,7 @@
       --radius-lg: 28px;
       --radius-md: 20px;
       --section-space: clamp(2.5rem, 4vw, 4rem);
+      --header-height: 78px;
     }
 
     * { box-sizing: border-box; }
@@ -53,21 +54,57 @@
       margin: 0 auto;
     }
 
-    .menu-toggle {
+    .site-header {
       position: fixed;
-      top: 1rem;
-      left: 1rem;
-      z-index: 60;
-      width: 48px;
-      height: 48px;
-      border: 1px solid var(--line);
-      background: rgba(255, 250, 246, 0.92);
-      backdrop-filter: blur(8px);
-      border-radius: 14px;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 70;
+      height: var(--header-height);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 clamp(0.8rem, 3vw, 1.8rem);
+      background: rgba(250, 244, 239, 0.72);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(234, 223, 214, 0.85);
+      box-shadow: 0 4px 24px rgba(88, 62, 48, 0.06);
+    }
+
+    .brand {
+      margin: 0;
+      font-size: clamp(1.25rem, 3.8vw, 1.7rem);
+      font-weight: 600;
+      color: #4f3f36;
+      text-align: center;
+      letter-spacing: 0.02em;
+      pointer-events: none;
+    }
+
+    .menu-toggle {
+      position: absolute;
+      left: clamp(0.75rem, 2vw, 1.3rem);
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 71;
+      width: 44px;
+      height: 44px;
+      border: 1px solid rgba(168, 125, 107, 0.26);
+      background: rgba(255, 251, 248, 0.82);
+      backdrop-filter: blur(6px);
+      border-radius: 999px;
       display: grid;
       place-items: center;
       cursor: pointer;
-      box-shadow: var(--shadow);
+      box-shadow: 0 8px 20px rgba(88, 62, 48, 0.12);
+      transition: transform .25s ease, border-color .25s ease, background .25s ease;
+    }
+
+    .menu-toggle:hover {
+      transform: translateY(-50%) translateY(-1px);
+      border-color: rgba(156, 104, 83, 0.45);
+      background: rgba(255, 250, 246, 0.95);
     }
 
     .menu-toggle:focus-visible,
@@ -77,25 +114,32 @@
       outline-offset: 2px;
     }
 
-    .menu-toggle span {
-      width: 20px;
+    .menu-toggle-line {
+      width: 18px;
       height: 2px;
-      background: #5b4a41;
+      background: #5e4a40;
       border-radius: 999px;
       display: block;
-      margin: 2px 0;
-      transition: transform .25s ease, opacity .25s ease;
+      margin: 2.4px 0;
+      transform-origin: center;
+      transition: transform .28s ease, opacity .24s ease, width .22s ease;
     }
 
-    .menu-toggle[aria-expanded="true"] span:nth-child(1) {
+    .menu-toggle-line:nth-child(2) {
+      width: 14px;
+      margin-left: auto;
+    }
+
+    .menu-toggle[aria-expanded="true"] .menu-toggle-line:nth-child(1) {
       transform: translateY(6px) rotate(45deg);
     }
 
-    .menu-toggle[aria-expanded="true"] span:nth-child(2) {
+    .menu-toggle[aria-expanded="true"] .menu-toggle-line:nth-child(2) {
       opacity: 0;
+      width: 0;
     }
 
-    .menu-toggle[aria-expanded="true"] span:nth-child(3) {
+    .menu-toggle[aria-expanded="true"] .menu-toggle-line:nth-child(3) {
       transform: translateY(-6px) rotate(-45deg);
     }
 
@@ -104,7 +148,7 @@
       inset: 0;
       background: rgba(38, 26, 20, 0.45);
       backdrop-filter: blur(3px);
-      z-index: 55;
+      z-index: 75;
       opacity: 0;
       pointer-events: none;
       transition: opacity .25s ease;
@@ -126,8 +170,8 @@
       box-shadow: 14px 0 34px rgba(66, 47, 37, 0.18);
       transform: translateX(-102%);
       transition: transform .28s ease;
-      z-index: 56;
-      padding: 1.25rem 1.2rem;
+      z-index: 76;
+      padding: 1.35rem 1.2rem;
       display: flex;
       flex-direction: column;
       gap: 1.4rem;
@@ -185,7 +229,8 @@
       overflow-y: auto;
       overflow-x: hidden;
       scroll-snap-type: y mandatory;
-      scroll-padding-top: 0;
+      scroll-padding-top: calc(var(--header-height) + 0.85rem);
+      padding-top: var(--header-height);
     }
 
     .scene {
@@ -194,7 +239,7 @@
       scroll-snap-stop: always;
       display: flex;
       align-items: center;
-      padding: var(--section-space) 0;
+      padding: calc(var(--section-space) + 0.65rem) 0 var(--section-space);
     }
 
     .scene .container {
@@ -457,11 +502,12 @@
         min-height: 100vh;
         overflow: visible;
         scroll-snap-type: none;
+        scroll-padding-top: calc(var(--header-height) + 0.7rem);
       }
 
       .scene {
         min-height: auto;
-        padding: clamp(3.2rem, 10vw, 4.2rem) 0;
+        padding: clamp(2.6rem, 10vw, 4rem) 0;
         scroll-snap-align: none;
       }
 
@@ -495,11 +541,24 @@
     }
 
     @media (max-width: 480px) {
+      :root {
+        --header-height: 68px;
+      }
+
       .container { width: min(100%, 93%); }
 
+      .site-header {
+        padding-inline: 0.7rem;
+      }
+
       .menu-toggle {
-        top: 0.7rem;
-        left: 0.7rem;
+        left: 0.55rem;
+        width: 40px;
+        height: 40px;
+      }
+
+      .brand {
+        font-size: 1.24rem;
       }
 
       .count-box span {
@@ -509,18 +568,21 @@
   </style>
 </head>
 <body>
-  <button
-    type="button"
-    class="menu-toggle"
-    id="menuToggle"
-    aria-label="Abrir menú de navegación"
-    aria-controls="menuOverlay"
-    aria-expanded="false"
-  >
-    <span></span>
-    <span></span>
-    <span></span>
-  </button>
+  <header class="site-header">
+    <button
+      type="button"
+      class="menu-toggle"
+      id="menuToggle"
+      aria-label="Abrir menú de navegación"
+      aria-controls="menuOverlay"
+      aria-expanded="false"
+    >
+      <span class="menu-toggle-line"></span>
+      <span class="menu-toggle-line"></span>
+      <span class="menu-toggle-line"></span>
+    </button>
+    <h2 class="brand">Alejandro y Alejandra</h2>
+  </header>
 
   <div class="menu-overlay" id="menuOverlay" aria-hidden="true">
     <aside class="menu-panel" role="dialog" aria-modal="true" aria-label="Menú principal">
@@ -700,12 +762,20 @@
     const menuToggle = document.getElementById("menuToggle");
     const menuClose = document.getElementById("menuClose");
     const menuLinks = document.querySelectorAll(".menu-links a");
+    const focusableInMenuSelector = [
+      "a[href]",
+      "button:not([disabled])",
+      "input:not([disabled])",
+      "select:not([disabled])",
+      "textarea:not([disabled])",
+      "[tabindex]:not([tabindex='-1'])"
+    ].join(",");
 
     function openMenu() {
       menuOverlay.classList.add("open");
       menuOverlay.setAttribute("aria-hidden", "false");
       menuToggle.setAttribute("aria-expanded", "true");
-      document.body.style.overflow = window.matchMedia("(max-width: 980px)").matches ? "hidden" : "hidden";
+      document.body.style.overflow = "hidden";
       menuClose.focus();
     }
 
@@ -739,6 +809,25 @@
     document.addEventListener("keydown", (event) => {
       if (event.key === "Escape" && menuOverlay.classList.contains("open")) {
         closeMenu();
+      }
+
+      if (event.key === "Tab" && menuOverlay.classList.contains("open")) {
+        const focusableElements = [...menuOverlay.querySelectorAll(focusableInMenuSelector)]
+          .filter((el) => el.offsetParent !== null);
+        if (!focusableElements.length) {
+          return;
+        }
+
+        const first = focusableElements[0];
+        const last = focusableElements[focusableElements.length - 1];
+
+        if (event.shiftKey && document.activeElement === first) {
+          event.preventDefault();
+          last.focus();
+        } else if (!event.shiftKey && document.activeElement === last) {
+          event.preventDefault();
+          first.focus();
+        }
       }
     });
 
