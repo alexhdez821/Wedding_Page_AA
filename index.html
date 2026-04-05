@@ -918,16 +918,24 @@
     const header = document.querySelector(".site-header");
     const hero = document.getElementById("hero");
 
+    let lastScrollY = window.scrollY;
+
     function updateHeaderVisibility() {
       if (!header || !hero) return;
 
       const heroBottom = hero.offsetHeight;
+      const currentScrollY = window.scrollY;
+      const isScrollingUp = currentScrollY < lastScrollY;
 
-      if (window.scrollY > heroBottom - 50) {
+      if (currentScrollY <= heroBottom - 50) {
+        header.classList.remove("show");
+      } else if (isScrollingUp) {
         header.classList.add("show");
       } else {
         header.classList.remove("show");
       }
+
+      lastScrollY = currentScrollY;
     }
 
     updateHeaderVisibility();
