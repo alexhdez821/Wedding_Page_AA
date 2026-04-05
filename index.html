@@ -4,968 +4,722 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Alejandro y Alejandra | Nuestra Boda</title>
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
   <style>
     :root {
-      --primary: #b8816b;
-      --bg: #f8f4ef;
-      --card: #fffaf6;
+      --bg: #f7f3ee;
+      --surface: rgba(255, 250, 245, 0.78);
+      --surface-solid: #fffaf6;
       --text: #3d342f;
-      --muted: #7a6b63;
-      --accent: #9c6853;
-      --line: #eadfd6;
-      --shadow: 0 14px 34px rgba(88, 62, 48, 0.09);
+      --muted: #74665e;
+      --line: rgba(110, 89, 77, 0.14);
+      --accent: #b98973;
+      --accent-dark: #9f6f59;
+      --header-h: 72px;
       --radius-lg: 28px;
       --radius-md: 20px;
-      --section-space: clamp(2.8rem, 6vw, 4.2rem);
-      --header-height: 64px;
+      --shadow: 0 14px 40px rgba(77, 57, 46, 0.10);
+      --container: min(1120px, 92%);
     }
 
-    * { box-sizing: border-box; }
-    html, body { height: 100%; }
-    html { scroll-behavior: smooth; }
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
 
     body {
       margin: 0;
-      font-family: "Inter", Arial, Helvetica, sans-serif;
+      font-family: "Inter", sans-serif;
       background: var(--bg);
       color: var(--text);
-      line-height: 1.7;
       overflow-x: hidden;
     }
 
-    h1, h2, h3 {
-      font-family: "Cormorant Garamond", Georgia, serif;
+    h1, h2, h3, .brand, .count-number {
+      font-family: "Cormorant Garamond", serif;
+      margin: 0;
+      line-height: 1.05;
       letter-spacing: 0.01em;
-      line-height: 1.2;
     }
 
-    p { margin-top: 0; }
+    p {
+      margin: 0;
+      line-height: 1.75;
+    }
 
     img {
-      max-width: 100%;
       display: block;
+      max-width: 100%;
     }
 
-    .container {
-      width: min(1120px, 91%);
-      margin: 0 auto;
+    a {
+      color: inherit;
+      text-decoration: none;
     }
 
     .site-header {
       position: fixed;
       top: 0;
       left: 0;
-      right: 0;
-      z-index: 70;
-      height: var(--header-height);
+      width: 100%;
+      height: var(--header-h);
+      z-index: 1000;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 0 clamp(0.65rem, 3vw, 1.8rem);
-      background: rgba(250, 244, 239, 0.78);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      border-bottom: 1px solid rgba(234, 223, 214, 0.85);
-      box-shadow: 0 4px 24px rgba(88, 62, 48, 0.06);
+      padding: 0 18px;
+      background: rgba(247, 243, 238, 0.72);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .header-inner {
+      width: 100%;
+      max-width: 1280px;
+      display: grid;
+      grid-template-columns: 48px 1fr 48px;
+      align-items: center;
+    }
+
+    .menu-btn {
+      width: 44px;
+      height: 44px;
+      border: none;
+      border-radius: 999px;
+      background: rgba(255, 250, 245, 0.72);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 6px 18px rgba(70, 52, 43, 0.08);
+      transition: transform 0.2s ease, background 0.2s ease;
+    }
+
+    .menu-btn:hover {
+      transform: translateY(-1px);
+      background: rgba(255, 250, 245, 0.92);
+    }
+
+    .menu-icon {
+      width: 18px;
+      display: grid;
+      gap: 4px;
+    }
+
+    .menu-icon span {
+      display: block;
+      height: 1.5px;
+      width: 100%;
+      background: var(--text);
+      border-radius: 999px;
     }
 
     .brand {
-      margin: 0;
-      font-size: clamp(1.14rem, 4.6vw, 1.7rem);
-      font-weight: 600;
-      color: #4f3f36;
       text-align: center;
-      letter-spacing: 0.02em;
-      pointer-events: none;
+      font-size: clamp(1.2rem, 2vw, 1.55rem);
+      font-weight: 600;
+      white-space: nowrap;
     }
 
-    .menu-toggle {
-      position: absolute;
-      left: clamp(0.5rem, 2vw, 1.3rem);
-      top: 50%;
-      transform: translateY(-50%);
-      z-index: 71;
-      width: 40px;
-      height: 40px;
-      border: 1px solid rgba(168, 125, 107, 0.26);
-      background: rgba(255, 251, 248, 0.82);
-      backdrop-filter: blur(6px);
-      border-radius: 999px;
-      display: grid;
-      place-items: center;
-      cursor: pointer;
-      box-shadow: 0 7px 18px rgba(88, 62, 48, 0.12);
-      transition: transform .25s ease, border-color .25s ease, background .25s ease;
-    }
-
-    .menu-toggle:hover {
-      transform: translateY(-50%) translateY(-1px);
-      border-color: rgba(156, 104, 83, 0.45);
-      background: rgba(255, 250, 246, 0.95);
-    }
-
-    .menu-toggle:focus-visible,
-    .menu-close:focus-visible,
-    .menu-panel a:focus-visible {
-      outline: 2px solid var(--accent);
-      outline-offset: 2px;
-    }
-
-    .menu-toggle-line {
-      width: 16px;
-      height: 2px;
-      background: #5e4a40;
-      border-radius: 999px;
-      display: block;
-      margin: 2.4px 0;
-      transform-origin: center;
-      transition: transform .28s ease, opacity .24s ease, width .22s ease;
-    }
-
-    .menu-toggle-line:nth-child(2) {
-      width: 12px;
-      margin-left: auto;
-    }
-
-    .menu-toggle[aria-expanded="true"] .menu-toggle-line:nth-child(1) {
-      transform: translateY(6px) rotate(45deg);
-    }
-
-    .menu-toggle[aria-expanded="true"] .menu-toggle-line:nth-child(2) {
-      opacity: 0;
-      width: 0;
-    }
-
-    .menu-toggle[aria-expanded="true"] .menu-toggle-line:nth-child(3) {
-      transform: translateY(-6px) rotate(-45deg);
-    }
-
-    .menu-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(38, 26, 20, 0.45);
-      backdrop-filter: blur(3px);
-      z-index: 75;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity .25s ease;
-    }
-
-    .menu-overlay.open {
-      opacity: 1;
-      pointer-events: auto;
+    .header-spacer {
+      width: 44px;
+      height: 44px;
     }
 
     .menu-panel {
       position: fixed;
-      top: 0;
-      left: 0;
-      width: min(360px, 88vw);
-      height: 100vh;
-      background: #fff8f3;
-      border-right: 1px solid var(--line);
-      box-shadow: 12px 0 30px rgba(66, 47, 37, 0.16);
-      transform: translateX(-102%);
-      transition: transform .28s ease;
-      z-index: 76;
-      padding: 1.2rem 1rem 1.5rem;
-      display: flex;
-      flex-direction: column;
-      gap: 1.4rem;
+      inset: 0;
+      z-index: 1100;
+      visibility: hidden;
+      opacity: 0;
+      transition: opacity 0.25s ease, visibility 0.25s ease;
     }
 
-    .menu-overlay.open .menu-panel {
+    .menu-panel.active {
+      visibility: visible;
+      opacity: 1;
+    }
+
+    .menu-backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(45, 32, 26, 0.28);
+    }
+
+    .menu-drawer {
+      position: relative;
+      width: min(360px, 86vw);
+      height: 100%;
+      background: rgba(255, 250, 245, 0.96);
+      backdrop-filter: blur(18px);
+      padding: 24px 22px 28px;
+      box-shadow: 18px 0 40px rgba(54, 39, 31, 0.14);
+      transform: translateX(-100%);
+      transition: transform 0.3s ease;
+    }
+
+    .menu-panel.active .menu-drawer {
       transform: translateX(0);
     }
 
-    .menu-head {
+    .menu-top {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 12px;
+      margin-bottom: 28px;
     }
 
     .menu-title {
-      margin: 0;
-      font-size: 1.65rem;
-      color: #4c3d34;
+      font-size: 1.2rem;
+      font-weight: 600;
+      font-family: "Cormorant Garamond", serif;
     }
 
-    .menu-close {
-      border: 1px solid var(--line);
-      background: white;
-      color: #5c4a42;
-      width: 38px;
-      height: 38px;
-      border-radius: 12px;
-      font-size: 1.2rem;
+    .close-btn {
+      border: none;
+      background: transparent;
+      font-size: 1.8rem;
+      line-height: 1;
+      color: var(--text);
       cursor: pointer;
     }
 
     .menu-links {
       display: grid;
-      gap: 0.35rem;
-    }
-
-    .menu-links a {
-      text-decoration: none;
-      color: var(--text);
-      border-radius: 14px;
-      padding: 0.75rem 0.82rem;
-      transition: background .2s ease, color .2s ease;
-      font-weight: 600;
-    }
-
-    .menu-links a:hover {
-      background: #f5e8de;
-      color: var(--accent);
-    }
-
-    .snap-scroll {
-      min-height: 100vh;
-      overflow: visible;
-      scroll-snap-type: none;
-      scroll-padding-top: calc(var(--header-height) + 0.85rem);
-      padding-top: var(--header-height);
-    }
-
-    .scene {
-      min-height: auto;
-      scroll-snap-align: none;
-      display: flex;
-      align-items: flex-start;
-      padding: calc(var(--section-space) + 0.5rem) 0 var(--section-space);
-    }
-
-    .scene .container {
-      width: min(1120px, 92%);
-    }
-
-    .hero {
-      position: relative;
-      isolation: isolate;
-      background: url("https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1800&q=80") center/cover no-repeat;
-    }
-
-    .hero::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(160deg, rgba(53, 38, 31, 0.62), rgba(111, 68, 49, 0.38) 55%, rgba(184, 129, 107, 0.32));
-      z-index: -1;
-    }
-
-    .hero-card {
-      background: rgba(255, 250, 246, 0.9);
-      border: 1px solid rgba(255, 255, 255, 0.45);
-      border-radius: var(--radius-lg);
-      padding: clamp(1.8rem, 4vw, 3rem);
-      box-shadow: var(--shadow);
-      max-width: 760px;
-      width: 100%;
-      text-align: left;
-      margin-inline: auto;
-    }
-
-    .eyebrow {
-      text-transform: uppercase;
-      letter-spacing: 0.2em;
-      color: var(--accent);
-      font-size: 0.78rem;
-      margin-bottom: 10px;
-      font-weight: 600;
-    }
-
-    h1 {
-      font-size: clamp(2.25rem, 11vw, 5.4rem);
-      line-height: 1.05;
-      margin: 0;
-    }
-
-    .subtitle {
-      font-size: clamp(0.98rem, 3.7vw, 1.2rem);
-      color: #5f4f46;
-      max-width: 640px;
-      margin: 14px 0 20px;
-    }
-
-    .hero-meta {
-      font-size: clamp(1rem, 3.8vw, 1.22rem);
-      margin: 0;
-      font-weight: 600;
-      color: #4d3f37;
-    }
-
-    .hero-actions {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 10px;
-      margin-top: 20px;
-    }
-
-    .btn {
-      display: inline-block;
-      padding: 13px 18px;
-      border-radius: 999px;
-      text-decoration: none;
-      border: 1px solid var(--primary);
-      transition: transform .2s ease, background .25s ease, color .25s ease, box-shadow .25s ease;
-      font-weight: 600;
-      text-align: center;
-      min-width: 0;
-      width: 100%;
-    }
-
-    .btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 10px 18px rgba(156, 104, 83, 0.2);
-    }
-
-    .btn-primary {
-      background: var(--primary);
-      color: white;
-    }
-
-    .btn-primary:hover { background: var(--accent); }
-
-    .btn-secondary {
-      color: var(--accent);
-      background: transparent;
-    }
-
-    .btn-secondary:hover {
-      background: rgba(184, 129, 107, 0.12);
-    }
-
-    .section-title {
-      text-align: left;
-      font-size: clamp(1.95rem, 8.7vw, 2.8rem);
-      margin: 0 0 14px;
-      color: #4a3e38;
-    }
-
-    .section-copy {
-      text-align: left;
-      color: var(--muted);
-      max-width: 720px;
-      margin: 0 0 30px;
-      font-size: 1rem;
-    }
-
-    .grid {
-      display: grid;
-      gap: 22px;
-    }
-
-    .grid-2,
-    .grid-3,
-    .photo-grid { grid-template-columns: 1fr; }
-
-    .card {
-      background: var(--card);
-      border: 1px solid var(--line);
-      border-radius: 18px;
-      padding: clamp(1.05rem, 4vw, 1.55rem);
-      box-shadow: var(--shadow);
-      min-width: 0;
-      transition: transform .25s ease, box-shadow .25s ease;
-    }
-
-    .card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 20px 40px rgba(88, 62, 48, 0.12);
-    }
-
-    .card h3 {
-      margin: 0 0 12px;
-      font-size: 1.6rem;
-    }
-
-    .details-list {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-    }
-
-    .details-list li {
-      padding: 11px 0;
-      border-bottom: 1px solid var(--line);
-      word-wrap: break-word;
-    }
-
-    .details-list li:last-child { border-bottom: none; }
-
-    .schedule-item {
-      display: grid;
-      gap: 4px;
-      align-items: flex-start;
-      padding: 14px 0;
-      border-bottom: 1px solid var(--line);
-    }
-
-    .schedule-item:last-child { border-bottom: none; }
-
-    .time {
-      min-width: auto;
-      font-weight: 700;
-      color: var(--accent);
-      flex-shrink: 0;
-    }
-
-    .countdown {
-      display: flex;
-      justify-content: flex-start;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 24px;
-    }
-
-    .count-box {
-      background: var(--card);
-      border: 1px solid var(--line);
-      border-radius: 14px;
-      min-width: 78px;
-      padding: 10px;
-      text-align: center;
-      flex: 1 1 calc(50% - 10px);
-      max-width: 104px;
-      line-height: 1.2;
-    }
-
-    .count-box span {
-      display: block;
-      font-size: 1.35rem;
-      font-weight: 700;
-      margin-bottom: 6px;
-      color: var(--accent);
-    }
-
-    .icon-title {
-      display: flex;
-      gap: 8px;
-      align-items: center;
-    }
-
-    .photo-grid {
-      display: grid;
       gap: 14px;
     }
 
-    .photo-item {
-      border-radius: 16px;
+    .menu-links a {
+      padding: 12px 0;
+      border-bottom: 1px solid var(--line);
+      font-size: 1.02rem;
+      color: var(--text);
+    }
+
+    main {
+      padding-top: var(--header-h);
+    }
+
+    .section {
+      position: relative;
+      min-height: 100svh;
+      display: flex;
+      align-items: center;
+      padding: 56px 0;
+    }
+
+    .container {
+      width: var(--container);
+      margin: 0 auto;
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero,
+    .countdown-section {
+      justify-content: center;
+      text-align: center;
+      color: white;
       overflow: hidden;
+    }
+
+    .hero::before,
+    .countdown-section::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-position: center;
+      background-size: cover;
+      background-repeat: no-repeat;
+      transform: scale(1.06);
+      filter: blur(6px);
+    }
+
+    .hero::after,
+    .countdown-section::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        180deg,
+        rgba(45, 32, 26, 0.36),
+        rgba(45, 32, 26, 0.48)
+      );
+    }
+
+    .hero::before {
+      background-image: url("https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=1800&q=80");
+    }
+
+    .countdown-section::before {
+      background-image: url("https://images.unsplash.com/photo-1520854221256-17451cc331bf?auto=format&fit=crop&w=1800&q=80");
+    }
+
+    .hero-empty {
+      min-height: 40vh;
+    }
+
+    .countdown-shell {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .section-eyebrow {
+      display: inline-block;
+      font-size: 0.8rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+      color: rgba(255,255,255,0.88);
+    }
+
+    .countdown-title {
+      font-size: clamp(2.8rem, 8vw, 5.2rem);
+      margin-bottom: 18px;
+    }
+
+    .countdown-subtitle {
+      max-width: 700px;
+      margin: 0 auto 32px;
+      font-size: clamp(1rem, 2vw, 1.12rem);
+      color: rgba(255,255,255,0.88);
+    }
+
+    .count-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 16px;
+      max-width: 760px;
+      margin: 0 auto;
+    }
+
+    .count-card {
+      background: rgba(255,255,255,0.13);
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 20px;
+      padding: 18px 12px;
+      backdrop-filter: blur(10px);
+    }
+
+    .count-number {
+      display: block;
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      margin-bottom: 8px;
+    }
+
+    .count-label {
+      font-size: 0.9rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.82);
+    }
+
+    .content-section {
+      background: var(--bg);
+    }
+
+    .content-inner {
+      max-width: 900px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .section-title {
+      font-size: clamp(2.4rem, 6vw, 4rem);
+      margin-bottom: 18px;
+      color: var(--text);
+    }
+
+    .section-copy {
+      max-width: 760px;
+      margin: 0 auto;
+      color: var(--muted);
+      font-size: 1.03rem;
+    }
+
+    .card {
+      margin-top: 28px;
+      background: var(--surface-solid);
       border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      padding: clamp(1.4rem, 3vw, 2.2rem);
       box-shadow: var(--shadow);
-      aspect-ratio: 5/4;
+      text-align: left;
+    }
+
+    .timeline {
+      display: grid;
+      gap: 18px;
+      margin-top: 30px;
+      text-align: left;
+    }
+
+    .timeline-item {
+      padding: 18px 20px;
+      background: var(--surface-solid);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow);
+    }
+
+    .timeline-time {
+      font-weight: 600;
+      color: var(--accent-dark);
+      margin-bottom: 8px;
+    }
+
+    .travel-grid,
+    .photo-grid {
+      display: grid;
+      gap: 20px;
+      margin-top: 28px;
+    }
+
+    .travel-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .photo-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .photo-item {
+      aspect-ratio: 4 / 5;
+      overflow: hidden;
+      border-radius: 22px;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--line);
     }
 
     .photo-item img {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      transition: transform .45s ease;
     }
 
-    .photo-item:hover img { transform: scale(1.08); }
-
-    .fade-in {
-      opacity: 0;
-      transform: translateY(20px);
-      transition: opacity .65s ease, transform .65s ease;
+    .confirm-button {
+      display: inline-block;
+      margin-top: 28px;
+      padding: 14px 26px;
+      border-radius: 999px;
+      background: var(--accent);
+      color: white;
+      font-weight: 600;
+      transition: background 0.2s ease, transform 0.2s ease;
     }
 
-    .fade-in.visible {
-      opacity: 1;
-      transform: translateY(0);
+    .confirm-button:hover {
+      background: var(--accent-dark);
+      transform: translateY(-1px);
     }
 
     footer {
+      padding: 32px 20px 48px;
       text-align: center;
       color: var(--muted);
       border-top: 1px solid var(--line);
-      background: #f7f1ea;
-      padding: 1.4rem 0;
     }
 
-    @media (min-width: 700px) {
-      :root {
-        --header-height: 70px;
+    @media (max-width: 900px) {
+      .travel-grid,
+      .photo-grid {
+        grid-template-columns: 1fr;
       }
 
-      .hero-actions {
+      .count-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
       }
-
-      .count-box {
-        flex-basis: 84px;
-      }
     }
 
-    @media (min-width: 981px) {
+    @media (max-width: 640px) {
       :root {
-        --header-height: 78px;
-        --section-space: clamp(2.5rem, 4vw, 4rem);
-      }
-
-      body {
-        overflow: hidden;
-      }
-
-      .container {
-        width: min(1120px, 92%);
+        --header-h: 64px;
       }
 
       .site-header {
-        padding: 0 clamp(0.8rem, 3vw, 1.8rem);
+        padding: 0 12px;
       }
 
-      .menu-toggle {
-        left: clamp(0.75rem, 2vw, 1.3rem);
-        width: 44px;
-        height: 44px;
+      .header-inner {
+        grid-template-columns: 44px 1fr 44px;
       }
 
-      .menu-toggle-line {
-        width: 18px;
+      .brand {
+        font-size: 1.05rem;
       }
 
-      .menu-toggle-line:nth-child(2) {
-        width: 14px;
+      .section {
+        min-height: auto;
+        padding: 72px 0 56px;
       }
 
-      .menu-panel {
-        width: min(360px, 86vw);
-        box-shadow: 14px 0 34px rgba(66, 47, 37, 0.18);
-        padding: 1.35rem 1.2rem;
+      .hero,
+      .countdown-section {
+        min-height: calc(100svh - var(--header-h));
       }
 
-      .menu-title {
-        font-size: 1.9rem;
-      }
-
-      .snap-scroll {
-        height: 100vh;
-        overflow-y: auto;
-        overflow-x: hidden;
-        scroll-snap-type: y mandatory;
-      }
-
-      .scene {
-        min-height: 100vh;
-        scroll-snap-align: start;
-        scroll-snap-stop: always;
-        align-items: center;
-        padding: calc(var(--section-space) + 0.65rem) 0 var(--section-space);
-      }
-
-      .hero-card {
-        text-align: center;
-      }
-
-      .subtitle {
-        margin: 16px auto 22px;
-      }
-
-      .hero-actions {
-        display: flex;
-        justify-content: center;
-        flex-wrap: wrap;
+      .count-grid {
         gap: 12px;
-        margin-top: 24px;
       }
 
-      .btn {
-        min-width: 170px;
-        width: auto;
+      .count-card {
+        padding: 16px 10px;
       }
 
-      .section-title,
-      .section-copy {
-        text-align: center;
+      .section-title {
+        font-size: clamp(2rem, 10vw, 3rem);
       }
 
       .section-copy {
-        margin: 0 auto 32px;
-        font-size: 1.04rem;
+        font-size: 0.98rem;
       }
 
-      .grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-
-      .card {
-        border-radius: var(--radius-md);
-        padding: clamp(1.1rem, 2.5vw, 1.6rem);
-      }
-
-      .schedule-item {
-        display: flex;
-        gap: 14px;
-      }
-
-      .time {
-        min-width: 92px;
-      }
-
-      .countdown {
-        justify-content: center;
-        gap: 14px;
-        margin-top: 30px;
-      }
-
-      .count-box {
-        min-width: 90px;
-        padding: 12px;
-        flex: 1 1 90px;
-        max-width: 124px;
-      }
-
-      .count-box span {
-        font-size: 1.7rem;
-      }
-
-      .photo-grid {
-        gap: 18px;
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-      }
-
-      .photo-item {
-        border-radius: 18px;
-        aspect-ratio: 4/5;
-      }
-    }
-
-    @media (max-width: 480px) {
-      .container { width: min(100%, 92%); }
-
-      .hero-card {
-        padding: 1.35rem 1rem 1.15rem;
-      }
-
-      .menu-panel {
-        width: min(340px, 90vw);
+      .menu-drawer {
+        padding-top: 20px;
       }
     }
   </style>
 </head>
 <body>
   <header class="site-header">
-    <button
-      type="button"
-      class="menu-toggle"
-      id="menuToggle"
-      aria-label="Abrir menú de navegación"
-      aria-controls="menuOverlay"
-      aria-expanded="false"
-    >
-      <span class="menu-toggle-line"></span>
-      <span class="menu-toggle-line"></span>
-      <span class="menu-toggle-line"></span>
-    </button>
-    <h2 class="brand">Alejandro y Alejandra</h2>
+    <div class="header-inner">
+      <button class="menu-btn" id="menuToggle" aria-label="Abrir menú">
+        <span class="menu-icon">
+          <span></span>
+          <span></span>
+          <span></span>
+        </span>
+      </button>
+
+      <div class="brand">Alejandro y Alejandra</div>
+      <div class="header-spacer"></div>
+    </div>
   </header>
 
-  <div class="menu-overlay" id="menuOverlay" aria-hidden="true">
-    <aside class="menu-panel" role="dialog" aria-modal="true" aria-label="Menú principal">
-      <div class="menu-head">
-        <h2 class="menu-title">Menú</h2>
-        <button type="button" class="menu-close" id="menuClose" aria-label="Cerrar menú">✕</button>
+  <div class="menu-panel" id="menuPanel" aria-hidden="true">
+    <div class="menu-backdrop" id="menuBackdrop"></div>
+    <aside class="menu-drawer">
+      <div class="menu-top">
+        <div class="menu-title">Menú</div>
+        <button class="close-btn" id="menuClose" aria-label="Cerrar menú">&times;</button>
       </div>
-      <nav class="menu-links" aria-label="Navegación principal">
-        <a href="#historia">Nuestra historia</a>
-        <a href="#detalles">Detalles</a>
+
+      <nav class="menu-links">
+        <a href="#hero">Inicio</a>
+        <a href="#countdown">Cuenta regresiva</a>
+        <a href="#historia">Historia</a>
         <a href="#itinerario">Itinerario</a>
         <a href="#viaje">Viaje</a>
-        <a href="rsvp.html">Confirmar</a>
+        <a href="#fotos">Fotos</a>
+        <a href="#confirmar">Confirmar</a>
       </nav>
     </aside>
   </div>
 
-  <main class="snap-scroll" id="snapScroll">
-    <section class="scene hero fade-in" id="inicio">
+  <main>
+    <section class="section hero" id="hero">
       <div class="container">
-        <div class="hero-card">
-          <div class="eyebrow">¡Nos casamos!</div>
-          <h1>Alejandro<br>y Alejandra</h1>
-          <p class="subtitle">
-            Con mucha alegría queremos compartir este día tan especial con nuestra familia y amigos. Gracias por acompañarnos en el comienzo de esta nueva etapa.
+        <div class="hero-empty"></div>
+      </div>
+    </section>
+
+    <section class="section countdown-section" id="countdown">
+      <div class="container">
+        <div class="countdown-shell">
+          <div class="section-eyebrow">Falta muy poco</div>
+          <h1 class="countdown-title">Cuenta regresiva</h1>
+          <p class="countdown-subtitle">
+            Estamos contando los días para celebrar este momento tan especial con ustedes.
           </p>
-          <p class="hero-meta">Sábado, 17 de octubre de 2026 · Scottsdale, Arizona</p>
-          <div class="hero-actions">
-            <a class="btn btn-primary" href="rsvp.html">Confirmar asistencia</a>
-            <a class="btn btn-secondary" href="#detalles">Ver detalles</a>
-          </div>
-          <div class="countdown" id="countdown">
-            <div class="count-box"><span id="days">--</span>Días</div>
-            <div class="count-box"><span id="hours">--</span>Horas</div>
-            <div class="count-box"><span id="minutes">--</span>Min</div>
-            <div class="count-box"><span id="seconds">--</span>Seg</div>
+
+          <div class="count-grid" id="countdownGrid">
+            <div class="count-card">
+              <span class="count-number" id="days">--</span>
+              <div class="count-label">Días</div>
+            </div>
+            <div class="count-card">
+              <span class="count-number" id="hours">--</span>
+              <div class="count-label">Horas</div>
+            </div>
+            <div class="count-card">
+              <span class="count-number" id="minutes">--</span>
+              <div class="count-label">Minutos</div>
+            </div>
+            <div class="count-card">
+              <span class="count-number" id="seconds">--</span>
+              <div class="count-label">Segundos</div>
+            </div>
           </div>
         </div>
       </div>
     </section>
 
-    <section id="historia" class="scene fade-in">
+    <section class="section content-section" id="historia">
       <div class="container">
-        <h2 class="section-title">Nuestra historia</h2>
-        <p class="section-copy">
-          Una historia construida con risas, aventuras y mucho amor. Nos emociona celebrarla con ustedes.
-        </p>
-        <div class="grid grid-2">
-          <div class="card">
-            <h3 class="icon-title"><span>💞</span>Cómo nos conocimos</h3>
-            <p>
-              Reemplaza este texto con su historia. Lo ideal es que sea breve, cálida y personal para que sus invitados conecten con su camino como pareja.
-            </p>
-          </div>
-          <div class="card">
-            <h3 class="icon-title"><span>💍</span>La propuesta</h3>
-            <p>
-              Aquí pueden contar cómo fue la propuesta y compartir la emoción de este nuevo capítulo que están por comenzar juntos.
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
+        <div class="content-inner">
+          <h2 class="section-title">Nuestra historia</h2>
+          <p class="section-copy">
+            Aquí irá su historia. Este espacio puede contar cómo se conocieron, cómo ha crecido su relación y lo especial que es compartir este día con su familia y amigos.
+          </p>
 
-    <section id="detalles" class="scene fade-in">
-      <div class="container">
-        <h2 class="section-title">Detalles</h2>
-        <p class="section-copy">Información importante para que disfruten cada momento con tranquilidad.</p>
-        <div class="grid grid-3">
           <div class="card">
-            <h3 class="icon-title"><span>⛪</span>Ceremonia</h3>
-            <ul class="details-list">
-              <li><strong>Fecha:</strong> 17 de octubre de 2026</li>
-              <li><strong>Hora:</strong> 4:00 PM</li>
-              <li><strong>Lugar:</strong> Nombre del lugar de la ceremonia</li>
-              <li><strong>Dirección:</strong> 1234 Venue Street, Scottsdale, AZ</li>
-            </ul>
-          </div>
-          <div class="card">
-            <h3 class="icon-title"><span>🥂</span>Recepción</h3>
-            <ul class="details-list">
-              <li><strong>Hora:</strong> 6:00 PM</li>
-              <li><strong>Lugar:</strong> Nombre del lugar de la recepción</li>
-              <li><strong>Dirección:</strong> 1234 Venue Street, Scottsdale, AZ</li>
-              <li><strong>Código de vestimenta:</strong> Formal / Semiformal</li>
-            </ul>
-          </div>
-          <div class="card">
-            <h3 class="icon-title"><span>🎁</span>Mesa de regalos</h3>
             <p>
-              Aquí puedes agregar el enlace de su mesa de regalos cuando lo tengan listo.
-            </p>
-            <p>
-              <a href="#" class="btn btn-secondary">Ver regalo</a>
+              Por ahora dejé esta sección limpia y elegante para que después podamos escribir el texto real con el tono que ustedes quieran.
             </p>
           </div>
         </div>
       </div>
     </section>
 
-    <section id="itinerario" class="scene fade-in">
+    <section class="section content-section" id="itinerario">
       <div class="container">
-        <h2 class="section-title">Itinerario</h2>
-        <p class="section-copy">Una línea de tiempo sencilla para que todos sepan qué esperar en cada etapa de la celebración.</p>
-        <div class="card">
-          <div class="schedule-item">
-            <div class="time">3:30 PM</div>
-            <div>Llegada de invitados</div>
-          </div>
-          <div class="schedule-item">
-            <div class="time">4:00 PM</div>
-            <div>Inicio de la ceremonia</div>
-          </div>
-          <div class="schedule-item">
-            <div class="time">5:00 PM</div>
-            <div>Cóctel</div>
-          </div>
-          <div class="schedule-item">
-            <div class="time">6:00 PM</div>
-            <div>Cena y recepción</div>
-          </div>
-          <div class="schedule-item">
-            <div class="time">9:00 PM</div>
-            <div>Baile y celebración</div>
+        <div class="content-inner">
+          <h2 class="section-title">Itinerario</h2>
+          <p class="section-copy">
+            Una guía sencilla para acompañarlos durante cada momento del evento.
+          </p>
+
+          <div class="timeline">
+            <div class="timeline-item">
+              <div class="timeline-time">3:30 PM</div>
+              <div>Llegada de invitados</div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-time">4:00 PM</div>
+              <div>Ceremonia</div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-time">6:00 PM</div>
+              <div>Recepción</div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-time">9:00 PM</div>
+              <div>Celebración</div>
+            </div>
           </div>
         </div>
       </div>
     </section>
 
-    <section id="viaje" class="scene fade-in">
+    <section class="section content-section" id="viaje">
       <div class="container">
-        <h2 class="section-title">Viaje y hospedaje</h2>
-        <p class="section-copy">Recomendaciones para que su llegada y estancia en Scottsdale sea fácil y cómoda.</p>
-        <div class="grid grid-2">
-          <div class="card">
-            <h3 class="icon-title"><span>🏨</span>Opciones de hotel</h3>
-            <p>Hotel 1 — a 10 minutos del lugar</p>
-            <p>Hotel 2 — tarifa especial para invitados</p>
-            <p>Hotel 3 — opción económica</p>
-          </div>
-          <div class="card">
-            <h3 class="icon-title"><span>✈️</span>Información útil</h3>
-            <p>Aeropuerto más cercano: Phoenix Sky Harbor International Airport</p>
-            <p>Estacionamiento: Disponible en el lugar</p>
-            <p>Clima: Tarde cálida, se recomienda llevar una capa ligera</p>
+        <div class="content-inner">
+          <h2 class="section-title">Viaje</h2>
+          <p class="section-copy">
+            Información útil para hospedaje, transporte y recomendaciones para quienes viajan.
+          </p>
+
+          <div class="travel-grid">
+            <div class="card">
+              <h3>Hospedaje</h3>
+              <p>
+                Aquí podrán agregar hoteles recomendados, tarifas especiales o zonas cercanas al evento.
+              </p>
+            </div>
+
+            <div class="card">
+              <h3>Información útil</h3>
+              <p>
+                Aquí podrán agregar aeropuerto cercano, estacionamiento, clima o cualquier detalle importante.
+              </p>
+            </div>
           </div>
         </div>
       </div>
     </section>
 
-    <section class="scene fade-in" id="fotos">
+    <section class="section content-section" id="fotos">
       <div class="container">
-        <h2 class="section-title">Fotos</h2>
-        <p class="section-copy">Una galería visual para compartir algunos de sus recuerdos y momentos favoritos.</p>
-        <div class="photo-grid">
-          <figure class="photo-item"><img src="https://images.unsplash.com/photo-1522673607200-164d1b6ce486?auto=format&fit=crop&w=900&q=80" alt="Foto de compromiso de la pareja"></figure>
-          <figure class="photo-item"><img src="https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=900&q=80" alt="Detalle floral de boda"></figure>
-          <figure class="photo-item"><img src="https://images.unsplash.com/photo-1469371670807-013ccf25f16a?auto=format&fit=crop&w=900&q=80" alt="Paisaje del lugar de celebración"></figure>
+        <div class="content-inner">
+          <h2 class="section-title">Fotos</h2>
+          <p class="section-copy">
+            Una selección de recuerdos y momentos especiales.
+          </p>
+
+          <div class="photo-grid">
+            <figure class="photo-item">
+              <img src="https://images.unsplash.com/photo-1522673607200-164d1b6ce486?auto=format&fit=crop&w=900&q=80" alt="Foto 1">
+            </figure>
+            <figure class="photo-item">
+              <img src="https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=900&q=80" alt="Foto 2">
+            </figure>
+            <figure class="photo-item">
+              <img src="https://images.unsplash.com/photo-1469371670807-013ccf25f16a?auto=format&fit=crop&w=900&q=80" alt="Foto 3">
+            </figure>
+          </div>
         </div>
       </div>
     </section>
 
-    <section class="scene fade-in" aria-label="Cierre">
-      <footer>
-        <div class="container">
-          Hecho con mucho amor para nuestra familia y amigos.<br>
-          Alejandro y Alejandra
+    <section class="section content-section" id="confirmar">
+      <div class="container">
+        <div class="content-inner">
+          <h2 class="section-title">Confirmar asistencia</h2>
+          <p class="section-copy">
+            Nos haría muchísima ilusión contar con ustedes en este día tan importante.
+          </p>
+
+          <a class="confirm-button" href="rsvp.html">Ir a confirmar</a>
         </div>
-      </footer>
+      </div>
     </section>
   </main>
 
-  <script type="module">
-    const weddingDate = new Date("2026-10-17T16:00:00").getTime();
-    const snapScroll = document.getElementById("snapScroll");
-    const menuOverlay = document.getElementById("menuOverlay");
+  <footer>
+    Hecho con amor para nuestra familia y amigos.
+  </footer>
+
+  <script>
+    const menuPanel = document.getElementById("menuPanel");
     const menuToggle = document.getElementById("menuToggle");
     const menuClose = document.getElementById("menuClose");
+    const menuBackdrop = document.getElementById("menuBackdrop");
     const menuLinks = document.querySelectorAll(".menu-links a");
-    const focusableInMenuSelector = [
-      "a[href]",
-      "button:not([disabled])",
-      "input:not([disabled])",
-      "select:not([disabled])",
-      "textarea:not([disabled])",
-      "[tabindex]:not([tabindex='-1'])"
-    ].join(",");
 
     function openMenu() {
-      menuOverlay.classList.add("open");
-      menuOverlay.setAttribute("aria-hidden", "false");
-      menuToggle.setAttribute("aria-expanded", "true");
-      document.body.style.overflow = "hidden";
-      menuClose.focus();
+      menuPanel.classList.add("active");
+      menuPanel.setAttribute("aria-hidden", "false");
     }
 
-    function closeMenu(restoreFocus = true) {
-      menuOverlay.classList.remove("open");
-      menuOverlay.setAttribute("aria-hidden", "true");
-      menuToggle.setAttribute("aria-expanded", "false");
-      document.body.style.overflow = window.matchMedia("(max-width: 980px)").matches ? "auto" : "hidden";
-      if (restoreFocus) {
-        menuToggle.focus();
-      }
+    function closeMenu() {
+      menuPanel.classList.remove("active");
+      menuPanel.setAttribute("aria-hidden", "true");
     }
 
-    menuToggle.addEventListener("click", () => {
-      const isOpen = menuOverlay.classList.contains("open");
-      if (isOpen) {
-        closeMenu();
-      } else {
-        openMenu();
-      }
-    });
+    menuToggle.addEventListener("click", openMenu);
+    menuClose.addEventListener("click", closeMenu);
+    menuBackdrop.addEventListener("click", closeMenu);
 
-    menuClose.addEventListener("click", () => closeMenu());
-
-    menuOverlay.addEventListener("click", (event) => {
-      if (event.target === menuOverlay) {
-        closeMenu(false);
-      }
+    menuLinks.forEach(link => {
+      link.addEventListener("click", closeMenu);
     });
 
     document.addEventListener("keydown", (event) => {
-      if (event.key === "Escape" && menuOverlay.classList.contains("open")) {
+      if (event.key === "Escape") {
         closeMenu();
       }
-
-      if (event.key === "Tab" && menuOverlay.classList.contains("open")) {
-        const focusableElements = [...menuOverlay.querySelectorAll(focusableInMenuSelector)]
-          .filter((el) => el.offsetParent !== null);
-        if (!focusableElements.length) {
-          return;
-        }
-
-        const first = focusableElements[0];
-        const last = focusableElements[focusableElements.length - 1];
-
-        if (event.shiftKey && document.activeElement === first) {
-          event.preventDefault();
-          last.focus();
-        } else if (!event.shiftKey && document.activeElement === last) {
-          event.preventDefault();
-          first.focus();
-        }
-      }
     });
 
-    function goToSection(targetId) {
-      const target = document.getElementById(targetId);
-      if (!target) {
-        return;
-      }
-
-      target.scrollIntoView({ behavior: "smooth", block: "start" });
-      history.replaceState(null, "", `#${targetId}`);
-    }
-
-    menuLinks.forEach((link) => {
-      link.addEventListener("click", (event) => {
-        const href = link.getAttribute("href") || "";
-        if (!href.startsWith("#")) {
-          closeMenu(false);
-          return;
-        }
-
-        event.preventDefault();
-        goToSection(href.slice(1));
-        closeMenu(false);
-      });
-    });
-
-    document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
-      anchor.addEventListener("click", (event) => {
-        const href = anchor.getAttribute("href") || "";
-        const targetId = href.slice(1);
-        if (!targetId) {
-          return;
-        }
-
-        event.preventDefault();
-        goToSection(targetId);
-      });
-    });
-
-    if (window.location.hash) {
-      const initialTarget = document.getElementById(window.location.hash.slice(1));
-      if (initialTarget) {
-        requestAnimationFrame(() => {
-          initialTarget.scrollIntoView({ behavior: "auto", block: "start" });
-        });
-      }
-    }
+    const weddingDate = new Date("2026-10-17T16:00:00").getTime();
 
     function updateCountdown() {
       const now = new Date().getTime();
       const distance = weddingDate - now;
 
       if (distance <= 0) {
-        document.getElementById("countdown").innerHTML = "<div class='count-box'><span>Hoy</span>¡Nos casamos!</div>";
+        document.getElementById("countdownGrid").innerHTML = `
+          <div class="count-card" style="grid-column: 1 / -1;">
+            <span class="count-number">Hoy</span>
+            <div class="count-label">¡Nos casamos!</div>
+          </div>
+        `;
         return;
       }
 
@@ -979,20 +733,6 @@
       document.getElementById("minutes").textContent = minutes;
       document.getElementById("seconds").textContent = seconds;
     }
-
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add("visible");
-          observer.unobserve(entry.target);
-        }
-      });
-    }, {
-      root: snapScroll,
-      threshold: 0.2
-    });
-
-    document.querySelectorAll(".fade-in").forEach((item) => observer.observe(item));
 
     updateCountdown();
     setInterval(updateCountdown, 1000);
