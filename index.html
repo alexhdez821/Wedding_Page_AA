@@ -19,10 +19,11 @@
       --shadow: 0 14px 34px rgba(88, 62, 48, 0.09);
       --radius-lg: 28px;
       --radius-md: 20px;
-      --section-space: clamp(4rem, 7vw, 6rem);
+      --section-space: clamp(2.5rem, 4vw, 4rem);
     }
 
     * { box-sizing: border-box; }
+    html, body { height: 100%; }
     html { scroll-behavior: smooth; }
 
     body {
@@ -31,10 +32,10 @@
       background: var(--bg);
       color: var(--text);
       line-height: 1.7;
-      overflow-x: hidden;
+      overflow: hidden;
     }
 
-    h1, h2, h3, .brand {
+    h1, h2, h3 {
       font-family: "Cormorant Garamond", Georgia, serif;
       letter-spacing: 0.01em;
       line-height: 1.2;
@@ -52,53 +53,157 @@
       margin: 0 auto;
     }
 
-    header {
-      position: sticky;
-      top: 0;
-      background: rgba(248, 244, 239, 0.92);
+    .menu-toggle {
+      position: fixed;
+      top: 1rem;
+      left: 1rem;
+      z-index: 60;
+      width: 48px;
+      height: 48px;
+      border: 1px solid var(--line);
+      background: rgba(255, 250, 246, 0.92);
       backdrop-filter: blur(8px);
-      border-bottom: 1px solid var(--line);
-      z-index: 30;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      box-shadow: var(--shadow);
     }
 
-    nav {
+    .menu-toggle:focus-visible,
+    .menu-close:focus-visible,
+    .menu-panel a:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+
+    .menu-toggle span {
+      width: 20px;
+      height: 2px;
+      background: #5b4a41;
+      border-radius: 999px;
+      display: block;
+      margin: 2px 0;
+      transition: transform .25s ease, opacity .25s ease;
+    }
+
+    .menu-toggle[aria-expanded="true"] span:nth-child(1) {
+      transform: translateY(6px) rotate(45deg);
+    }
+
+    .menu-toggle[aria-expanded="true"] span:nth-child(2) {
+      opacity: 0;
+    }
+
+    .menu-toggle[aria-expanded="true"] span:nth-child(3) {
+      transform: translateY(-6px) rotate(-45deg);
+    }
+
+    .menu-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(38, 26, 20, 0.45);
+      backdrop-filter: blur(3px);
+      z-index: 55;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .25s ease;
+    }
+
+    .menu-overlay.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .menu-panel {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: min(360px, 86vw);
+      height: 100vh;
+      background: #fff8f3;
+      border-right: 1px solid var(--line);
+      box-shadow: 14px 0 34px rgba(66, 47, 37, 0.18);
+      transform: translateX(-102%);
+      transition: transform .28s ease;
+      z-index: 56;
+      padding: 1.25rem 1.2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.4rem;
+    }
+
+    .menu-overlay.open .menu-panel {
+      transform: translateX(0);
+    }
+
+    .menu-head {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 14px 0;
-      gap: 16px;
+      gap: 12px;
     }
 
-    .brand {
-      font-size: clamp(1.25rem, 2.4vw, 1.7rem);
-      font-weight: 700;
-      text-align: center;
+    .menu-title {
+      margin: 0;
+      font-size: 1.9rem;
+      color: #4c3d34;
     }
 
-    .nav-links {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 14px;
+    .menu-close {
+      border: 1px solid var(--line);
+      background: white;
+      color: #5c4a42;
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      font-size: 1.2rem;
+      cursor: pointer;
     }
 
-    .nav-links a {
+    .menu-links {
+      display: grid;
+      gap: 0.4rem;
+    }
+
+    .menu-links a {
       text-decoration: none;
       color: var(--text);
-      font-size: 0.95rem;
-      font-weight: 500;
-      transition: color .25s ease;
+      border-radius: 12px;
+      padding: 0.7rem 0.75rem;
+      transition: background .2s ease, color .2s ease;
+      font-weight: 600;
     }
 
-    .nav-links a:hover { color: var(--accent); }
+    .menu-links a:hover {
+      background: #f5e8de;
+      color: var(--accent);
+    }
+
+    .snap-scroll {
+      height: 100vh;
+      overflow-y: auto;
+      overflow-x: hidden;
+      scroll-snap-type: y mandatory;
+      scroll-padding-top: 0;
+    }
+
+    .scene {
+      min-height: 100vh;
+      scroll-snap-align: start;
+      scroll-snap-stop: always;
+      display: flex;
+      align-items: center;
+      padding: var(--section-space) 0;
+    }
+
+    .scene .container {
+      width: min(1120px, 92%);
+    }
 
     .hero {
-      min-height: calc(100vh - 70px);
-      display: grid;
-      place-items: center;
       position: relative;
       isolation: isolate;
-      padding: 56px 0;
       background: url("https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1800&q=80") center/cover no-repeat;
     }
 
@@ -119,6 +224,7 @@
       max-width: 760px;
       width: 100%;
       text-align: center;
+      margin-inline: auto;
     }
 
     .eyebrow {
@@ -191,14 +297,9 @@
       background: rgba(184, 129, 107, 0.12);
     }
 
-    section {
-      padding: var(--section-space) 0;
-      scroll-margin-top: 90px;
-    }
-
     .section-title {
       text-align: center;
-      font-size: clamp(2.1rem, 4.8vw, 2.8rem);
+      font-size: clamp(2rem, 4.8vw, 2.8rem);
       margin: 0 0 14px;
       color: #4a3e38;
     }
@@ -207,13 +308,13 @@
       text-align: center;
       color: var(--muted);
       max-width: 720px;
-      margin: 0 auto 42px;
+      margin: 0 auto 32px;
       font-size: 1.04rem;
     }
 
     .grid {
       display: grid;
-      gap: 24px;
+      gap: 22px;
     }
 
     .grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -223,7 +324,7 @@
       background: var(--card);
       border: 1px solid var(--line);
       border-radius: var(--radius-md);
-      padding: clamp(1.2rem, 2.5vw, 1.7rem);
+      padding: clamp(1.1rem, 2.5vw, 1.6rem);
       box-shadow: var(--shadow);
       min-width: 0;
       transition: transform .25s ease, box-shadow .25s ease;
@@ -338,178 +439,38 @@
       transform: translateY(0);
     }
 
-
-
-    .rsvp-shell {
-      background: var(--card);
-      border: 1px solid var(--line);
-      border-radius: var(--radius-md);
-      box-shadow: var(--shadow);
-      padding: clamp(1.2rem, 3vw, 2rem);
-      max-width: 860px;
-      margin: 0 auto;
-    }
-
-    .rsvp-shell h3 {
-      margin: 0 0 14px;
-      font-size: 1.5rem;
-    }
-
-    .rsvp-form {
-      display: grid;
-      gap: 16px;
-    }
-
-    .form-grid {
-      display: grid;
-      gap: 12px;
-      grid-template-columns: 1fr;
-    }
-
-    .rsvp-form label {
-      display: block;
-      font-size: 0.94rem;
-      font-weight: 600;
-      margin-bottom: 6px;
-      color: #5a4a42;
-    }
-
-    .rsvp-form input {
-      width: 100%;
-      padding: 12px 14px;
-      border: 1px solid #d8c8bb;
-      border-radius: 12px;
-      background: #fff;
-      color: var(--text);
-      font-size: 1rem;
-    }
-
-    .rsvp-form input:focus {
-      outline: none;
-      border-color: var(--accent);
-      box-shadow: 0 0 0 3px rgba(156, 104, 83, 0.14);
-    }
-
-    .inline-note {
-      margin: 0;
-      color: var(--muted);
-      font-size: 0.92rem;
-    }
-
-    .result-card {
-      border-radius: 14px;
-      padding: 14px;
-      border: 1px solid;
-      margin-bottom: 14px;
-      background: #fff;
-    }
-
-    .result-card h3 {
-      margin: 0 0 5px;
-      font-size: 1.35rem;
-    }
-
-    .result-card p {
-      margin: 0;
-      color: #5e5048;
-    }
-
-    .result-card.success {
-      border-color: #cfdfcf;
-      background: #f6fbf5;
-    }
-
-    .result-card.error {
-      border-color: #ead0cf;
-      background: #fff7f7;
-    }
-
-    .result-card.warning {
-      border-color: #eadfb5;
-      background: #fffcf0;
-    }
-
-    .invited-list {
-      margin: 10px 0 0;
-      padding-left: 18px;
-      color: #5c4d45;
-    }
-
-    .person-row {
-      border: 1px solid var(--line);
-      border-radius: 12px;
-      padding: 12px;
-      background: #fff;
-    }
-
-    .person-label {
-      margin-bottom: 8px;
-      font-weight: 700;
-      color: #4f4038;
-    }
-
-    .person-options {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px 14px;
-      align-items: center;
-    }
-
-    .person-options label {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      margin: 0;
-      font-weight: 500;
-    }
-
-    .person-options input {
-      width: auto;
-      margin: 0;
-      padding: 0;
-    }
-
-    .plus-one-block {
-      border-top: 1px solid var(--line);
-      padding-top: 10px;
-      display: grid;
-      gap: 10px;
-    }
-
-    .form-error {
-      min-height: 1.3em;
-      margin: 0;
-      color: #b14d49;
-      font-size: 0.92rem;
-      font-weight: 500;
-    }
-
     footer {
-      padding: 30px 0 56px;
       text-align: center;
       color: var(--muted);
       border-top: 1px solid var(--line);
       background: #f7f1ea;
+      padding: 1.4rem 0;
     }
 
-    @media (max-width: 860px) {
+    @media (max-width: 980px) {
+      body {
+        overflow: auto;
+      }
+
+      .snap-scroll {
+        height: auto;
+        min-height: 100vh;
+        overflow: visible;
+        scroll-snap-type: none;
+      }
+
+      .scene {
+        min-height: auto;
+        padding: clamp(3.2rem, 10vw, 4.2rem) 0;
+        scroll-snap-align: none;
+      }
+
       .grid-2, .grid-3, .photo-grid {
         grid-template-columns: 1fr;
       }
 
-      .person-options {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-
-      nav {
-        flex-direction: column;
-        padding: 12px 0;
-      }
-
       .hero {
         min-height: auto;
-        padding: 40px 0 52px;
       }
 
       .hero-card {
@@ -536,46 +497,49 @@
     @media (max-width: 480px) {
       .container { width: min(100%, 93%); }
 
-      .nav-links {
-        gap: 8px 12px;
-      }
-
-      .nav-links a {
-        font-size: 0.9rem;
-      }
-
-      section {
-        padding: clamp(3.2rem, 13vw, 4rem) 0;
+      .menu-toggle {
+        top: 0.7rem;
+        left: 0.7rem;
       }
 
       .count-box span {
         font-size: 1.4rem;
       }
-
-      .rsvp-shell {
-        padding: 1rem;
-      }
     }
   </style>
 </head>
 <body>
-  <header>
-    <div class="container">
-      <nav>
-        <div class="brand">Alejandro y Alejandra</div>
-        <div class="nav-links">
-          <a href="#historia">Nuestra historia</a>
-          <a href="#detalles">Detalles</a>
-          <a href="#itinerario">Itinerario</a>
-          <a href="#viaje">Viaje</a>
-          <a href="rsvp.html">Confirmar</a>
-        </div>
-      </nav>
-    </div>
-  </header>
+  <button
+    type="button"
+    class="menu-toggle"
+    id="menuToggle"
+    aria-label="Abrir menú de navegación"
+    aria-controls="menuOverlay"
+    aria-expanded="false"
+  >
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
 
-  <main>
-    <section class="hero fade-in">
+  <div class="menu-overlay" id="menuOverlay" aria-hidden="true">
+    <aside class="menu-panel" role="dialog" aria-modal="true" aria-label="Menú principal">
+      <div class="menu-head">
+        <h2 class="menu-title">Menú</h2>
+        <button type="button" class="menu-close" id="menuClose" aria-label="Cerrar menú">✕</button>
+      </div>
+      <nav class="menu-links" aria-label="Navegación principal">
+        <a href="#historia">Nuestra historia</a>
+        <a href="#detalles">Detalles</a>
+        <a href="#itinerario">Itinerario</a>
+        <a href="#viaje">Viaje</a>
+        <a href="rsvp.html">Confirmar</a>
+      </nav>
+    </aside>
+  </div>
+
+  <main class="snap-scroll" id="snapScroll">
+    <section class="scene hero fade-in" id="inicio">
       <div class="container">
         <div class="hero-card">
           <div class="eyebrow">¡Nos casamos!</div>
@@ -598,7 +562,7 @@
       </div>
     </section>
 
-    <section id="historia" class="fade-in">
+    <section id="historia" class="scene fade-in">
       <div class="container">
         <h2 class="section-title">Nuestra historia</h2>
         <p class="section-copy">
@@ -621,9 +585,9 @@
       </div>
     </section>
 
-    <section id="detalles" class="fade-in">
+    <section id="detalles" class="scene fade-in">
       <div class="container">
-        <h2 class="section-title">Wedding Details</h2>
+        <h2 class="section-title">Detalles</h2>
         <p class="section-copy">Información importante para que disfruten cada momento con tranquilidad.</p>
         <div class="grid grid-3">
           <div class="card">
@@ -657,7 +621,7 @@
       </div>
     </section>
 
-    <section id="itinerario" class="fade-in">
+    <section id="itinerario" class="scene fade-in">
       <div class="container">
         <h2 class="section-title">Itinerario</h2>
         <p class="section-copy">Una línea de tiempo sencilla para que todos sepan qué esperar en cada etapa de la celebración.</p>
@@ -686,7 +650,7 @@
       </div>
     </section>
 
-    <section id="viaje" class="fade-in">
+    <section id="viaje" class="scene fade-in">
       <div class="container">
         <h2 class="section-title">Viaje y hospedaje</h2>
         <p class="section-copy">Recomendaciones para que su llegada y estancia en Scottsdale sea fácil y cómoda.</p>
@@ -707,7 +671,7 @@
       </div>
     </section>
 
-    <section class="fade-in">
+    <section class="scene fade-in" id="fotos">
       <div class="container">
         <h2 class="section-title">Fotos</h2>
         <p class="section-copy">Una galería visual para compartir algunos de sus recuerdos y momentos favoritos.</p>
@@ -719,18 +683,110 @@
       </div>
     </section>
 
-    
+    <section class="scene fade-in" aria-label="Cierre">
+      <footer>
+        <div class="container">
+          Hecho con mucho amor para nuestra familia y amigos.<br>
+          Alejandro y Alejandra
+        </div>
+      </footer>
+    </section>
   </main>
-
-  <footer>
-    <div class="container">
-      Hecho con mucho amor para nuestra familia y amigos.<br>
-      Alejandro y Alejandra
-    </div>
-  </footer>
 
   <script type="module">
     const weddingDate = new Date("2026-10-17T16:00:00").getTime();
+    const snapScroll = document.getElementById("snapScroll");
+    const menuOverlay = document.getElementById("menuOverlay");
+    const menuToggle = document.getElementById("menuToggle");
+    const menuClose = document.getElementById("menuClose");
+    const menuLinks = document.querySelectorAll(".menu-links a");
+
+    function openMenu() {
+      menuOverlay.classList.add("open");
+      menuOverlay.setAttribute("aria-hidden", "false");
+      menuToggle.setAttribute("aria-expanded", "true");
+      document.body.style.overflow = window.matchMedia("(max-width: 980px)").matches ? "hidden" : "hidden";
+      menuClose.focus();
+    }
+
+    function closeMenu(restoreFocus = true) {
+      menuOverlay.classList.remove("open");
+      menuOverlay.setAttribute("aria-hidden", "true");
+      menuToggle.setAttribute("aria-expanded", "false");
+      document.body.style.overflow = window.matchMedia("(max-width: 980px)").matches ? "auto" : "hidden";
+      if (restoreFocus) {
+        menuToggle.focus();
+      }
+    }
+
+    menuToggle.addEventListener("click", () => {
+      const isOpen = menuOverlay.classList.contains("open");
+      if (isOpen) {
+        closeMenu();
+      } else {
+        openMenu();
+      }
+    });
+
+    menuClose.addEventListener("click", () => closeMenu());
+
+    menuOverlay.addEventListener("click", (event) => {
+      if (event.target === menuOverlay) {
+        closeMenu(false);
+      }
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && menuOverlay.classList.contains("open")) {
+        closeMenu();
+      }
+    });
+
+    function goToSection(targetId) {
+      const target = document.getElementById(targetId);
+      if (!target) {
+        return;
+      }
+
+      target.scrollIntoView({ behavior: "smooth", block: "start" });
+      history.replaceState(null, "", `#${targetId}`);
+    }
+
+    menuLinks.forEach((link) => {
+      link.addEventListener("click", (event) => {
+        const href = link.getAttribute("href") || "";
+        if (!href.startsWith("#")) {
+          closeMenu(false);
+          return;
+        }
+
+        event.preventDefault();
+        goToSection(href.slice(1));
+        closeMenu(false);
+      });
+    });
+
+    document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+      anchor.addEventListener("click", (event) => {
+        const href = anchor.getAttribute("href") || "";
+        const targetId = href.slice(1);
+        if (!targetId) {
+          return;
+        }
+
+        event.preventDefault();
+        goToSection(targetId);
+      });
+    });
+
+    if (window.location.hash) {
+      const initialTarget = document.getElementById(window.location.hash.slice(1));
+      if (initialTarget) {
+        requestAnimationFrame(() => {
+          initialTarget.scrollIntoView({ behavior: "auto", block: "start" });
+        });
+      }
+    }
 
     function updateCountdown() {
       const now = new Date().getTime();
@@ -759,7 +815,10 @@
           observer.unobserve(entry.target);
         }
       });
-    }, { threshold: 0.18 });
+    }, {
+      root: snapScroll,
+      threshold: 0.2
+    });
 
     document.querySelectorAll(".fade-in").forEach((item) => observer.observe(item));
 
