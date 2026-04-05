@@ -320,6 +320,20 @@
       font-family: "Cormorant Garamond", serif;
     }
 
+    .count-grid.days-only {
+      align-items: center;
+    }
+
+    .count-grid.days-only .count-number {
+      font-size: clamp(6rem, 24vw, 14rem);
+      line-height: 0.88;
+    }
+
+    .count-grid.days-only .count-label {
+      font-size: clamp(1.05rem, 2.6vw, 1.6rem);
+      letter-spacing: 0.22em;
+    }
+
     .count-unit {
       min-width: 0;
       text-align: center;
@@ -720,31 +734,10 @@
     <section class="section countdown-section" id="countdown">
       <div class="container">
         <div class="countdown-shell">
-          <div class="section-eyebrow">Falta muy poco</div>
-          <h1 class="countdown-title">Cuenta regresiva</h1>
-          <p class="countdown-subtitle">
-            Estamos contando los días para celebrar este momento tan especial con ustedes.
-          </p>
-
-          <div class="count-grid" id="countdownGrid" aria-label="Cuenta regresiva para la boda">
+          <div class="count-grid days-only" id="countdownGrid" aria-label="Días restantes para la boda">
             <div class="count-unit">
               <span class="count-number" id="days">--</span>
               <div class="count-label">Días</div>
-            </div>
-            <span class="count-separator" aria-hidden="true">:</span>
-            <div class="count-unit">
-              <span class="count-number" id="hours">--</span>
-              <div class="count-label">Horas</div>
-            </div>
-            <span class="count-separator" aria-hidden="true">:</span>
-            <div class="count-unit">
-              <span class="count-number" id="minutes">--</span>
-              <div class="count-label">Minutos</div>
-            </div>
-            <span class="count-separator" aria-hidden="true">:</span>
-            <div class="count-unit">
-              <span class="count-number" id="seconds">--</span>
-              <div class="count-label">Segundos</div>
             </div>
           </div>
         </div>
@@ -911,14 +904,8 @@
       }
 
       const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
       document.getElementById("days").textContent = days;
-      document.getElementById("hours").textContent = hours;
-      document.getElementById("minutes").textContent = minutes;
-      document.getElementById("seconds").textContent = seconds;
     }
 
     updateCountdown();
