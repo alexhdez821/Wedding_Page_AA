@@ -478,6 +478,42 @@
       color: #84746b;
     }
 
+    .history-wrapper {
+      display: grid;
+      grid-template-columns: minmax(320px, 1fr) minmax(280px, 0.95fr);
+      align-items: center;
+      column-gap: clamp(2.5rem, 6vw, 6rem);
+      row-gap: 2rem;
+    }
+
+    .history-image {
+      margin: 0;
+    }
+
+    .history-image img {
+      width: 100%;
+      max-width: 520px;
+      aspect-ratio: 4 / 5;
+      object-fit: cover;
+      display: block;
+      border-radius: 8px;
+      margin: 0 auto;
+    }
+
+    .history-content {
+      text-align: left;
+      max-width: 620px;
+    }
+
+    .history-content .section-copy {
+      margin: 0;
+      max-width: 100%;
+    }
+
+    .history-content .card {
+      margin-top: 20px;
+    }
+
     .content-inner {
       max-width: 900px;
       margin: 0 auto;
@@ -666,6 +702,25 @@
         font-size: 0.92rem;
       }
 
+      .history-wrapper {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+
+      .history-content {
+        max-width: 100%;
+        text-align: center;
+      }
+
+      .history-content .section-copy {
+        margin: 0 auto;
+      }
+
+      .history-image img {
+        max-width: min(100%, 420px);
+        aspect-ratio: 4 / 5;
+      }
+
       .section-copy {
         font-size: 0.98rem;
       }
@@ -769,16 +824,21 @@
 
     <section class="section content-section" id="historia">
       <div class="container">
-        <div class="content-inner">
-          <h2 class="section-title">Nuestra historia</h2>
-          <p class="section-copy">
-            Aquí irá su historia. Este espacio puede contar cómo se conocieron, cómo ha crecido su relación y lo especial que es compartir este día con su familia y amigos.
-          </p>
-
-          <div class="card">
-            <p>
-              Por ahora dejé esta sección limpia y elegante para que después podamos escribir el texto real con el tono que ustedes quieran.
+        <div class="history-wrapper">
+          <figure class="history-image">
+            <img src="./images/784E6B64-AB33-4F6B-B3EB-C94B731F4558.png" alt="Alejandro y Alejandra" />
+          </figure>
+          <div class="history-content">
+            <h2 class="section-title">Nuestra historia</h2>
+            <p class="section-copy">
+              Aquí irá su historia. Este espacio puede contar cómo se conocieron, cómo ha crecido su relación y lo especial que es compartir este día con su familia y amigos.
             </p>
+
+            <div class="card">
+              <p>
+                Por ahora dejé esta sección limpia y elegante para que después podamos escribir el texto real con el tono que ustedes quieran.
+              </p>
+            </div>
           </div>
         </div>
       </div>
