@@ -645,6 +645,10 @@ export function initRsvpFlow() {
         const responseCopy = normalizedAttending
           ? "Recibimos tu respuesta y usamos tu correo para validar el acceso a los detalles."
           : "Te vamos a extrañar en nuestro gran día, pero agradecemos mucho tu cariño y buenos deseos.";
+        const confirmedGuestLabel = guestCount === 1 ? "persona" : "personas";
+        const confirmedGuestMessage = normalizedAttending
+          ? `Quedó confirmada la asistencia de ${guestCount} ${confirmedGuestLabel} en tu RSVP.`
+          : `Quedó registrado tu RSVP con ${guestCount} ${confirmedGuestLabel} asistiendo.`;
 
         const detailsButtons = normalizedAttending
           ? `
@@ -660,6 +664,7 @@ export function initRsvpFlow() {
           <div class="result-card success" role="status" aria-live="polite">
             <h3>${responseHeading}</h3>
             <p>${responseCopy}</p>
+            <p class="invite-confirmation">${confirmedGuestMessage}</p>
           </div>
           ${detailsButtons}
         `;
