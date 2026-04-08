@@ -342,6 +342,9 @@ export function initRsvpFlow() {
       }, 0);
       const maxGuests = Math.max(declaredMaxGuests, invitedGuests.length);
       const additionalGuestSlots = Math.max(0, maxGuests - invitedGuests.length);
+      const isSingleGuestWithOnePlusOne = invitedGuests.length === 1 && additionalGuestSlots === 1;
+      const shouldAskNeedPlusOneFirst = isSingleGuestWithOnePlusOne;
+      const shouldAutoAskAdditionalGuestNames = additionalGuestSlots > 0 && !shouldAskNeedPlusOneFirst;
       const responseGroup = getResponseGroupKey(guest);
 
       const { data: existingResponse, error: responseError } = await supabase
@@ -405,8 +408,18 @@ export function initRsvpFlow() {
         <form id="responseForm" class="rsvp-form" novalidate>
           ${groupAttendanceFields}
 
+          <div id="plusOneDecisionWrap" ${shouldAskNeedPlusOneFirst ? "hidden" : "hidden"}>
+            <div class="person-row">
+              <div class="person-label">¿Necesitas tu +1?</div>
+              <div class="person-options" role="radiogroup" aria-label="Confirmar plus one">
+                <label><input type="radio" name="needsPlusOne" value="true"> Sí</label>
+                <label><input type="radio" name="needsPlusOne" value="false"> No</label>
+              </div>
+            </div>
+          </div>
+
           <div id="additionalGuestsWrap" ${additionalGuestSlots > 0 ? "hidden" : "hidden"}>
-            <p class="person-label">Nombres de invitados adicionales</p>
+            <p class="person-label">${additionalGuestSlots === 1 ? "Nombre de tu invitado adicional" : "Nombres de invitados adicionales"}</p>
             ${Array.from({ length: additionalGuestSlots })
               .map(
                 (_, index) => `
@@ -433,8 +446,10 @@ export function initRsvpFlow() {
 
       const responseForm = document.getElementById("responseForm");
       const submitError = document.getElementById("submitError");
+      const plusOneDecisionWrap = document.getElementById("plusOneDecisionWrap");
       const additionalGuestsWrap = document.getElementById("additionalGuestsWrap");
       const additionalGuestInputs = Array.from(responseForm?.querySelectorAll('input[name^="additionalGuest"]') || []);
+      const needsPlusOneInputs = responseForm?.querySelectorAll('input[name="needsPlusOne"]');
       const rsvpEmailWrap = document.getElementById("rsvpEmailWrap");
       const rsvpEmailInput = document.getElementById("rsvpEmail");
       const attendanceInputs = responseForm?.querySelectorAll('input[name="attending"]');
@@ -473,7 +488,28 @@ export function initRsvpFlow() {
         }
 
         if (additionalGuestsWrap) {
-          const showAdditionalGuests = isAttending && additionalGuestSlots > 0;
+          const needsPlusOneSelected = responseForm.querySelector('input[name="needsPlusOne"]:checked')?.value;
+          const showPlusOneDecision = isAttending && shouldAskNeedPlusOneFirst;
+          const showAdditionalGuests =
+            isAttending &&
+            additionalGuestSlots > 0 &&
+            (shouldAutoAskAdditionalGuestNames || (showPlusOneDecision && needsPlusOneSelected === "true"));
+
+          if (plusOneDecisionWrap) {
+            const wasPlusOneDecisionHidden = plusOneDecisionWrap.hidden;
+            plusOneDecisionWrap.hidden = !showPlusOneDecision;
+
+            if (!showPlusOneDecision) {
+              needsPlusOneInputs?.forEach((input) => {
+                input.checked = false;
+              });
+            }
+
+            if (wasPlusOneDecisionHidden && !plusOneDecisionWrap.hidden) {
+              focusRevealedQuestion(plusOneDecisionWrap, needsPlusOneInputs?.[0]);
+            }
+          }
+
           additionalGuestsWrap.hidden = !showAdditionalGuests;
           additionalGuestInputs.forEach((input) => {
             input.required = false;
@@ -490,6 +526,7 @@ export function initRsvpFlow() {
       groupAttendanceInputSets.forEach((inputs) =>
         inputs?.forEach((input) => input.addEventListener("change", updateConditionalFields))
       );
+      needsPlusOneInputs?.forEach((input) => input.addEventListener("change", updateConditionalFields));
       updateConditionalFields();
 
       responseForm.addEventListener("submit", async (submitEvent) => {
@@ -524,6 +561,23 @@ export function initRsvpFlow() {
         const additionalGuestNames = additionalGuestInputs
           .map((input) => input.value.trim())
           .filter(Boolean);
+
+        const needsPlusOneValue = responseForm.querySelector('input[name="needsPlusOne"]:checked')?.value;
+        if (shouldAskNeedPlusOneFirst && normalizedAttending && needsPlusOneValue === undefined) {
+          submitError.textContent = "Por favor indícanos si utilizarás tu +1.";
+          return;
+        }
+
+        if (shouldAskNeedPlusOneFirst && normalizedAttending && needsPlusOneValue === "true" && additionalGuestNames.length !== 1) {
+          submitError.textContent = "Por favor comparte el nombre de tu invitado +1.";
+          return;
+        }
+
+        if (shouldAskNeedPlusOneFirst && normalizedAttending && needsPlusOneValue === "false" && additionalGuestNames.length > 0) {
+          submitError.textContent = "Solo agrega un invitado si seleccionaste que sí usarás tu +1.";
+          return;
+        }
+
         if (additionalGuestNames.length > additionalGuestSlots) {
           submitError.textContent = "Solo puedes agregar el número de invitados permitidos en tu invitación.";
           return;
