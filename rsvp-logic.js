@@ -89,16 +89,15 @@ function isMissingColumnError(error, columnName) {
   const code = String(error?.code ?? "").toUpperCase();
   const message = String(error?.message ?? "").toLowerCase();
   const details = String(error?.details ?? "").toLowerCase();
+  const hint = String(error?.hint ?? "").toLowerCase();
   const normalizedColumn = String(columnName ?? "").toLowerCase();
+  const combined = `${message} ${details} ${hint}`;
 
   if (!normalizedColumn) return false;
 
   return (
-    code === "42703" &&
-    (message.includes(normalizedColumn) ||
-      details.includes(normalizedColumn) ||
-      message.includes("column") ||
-      details.includes("column"))
+    (code === "42703" || code === "PGRST204") &&
+    (combined.includes(normalizedColumn) || combined.includes("column"))
   );
 }
 
