@@ -97,22 +97,26 @@ alter table rsvp_responses add column if not exists email text;
 
 The details image URL is currently configured in `rsvp-logic.js` as `WEDDING_DETAILS_IMAGE_URL`. Replace it with your private hosted invitation image.
 
-## New party-of-2 shared RSVP requirement
+## New shared-family RSVP requirement
 
-If you want either person in a known pair to submit one shared RSVP (party size of 2 max), add a shared key to both guests and store responses by that key.
+If you want a known household (2+ named guests) to submit one shared RSVP, use a shared key for everyone in the household and define a per-household max capacity.
 
-### 1) Add shared pair key to guest list
+### 1) Add shared household key to guest list
 
 ```sql
 alter table guest_list add column if not exists rsvp_pair_id text;
+alter table guest_list add column if not exists max_guests integer;
 ```
 
-For each known pair, assign the same `rsvp_pair_id` value to both rows. Leave it `null` for individual invites.
+For each known household, assign the same `rsvp_pair_id` value to all rows in that household. Leave it `null` for individual invites.
+Set `max_guests` to the total number of guests allowed for that household (for example, `6` for a family invitation that may include children not already listed by name).
 
 Example:
 
 ```sql
-update guest_list set rsvp_pair_id = 'pair-ana-luis' where id in ('guest_a_id', 'guest_b_id');
+update guest_list
+set rsvp_pair_id = 'family-garcia', max_guests = 4
+where id in ('guest_mom_id', 'guest_dad_id');
 ```
 
 > If you see `22P02: invalid input syntax for type uuid`, your `rsvp_pair_id` column is `uuid` (not `text`).
@@ -132,10 +136,11 @@ update guest_list set rsvp_pair_id = 'pair-ana-luis' where id in ('guest_a_id', 
 > alter table guest_list alter column rsvp_pair_id type text using rsvp_pair_id::text;
 > ```
 
-### 2) Store responses by response group
+### 2) Store responses by response group and save additional guest names
 
 ```sql
 alter table rsvp_responses add column if not exists response_group text;
+alter table rsvp_responses add column if not exists additional_guest_names jsonb not null default '[]'::jsonb;
 
 update rsvp_responses
 set response_group = coalesce(response_group, 'guest:' || guest_id);
@@ -150,4 +155,4 @@ The front-end now computes:
 - `pair:<rsvp_pair_id>` for linked guests
 - `guest:<guest_id>` for solo guests
 
-This allows either member of a linked pair to find the invitation and submit once, while still limiting one final RSVP per pair.
+This allows any member of a linked household to find the invitation and submit once, while still limiting one final RSVP per response group.
