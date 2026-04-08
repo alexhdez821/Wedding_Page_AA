@@ -85,6 +85,42 @@ function getFriendlyRsvpInsertError(error) {
   return "No pudimos guardar tu RSVP en este momento. Inténtalo de nuevo.";
 }
 
+function isMissingColumnError(error, columnName) {
+  const code = String(error?.code ?? "").toUpperCase();
+  const message = String(error?.message ?? "").toLowerCase();
+  const details = String(error?.details ?? "").toLowerCase();
+  const normalizedColumn = String(columnName ?? "").toLowerCase();
+
+  if (!normalizedColumn) return false;
+
+  return (
+    code === "42703" &&
+    (message.includes(normalizedColumn) ||
+      details.includes(normalizedColumn) ||
+      message.includes("column") ||
+      details.includes("column"))
+  );
+}
+
+async function insertRsvpWithSchemaFallback(supabase, payload) {
+  const { error } = await supabase.from("rsvp_responses").insert([payload]);
+  if (!error) return { error: null };
+
+  if (isMissingColumnError(error, "additional_guest_names")) {
+    const fallbackPayload = { ...payload };
+    delete fallbackPayload.additional_guest_names;
+    const fallbackResult = await supabase.from("rsvp_responses").insert([fallbackPayload]);
+    if (!fallbackResult.error) {
+      console.warn(
+        "Inserted RSVP without additional_guest_names because the column is missing in the database schema."
+      );
+    }
+    return fallbackResult;
+  }
+
+  return { error };
+}
+
 function clearLookupFields(lookupForm) {
   lookupForm.reset();
   lookupForm.hidden = true;
@@ -523,18 +559,19 @@ export function initRsvpFlow() {
 
         if (submitButton) submitButton.disabled = true;
 
-        const { error: insertError } = await supabase.from("rsvp_responses").insert([
-          {
-            guest_id: guest.id,
-            response_group: responseGroup,
-            attending: normalizedAttending,
-            guest_count: guestCount,
-            plus_one_name: additionalGuestNames.length === 1 ? additionalGuestNames[0] : null,
-            additional_guest_names: additionalGuestNames,
-            email: normalizedAttending ? rsvpEmail : null,
-            submitted_at: new Date().toISOString()
-          }
-        ]);
+        const insertPayload = {
+          guest_id: guest.id,
+          response_group: responseGroup,
+          attending: normalizedAttending,
+          guest_count: guestCount,
+          plus_one_name: additionalGuestNames.length === 1 ? additionalGuestNames[0] : null,
+          email: normalizedAttending ? rsvpEmail : null,
+          submitted_at: new Date().toISOString()
+        };
+        if (additionalGuestNames.length > 0) {
+          insertPayload.additional_guest_names = additionalGuestNames;
+        }
+        const { error: insertError } = await insertRsvpWithSchemaFallback(supabase, insertPayload);
 
         if (insertError) {
           console.error("RSVP insert failed", insertError);
