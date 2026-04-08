@@ -617,16 +617,17 @@ export function initRsvpFlow() {
 
         if (submitButton) submitButton.disabled = true;
 
+        const isSinglePlusOneResponse = shouldAskNeedPlusOneFirst && additionalGuestNames.length === 1;
         const insertPayload = {
           guest_id: guest.id,
           response_group: responseGroup,
           attending: normalizedAttending,
           guest_count: guestCount,
-          plus_one_name: additionalGuestNames.length === 1 ? additionalGuestNames[0] : null,
+          plus_one_name: isSinglePlusOneResponse ? additionalGuestNames[0] : null,
           email: normalizedAttending ? rsvpEmail : null,
           submitted_at: new Date().toISOString()
         };
-        if (additionalGuestNames.length > 0) {
+        if (additionalGuestNames.length > 0 && !isSinglePlusOneResponse) {
           insertPayload.additional_guest_names = additionalGuestNames;
         }
         const { error: insertError } = await insertRsvpWithSchemaFallback(supabase, insertPayload);
