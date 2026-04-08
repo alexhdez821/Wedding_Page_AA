@@ -488,6 +488,7 @@
 
     .history-image {
       margin: 0;
+      position: relative;
     }
 
     .history-image img {
@@ -498,6 +499,59 @@
       display: block;
       border-radius: 8px;
       margin: 0 auto;
+    }
+
+    .history-slideshow {
+      position: relative;
+      max-width: 520px;
+      margin: 0 auto;
+    }
+
+    .history-nav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 42px;
+      height: 42px;
+      border: none;
+      border-radius: 999px;
+      background: rgba(255, 250, 245, 0.88);
+      color: var(--text);
+      font-size: 1.35rem;
+      cursor: pointer;
+      box-shadow: 0 8px 22px rgba(70, 52, 43, 0.18);
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      transition: transform 0.2s ease, background 0.2s ease;
+    }
+
+    .history-nav:hover {
+      transform: translateY(-50%) scale(1.04);
+      background: rgba(255, 250, 245, 1);
+    }
+
+    .history-nav:focus-visible {
+      outline: 2px solid var(--accent-dark);
+      outline-offset: 2px;
+    }
+
+    .history-nav.prev {
+      left: 12px;
+    }
+
+    .history-nav.next {
+      right: 12px;
+    }
+
+    .history-caption {
+      margin-top: 14px;
+      text-align: center;
+      font-size: 0.98rem;
+      color: var(--muted);
+      min-height: 2.2em;
+      line-height: 1.45;
+      padding: 0 10px;
     }
 
     .history-content {
@@ -721,6 +775,16 @@
         aspect-ratio: 4 / 5;
       }
 
+      .history-slideshow {
+        max-width: min(100%, 420px);
+      }
+
+      .history-nav {
+        width: 38px;
+        height: 38px;
+        font-size: 1.15rem;
+      }
+
       .section-copy {
         font-size: 0.98rem;
       }
@@ -826,7 +890,14 @@
       <div class="container">
         <div class="history-wrapper">
           <figure class="history-image">
-            <img src="./images/784E6B64-AB33-4F6B-B3EB-C94B731F4558.png" alt="Alejandro y Alejandra" />
+            <div class="history-slideshow">
+              <button class="history-nav prev" id="historyPrev" type="button" aria-label="Foto anterior">&#10094;</button>
+              <img id="historySlideImage" src="./images/32.jpeg" alt="Nuestra historia - foto 1" />
+              <button class="history-nav next" id="historyNext" type="button" aria-label="Foto siguiente">&#10095;</button>
+            </div>
+            <figcaption class="history-caption" id="historyCaption">
+              Nuestro comienzo: una foto que nos recuerda los primeros momentos de nuestra historia.
+            </figcaption>
           </figure>
           <div class="history-content">
             <h2 class="section-title">Nuestra historia</h2>
@@ -971,6 +1042,52 @@
     updateHeaderVisibility();
     window.addEventListener("scroll", updateHeaderVisibility, { passive: true });
     window.addEventListener("resize", updateHeaderVisibility);
+
+    const historySlides = [
+      {
+        src: "./images/32.jpeg",
+        alt: "Nuestra historia - foto 1",
+        description: "Nuestro comienzo: una foto que nos recuerda los primeros momentos de nuestra historia."
+      },
+      {
+        src: "./images/49.jpeg",
+        alt: "Nuestra historia - foto 2",
+        description: "Un capítulo inolvidable: creciendo juntos con amor, paciencia y muchas sonrisas."
+      },
+      {
+        src: "./images/64.jpeg",
+        alt: "Nuestra historia - foto 3",
+        description: "Hoy celebramos todo lo vivido y lo que viene: este sueño que seguimos construyendo."
+      }
+    ];
+
+    const historyImage = document.getElementById("historySlideImage");
+    const historyCaption = document.getElementById("historyCaption");
+    const historyPrev = document.getElementById("historyPrev");
+    const historyNext = document.getElementById("historyNext");
+    let currentHistorySlide = 0;
+
+    function renderHistorySlide(index) {
+      if (!historyImage || !historyCaption) return;
+      const slide = historySlides[index];
+      historyImage.src = slide.src;
+      historyImage.alt = slide.alt;
+      historyCaption.textContent = slide.description;
+    }
+
+    function showPreviousHistorySlide() {
+      currentHistorySlide = (currentHistorySlide - 1 + historySlides.length) % historySlides.length;
+      renderHistorySlide(currentHistorySlide);
+    }
+
+    function showNextHistorySlide() {
+      currentHistorySlide = (currentHistorySlide + 1) % historySlides.length;
+      renderHistorySlide(currentHistorySlide);
+    }
+
+    if (historyPrev) historyPrev.addEventListener("click", showPreviousHistorySlide);
+    if (historyNext) historyNext.addEventListener("click", showNextHistorySlide);
+    renderHistorySlide(currentHistorySlide);
 
     const weddingDate = new Date("2026-10-17T16:00:00").getTime();
 
