@@ -60,6 +60,31 @@ function isRsvpLookupPermissionIssue(error) {
   );
 }
 
+function getFriendlyRsvpInsertError(error) {
+  const code = String(error?.code ?? "").toUpperCase();
+  const message = String(error?.message ?? "").toLowerCase();
+  const details = String(error?.details ?? "").toLowerCase();
+  const combined = `${message} ${details}`;
+
+  if (code === "23505" || combined.includes("duplicate key")) {
+    return "Parece que tu RSVP ya había sido registrado. Recarga la página para validar tu correo y ver los detalles.";
+  }
+
+  if (code === "42703" || combined.includes("column") || combined.includes("does not exist")) {
+    if (combined.includes("email")) {
+      return "Tu RSVP no se pudo guardar porque falta configurar la columna de correo en la base de datos. Por favor avísanos para corregirlo.";
+    }
+    if (combined.includes("additional_guest_names")) {
+      return "Tu RSVP no se pudo guardar porque falta configurar invitados adicionales en la base de datos. Por favor avísanos para corregirlo.";
+    }
+    if (combined.includes("response_group")) {
+      return "Tu RSVP no se pudo guardar porque falta configurar grupos de respuesta en la base de datos. Por favor avísanos para corregirlo.";
+    }
+  }
+
+  return "No pudimos guardar tu RSVP en este momento. Inténtalo de nuevo.";
+}
+
 function clearLookupFields(lookupForm) {
   lookupForm.reset();
   lookupForm.hidden = true;
@@ -513,7 +538,7 @@ export function initRsvpFlow() {
 
         if (insertError) {
           console.error("RSVP insert failed", insertError);
-          submitError.textContent = "No pudimos guardar tu RSVP en este momento. Inténtalo de nuevo.";
+          submitError.textContent = getFriendlyRsvpInsertError(insertError);
           if (submitButton) submitButton.disabled = false;
           return;
         }
