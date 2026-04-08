@@ -472,7 +472,7 @@ export function initRsvpFlow() {
           const showAdditionalGuests = isAttending && additionalGuestSlots > 0;
           additionalGuestsWrap.hidden = !showAdditionalGuests;
           additionalGuestInputs.forEach((input) => {
-            input.required = showAdditionalGuests;
+            input.required = false;
             if (!showAdditionalGuests) input.value = "";
           });
 
@@ -520,8 +520,8 @@ export function initRsvpFlow() {
         const additionalGuestNames = additionalGuestInputs
           .map((input) => input.value.trim())
           .filter(Boolean);
-        if (normalizedAttending && additionalGuestSlots > 0 && additionalGuestNames.length !== additionalGuestSlots) {
-          submitError.textContent = "Por favor completa los nombres de los invitados adicionales.";
+        if (additionalGuestNames.length > additionalGuestSlots) {
+          submitError.textContent = "Solo puedes agregar el número de invitados permitidos en tu invitación.";
           return;
         }
 
