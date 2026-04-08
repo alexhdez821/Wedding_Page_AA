@@ -95,10 +95,15 @@ function isMissingColumnError(error, columnName) {
 
   if (!normalizedColumn) return false;
 
-  return (
-    (code === "42703" || code === "PGRST204") &&
-    (combined.includes(normalizedColumn) || combined.includes("column"))
-  );
+  const hasMissingColumnSignal =
+    code === "42703" ||
+    code === "PGRST204" ||
+    combined.includes("does not exist") ||
+    combined.includes("could not find the") ||
+    combined.includes("missing") ||
+    combined.includes("column");
+
+  return hasMissingColumnSignal && combined.includes(normalizedColumn);
 }
 
 async function insertRsvpWithSchemaFallback(supabase, payload) {
