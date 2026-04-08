@@ -481,12 +481,14 @@
     .history-wrapper {
       display: grid;
       grid-template-columns: minmax(320px, 1fr) minmax(280px, 0.95fr);
+      grid-template-areas: "content image";
       align-items: center;
       column-gap: clamp(2.5rem, 6vw, 6rem);
       row-gap: 2rem;
     }
 
     .history-image {
+      grid-area: image;
       margin: 0;
       position: relative;
     }
@@ -555,6 +557,7 @@
     }
 
     .history-content {
+      grid-area: content;
       text-align: left;
       max-width: 620px;
     }
@@ -758,6 +761,9 @@
 
       .history-wrapper {
         grid-template-columns: 1fr;
+        grid-template-areas:
+          "content"
+          "image";
         text-align: center;
       }
 
