@@ -307,52 +307,52 @@
     }
 
     .hero-copy {
-      display: grid;
-      place-items: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.55rem;
       text-align: center;
       color: rgba(255, 247, 240, 0.97);
-      text-shadow: 0 4px 18px rgba(0, 0, 0, 0.28);
+      text-shadow: 0 4px 18px rgba(0, 0, 0, 0.34);
+      width: min(92vw, 640px);
     }
 
-    .hero-ornament {
-      width: min(520px, 88vw);
-      height: 1px;
-      background: linear-gradient(
-        90deg,
-        rgba(255, 248, 240, 0),
-        rgba(255, 248, 240, 0.82) 20%,
-        rgba(255, 248, 240, 0.82) 80%,
-        rgba(255, 248, 240, 0)
-      );
+    .hero-script {
+      margin: 0 0 0.3rem;
+      font-family: "Great Vibes", cursive;
+      font-size: clamp(4rem, 14vw, 8.2rem);
+      font-weight: 400;
+      line-height: 0.88;
+      color: rgba(255, 255, 255, 0.94);
+      letter-spacing: 0.015em;
       opacity: 0;
-      transform: translateX(-24px);
-      clip-path: inset(0 100% 0 0);
-      animation: heroTextReveal 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.2s forwards;
-    }
-
-    .hero-names {
-      margin: 0;
-      font-family: "Cinzel", serif;
-      font-size: clamp(2rem, 6.4vw, 4.8rem);
-      font-weight: 600;
-      letter-spacing: 0.12em;
-      line-height: 1.05;
-      text-transform: uppercase;
-      opacity: 0;
-      transform: translateX(-38px);
-      filter: blur(6px);
+      transform: translateX(-32px);
+      filter: blur(4px);
       clip-path: inset(0 100% 0 0);
       animation: heroTextReveal 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
     }
 
-    .hero-date {
+    .hero-kicker {
       margin: 0;
-      width: 100%;
-      text-align: center;
-      font-family: "Cormorant Garamond", serif;
-      font-size: clamp(1.3rem, 2.9vw, 2.15rem);
-      letter-spacing: 0.14em;
+      font-family: "Inter", sans-serif;
+      font-size: clamp(0.58rem, 1.35vw, 0.84rem);
+      letter-spacing: 0.38em;
       text-transform: uppercase;
+      color: rgba(255, 249, 244, 0.72);
+      opacity: 0;
+      transform: translateX(-24px);
+      clip-path: inset(0 100% 0 0);
+      animation: heroTextReveal 0.95s cubic-bezier(0.22, 1, 0.36, 1) 0.35s forwards;
+    }
+
+    .hero-couple {
+      margin: 0;
+      font-family: "Cinzel", serif;
+      font-size: clamp(1.65rem, 4.3vw, 3rem);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: rgba(255, 255, 255, 0.96);
       opacity: 0;
       transform: translateX(-28px);
       filter: blur(4px);
@@ -360,16 +360,86 @@
       animation: heroTextReveal 1s cubic-bezier(0.22, 1, 0.36, 1) 0.5s forwards;
     }
 
-    .hero-symbol {
-      margin: 0.25rem 0;
-      font-family: "Cormorant Garamond", serif;
-      font-size: clamp(1.2rem, 2.6vw, 1.8rem);
-      letter-spacing: 0.18em;
+    .hero-couple em {
+      font-family: "Great Vibes", cursive;
+      font-style: normal;
+      font-size: 0.95em;
+      text-transform: none;
+      letter-spacing: 0.02em;
+      margin: 0 0.16em;
+    }
+
+    .hero-invite {
+      margin: 0;
+      font-family: "Inter", sans-serif;
+      font-size: clamp(0.58rem, 1.25vw, 0.8rem);
+      letter-spacing: 0.34em;
+      text-transform: uppercase;
+      color: rgba(255, 249, 244, 0.7);
       opacity: 0;
-      transform: translateX(-18px);
-      filter: blur(3px);
+      transform: translateX(-24px);
       clip-path: inset(0 100% 0 0);
-      animation: heroTextReveal 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.35s forwards;
+      animation: heroTextReveal 0.95s cubic-bezier(0.22, 1, 0.36, 1) 0.68s forwards;
+    }
+
+    .hero-date {
+      margin: 0;
+      font-family: "Cinzel", serif;
+      font-size: clamp(2.1rem, 7vw, 4.1rem);
+      line-height: 0.92;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.97);
+      opacity: 0;
+      transform: translateX(-28px);
+      filter: blur(4px);
+      clip-path: inset(0 100% 0 0);
+      animation: heroTextReveal 1s cubic-bezier(0.22, 1, 0.36, 1) 0.85s forwards;
+    }
+
+    .hero-date-box {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.65rem;
+      margin-top: 0.1rem;
+      padding: 0.35rem 0.6rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.38);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.38);
+      opacity: 0;
+      transform: translateX(-20px);
+      clip-path: inset(0 100% 0 0);
+      animation: heroTextReveal 1s cubic-bezier(0.22, 1, 0.36, 1) 1.05s forwards;
+    }
+
+    .hero-date-chip {
+      min-width: clamp(112px, 24vw, 146px);
+      border: 1px solid rgba(255, 255, 255, 0.68);
+      padding: 0.35rem 0.75rem;
+      font-family: "Cormorant Garamond", serif;
+      font-size: clamp(0.9rem, 2.1vw, 1.2rem);
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      line-height: 1.1;
+      color: rgba(255, 255, 255, 0.94);
+      background: rgba(19, 15, 17, 0.18);
+    }
+
+    .hero-time {
+      margin: 0;
+      font-family: "Inter", sans-serif;
+      font-size: clamp(0.62rem, 1.35vw, 0.8rem);
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: rgba(255, 249, 244, 0.88);
+    }
+
+    .hero-symbol {
+      font-family: "Cormorant Garamond", serif;
+      font-size: 1.2rem;
+      opacity: 0;
+      transform: translateX(-14px);
+      clip-path: inset(0 100% 0 0);
+      animation: heroTextReveal 0.9s cubic-bezier(0.22, 1, 0.36, 1) 1.15s forwards;
     }
 
     @keyframes heroTextReveal {
@@ -382,10 +452,13 @@
     }
 
     @media (prefers-reduced-motion: reduce) {
-      .hero-names,
+      .hero-script,
+      .hero-kicker,
       .hero-date,
       .hero-symbol,
-      .hero-ornament {
+      .hero-couple,
+      .hero-invite,
+      .hero-date-box {
         animation: none;
         opacity: 1;
         transform: none;
@@ -940,13 +1013,18 @@
         <div class="hero-content">
           <img class="hero-logo is-hidden" src="./images/hero_logo.png" alt="Monograma de Alejandro y Alejandra" aria-hidden="true" />
           <div class="hero-copy" aria-label="Alejandro y Alejandra, Oct 17, 2026">
-            <span class="hero-ornament" aria-hidden="true"></span>
-            <p class="hero-symbol" aria-hidden="true">✦ ✧ ✦</p>
-            <p class="hero-names">Alejandro &amp; Alejandra</p>
-            <p class="hero-symbol" aria-hidden="true">❦</p>
-            <p class="hero-date">Oct 17, 2026</p>
-            <p class="hero-symbol" aria-hidden="true">✦ ✧ ✦</p>
-            <span class="hero-ornament" aria-hidden="true"></span>
+            <p class="hero-script">We Do</p>
+            <p class="hero-kicker">Together with their families</p>
+            <p class="hero-couple">Alejandro <em>and</em> Alejandra</p>
+            <p class="hero-invite">Invite you to their wedding celebration</p>
+            <p class="hero-date">Oct 17</p>
+            <div class="hero-date-box" aria-label="Saturday, October 17, 2026 at 1:30 PM">
+              <span class="hero-date-chip">Saturday</span>
+              <span class="hero-symbol" aria-hidden="true">✦</span>
+              <span class="hero-date-chip">Oct 17, 2026</span>
+              <span class="hero-symbol" aria-hidden="true">✦</span>
+              <span class="hero-time">At 1:30 PM</span>
+            </div>
           </div>
         </div>
       </div>
