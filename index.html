@@ -333,6 +333,15 @@
       animation: heroTextReveal 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
     }
 
+    .hero-heart {
+      display: inline-block;
+      margin: 0 0.1em;
+      color: rgba(255, 214, 224, 0.95);
+      text-shadow: 0 0 16px rgba(255, 210, 220, 0.6);
+      transform-origin: center;
+      animation: heartPulse 1.6s ease-in-out 1.2s infinite;
+    }
+
     .hero-kicker {
       margin: 0;
       font-family: "Inter", sans-serif;
@@ -451,6 +460,16 @@
       }
     }
 
+    @keyframes heartPulse {
+      0%,
+      100% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.18);
+      }
+    }
+
     @media (prefers-reduced-motion: reduce) {
       .hero-script,
       .hero-kicker,
@@ -464,6 +483,10 @@
         transform: none;
         filter: none;
         clip-path: inset(0 0 0 0);
+      }
+
+      .hero-heart {
+        animation: none;
       }
     }
 
@@ -1013,7 +1036,7 @@
         <div class="hero-content">
           <img class="hero-logo is-hidden" src="./images/hero_logo.png" alt="Monograma de Alejandro y Alejandra" aria-hidden="true" />
           <div class="hero-copy" aria-label="Alejandro y Alejandra, Oct 17, 2026">
-            <p class="hero-script">We Do</p>
+            <p class="hero-script">We <span class="hero-heart" aria-hidden="true">♥</span> Do</p>
             <p class="hero-kicker">Together with their families</p>
             <p class="hero-couple">Alejandro <em>and</em> Alejandra</p>
             <p class="hero-invite">Invite you to their wedding celebration</p>
