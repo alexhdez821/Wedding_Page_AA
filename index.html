@@ -279,9 +279,9 @@
       min-height: calc(100svh - var(--header-h));
       display: flex;
       flex-direction: column;
-      align-items: flex-start;
+      align-items: center;
       justify-content: center;
-      gap: clamp(0.4rem, 1.6vw, 1rem);
+      gap: clamp(0.45rem, 1.8vw, 1.1rem);
       width: 100%;
       position: relative;
       z-index: 3;
@@ -302,50 +302,63 @@
       transform-origin: center;
     }
 
-    .hero-logo.logo-prep {
-      opacity: 0;
-      transform: translateY(28px) scale(0.98);
-      filter: blur(6px);
+    .hero-logo.is-hidden {
+      display: none;
     }
 
-    .hero-logo.logo-reveal {
-      opacity: 1;
-      transform: translateY(0) scale(1);
-      filter: blur(0);
+    .hero-copy {
+      display: grid;
+      place-items: center;
+      text-align: center;
+      color: rgba(255, 247, 240, 0.97);
+      text-shadow: 0 4px 18px rgba(0, 0, 0, 0.28);
+    }
+
+    .hero-names {
+      margin: 0;
+      font-family: "Great Vibes", cursive;
+      font-size: clamp(2.7rem, 8.5vw, 6rem);
+      letter-spacing: 0.03em;
+      line-height: 0.95;
+      opacity: 0;
+      transform: translateX(-38px);
+      filter: blur(6px);
+      clip-path: inset(0 100% 0 0);
+      animation: heroTextReveal 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
     }
 
     .hero-date {
       margin: 0;
       width: 100%;
       text-align: center;
-      font-family: "Great Vibes", cursive;
-      font-size: clamp(2rem, 5.5vw, 4rem);
-      letter-spacing: 0.04em;
-      color: rgba(255, 247, 240, 0.96);
-      text-shadow: 0 4px 18px rgba(0, 0, 0, 0.28);
+      font-family: "Cormorant Garamond", serif;
+      font-size: clamp(1.3rem, 2.9vw, 2.15rem);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
       opacity: 0;
-      transform: translateY(16px);
-      filter: blur(6px);
-      transition: opacity 1s ease, transform 1s ease, filter 1s ease;
-      transition-delay: 0.65s;
+      transform: translateX(-28px);
+      filter: blur(4px);
+      clip-path: inset(0 100% 0 0);
+      animation: heroTextReveal 1s cubic-bezier(0.22, 1, 0.36, 1) 0.5s forwards;
     }
 
-    .hero-date.date-reveal {
-      opacity: 1;
-      transform: translateY(0);
-      filter: blur(0);
+    @keyframes heroTextReveal {
+      to {
+        opacity: 1;
+        transform: translateX(0);
+        filter: blur(0);
+        clip-path: inset(0 0 0 0);
+      }
     }
 
     @media (prefers-reduced-motion: reduce) {
-      .hero-logo {
-        transition: none;
-      }
-
-      .hero-logo.logo-prep,
-      .hero-logo.logo-reveal {
+      .hero-names,
+      .hero-date {
+        animation: none;
         opacity: 1;
         transform: none;
         filter: none;
+        clip-path: inset(0 0 0 0);
       }
 
       .hero-date {
@@ -900,8 +913,11 @@
     <section class="section hero" id="hero">
       <div class="container">
         <div class="hero-content">
-          <img class="hero-logo" src="./images/hero_logo.png" alt="Monograma de Alejandro y Alejandra" />
-          <p class="hero-date" aria-label="Fecha de la boda">Oct 17, 2026</p>
+          <img class="hero-logo is-hidden" src="./images/hero_logo.png" alt="Monograma de Alejandro y Alejandra" aria-hidden="true" />
+          <div class="hero-copy" aria-label="Alejandro y Alejandra, Oct 17, 2026">
+            <p class="hero-names">Alejandro &amp; Alejandra</p>
+            <p class="hero-date">Oct 17, 2026</p>
+          </div>
         </div>
       </div>
     </section>
@@ -1085,19 +1101,6 @@
 
     const header = document.querySelector(".site-header");
     const hero = document.getElementById("hero");
-    const heroLogo = document.querySelector(".hero-logo");
-    const heroDate = document.querySelector(".hero-date");
-
-    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-    if (heroLogo && !prefersReducedMotion.matches) {
-      heroLogo.classList.add("logo-prep");
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          heroLogo.classList.add("logo-reveal");
-          if (heroDate) heroDate.classList.add("date-reveal");
-        });
-      });
-    }
 
     let lastScrollY = window.scrollY;
 
