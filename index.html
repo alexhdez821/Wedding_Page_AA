@@ -7,7 +7,7 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Great+Vibes&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600&family=Cormorant+Garamond:wght@400;500;600;700&family=Great+Vibes&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 
   <style>
     :root {
@@ -278,8 +278,10 @@
     .hero-content {
       min-height: calc(100svh - var(--header-h));
       display: flex;
-      align-items: flex-start;
+      flex-direction: column;
+      align-items: center;
       justify-content: center;
+      gap: clamp(0.45rem, 1.8vw, 1.1rem);
       width: 100%;
       position: relative;
       z-index: 3;
@@ -300,28 +302,168 @@
       transform-origin: center;
     }
 
-    .hero-logo.logo-prep {
-      opacity: 0;
-      transform: translateY(28px) scale(0.98);
-      filter: blur(6px);
+    .hero-logo.is-hidden {
+      display: none;
     }
 
-    .hero-logo.logo-reveal {
-      opacity: 1;
-      transform: translateY(0) scale(1);
-      filter: blur(0);
+    .hero-copy {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.55rem;
+      text-align: center;
+      color: rgba(255, 247, 240, 0.97);
+      text-shadow: 0 4px 18px rgba(0, 0, 0, 0.34);
+      width: min(92vw, 640px);
+    }
+
+    .hero-script {
+      margin: 0 0 0.3rem;
+      font-family: "Great Vibes", cursive;
+      font-size: clamp(4rem, 14vw, 8.2rem);
+      font-weight: 400;
+      line-height: 0.88;
+      color: rgba(255, 255, 255, 0.94);
+      letter-spacing: 0.015em;
+      opacity: 0;
+      transform: translateX(-32px);
+      filter: blur(4px);
+      clip-path: inset(0 100% 0 0);
+      animation: heroTextReveal 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+
+    .hero-kicker {
+      margin: 0;
+      font-family: "Inter", sans-serif;
+      font-size: clamp(0.58rem, 1.35vw, 0.84rem);
+      letter-spacing: 0.38em;
+      text-transform: uppercase;
+      color: rgba(255, 249, 244, 0.72);
+      opacity: 0;
+      transform: translateX(-24px);
+      clip-path: inset(0 100% 0 0);
+      animation: heroTextReveal 0.95s cubic-bezier(0.22, 1, 0.36, 1) 0.35s forwards;
+    }
+
+    .hero-couple {
+      margin: 0;
+      font-family: "Cinzel", serif;
+      font-size: clamp(1.65rem, 4.3vw, 3rem);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: rgba(255, 255, 255, 0.96);
+      opacity: 0;
+      transform: translateX(-28px);
+      filter: blur(4px);
+      clip-path: inset(0 100% 0 0);
+      animation: heroTextReveal 1s cubic-bezier(0.22, 1, 0.36, 1) 0.5s forwards;
+    }
+
+    .hero-couple em {
+      font-family: "Great Vibes", cursive;
+      font-style: normal;
+      font-size: 0.95em;
+      text-transform: none;
+      letter-spacing: 0.02em;
+      margin: 0 0.16em;
+    }
+
+    .hero-invite {
+      margin: 0;
+      font-family: "Inter", sans-serif;
+      font-size: clamp(0.58rem, 1.25vw, 0.8rem);
+      letter-spacing: 0.34em;
+      text-transform: uppercase;
+      color: rgba(255, 249, 244, 0.7);
+      opacity: 0;
+      transform: translateX(-24px);
+      clip-path: inset(0 100% 0 0);
+      animation: heroTextReveal 0.95s cubic-bezier(0.22, 1, 0.36, 1) 0.68s forwards;
+    }
+
+    .hero-date {
+      margin: 0;
+      font-family: "Cinzel", serif;
+      font-size: clamp(2.1rem, 7vw, 4.1rem);
+      line-height: 0.92;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.97);
+      opacity: 0;
+      transform: translateX(-28px);
+      filter: blur(4px);
+      clip-path: inset(0 100% 0 0);
+      animation: heroTextReveal 1s cubic-bezier(0.22, 1, 0.36, 1) 0.85s forwards;
+    }
+
+    .hero-date-box {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.65rem;
+      margin-top: 0.1rem;
+      padding: 0.35rem 0.6rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.38);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.38);
+      opacity: 0;
+      transform: translateX(-20px);
+      clip-path: inset(0 100% 0 0);
+      animation: heroTextReveal 1s cubic-bezier(0.22, 1, 0.36, 1) 1.05s forwards;
+    }
+
+    .hero-date-chip {
+      min-width: clamp(112px, 24vw, 146px);
+      border: 1px solid rgba(255, 255, 255, 0.68);
+      padding: 0.35rem 0.75rem;
+      font-family: "Cormorant Garamond", serif;
+      font-size: clamp(0.9rem, 2.1vw, 1.2rem);
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      line-height: 1.1;
+      color: rgba(255, 255, 255, 0.94);
+      background: rgba(19, 15, 17, 0.18);
+    }
+
+    .hero-time {
+      margin: 0;
+      font-family: "Inter", sans-serif;
+      font-size: clamp(0.62rem, 1.35vw, 0.8rem);
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: rgba(255, 249, 244, 0.88);
+    }
+
+    .hero-symbol {
+      font-family: "Cormorant Garamond", serif;
+      font-size: 1.2rem;
+      opacity: 0;
+      transform: translateX(-14px);
+      clip-path: inset(0 100% 0 0);
+      animation: heroTextReveal 0.9s cubic-bezier(0.22, 1, 0.36, 1) 1.15s forwards;
+    }
+
+    @keyframes heroTextReveal {
+      to {
+        opacity: 1;
+        transform: translateX(0);
+        filter: blur(0);
+        clip-path: inset(0 0 0 0);
+      }
     }
 
     @media (prefers-reduced-motion: reduce) {
-      .hero-logo {
-        transition: none;
-      }
-
-      .hero-logo.logo-prep,
-      .hero-logo.logo-reveal {
+      .hero-script,
+      .hero-kicker,
+      .hero-date,
+      .hero-symbol,
+      .hero-couple,
+      .hero-invite,
+      .hero-date-box {
+        animation: none;
         opacity: 1;
         transform: none;
         filter: none;
+        clip-path: inset(0 0 0 0);
       }
     }
 
@@ -869,7 +1011,21 @@
     <section class="section hero" id="hero">
       <div class="container">
         <div class="hero-content">
-          <img class="hero-logo" src="./images/hero_logo.png" alt="Monograma de Alejandro y Alejandra" />
+          <img class="hero-logo is-hidden" src="./images/hero_logo.png" alt="Monograma de Alejandro y Alejandra" aria-hidden="true" />
+          <div class="hero-copy" aria-label="Alejandro y Alejandra, Oct 17, 2026">
+            <p class="hero-script">We Do</p>
+            <p class="hero-kicker">Together with their families</p>
+            <p class="hero-couple">Alejandro <em>and</em> Alejandra</p>
+            <p class="hero-invite">Invite you to their wedding celebration</p>
+            <p class="hero-date">Oct 17</p>
+            <div class="hero-date-box" aria-label="Saturday, October 17, 2026 at 1:30 PM">
+              <span class="hero-date-chip">Saturday</span>
+              <span class="hero-symbol" aria-hidden="true">✦</span>
+              <span class="hero-date-chip">Oct 17, 2026</span>
+              <span class="hero-symbol" aria-hidden="true">✦</span>
+              <span class="hero-time">At 1:30 PM</span>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -1053,17 +1209,6 @@
 
     const header = document.querySelector(".site-header");
     const hero = document.getElementById("hero");
-    const heroLogo = document.querySelector(".hero-logo");
-
-    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-    if (heroLogo && !prefersReducedMotion.matches) {
-      heroLogo.classList.add("logo-prep");
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          heroLogo.classList.add("logo-reveal");
-        });
-      });
-    }
 
     let lastScrollY = window.scrollY;
 
