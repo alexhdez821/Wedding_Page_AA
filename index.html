@@ -319,6 +319,7 @@
     }
 
     .hero-script {
+      position: relative;
       margin: 0 0 0.3rem;
       font-family: "Great Vibes", cursive;
       font-size: clamp(4rem, 14vw, 8.2rem);
@@ -333,13 +334,37 @@
       animation: heroTextReveal 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
     }
 
-    .hero-heart {
-      display: inline-block;
-      margin: 0 0.1em;
-      color: rgba(255, 214, 224, 0.95);
-      text-shadow: 0 0 16px rgba(255, 210, 220, 0.6);
-      transform-origin: center;
-      animation: heartPulse 1.6s ease-in-out 1.2s infinite;
+    .hero-script::before {
+      content: "";
+      position: absolute;
+      left: 50%;
+      bottom: -0.04em;
+      width: 72%;
+      height: 1px;
+      transform: translateX(-50%);
+      background: linear-gradient(
+        90deg,
+        rgba(255, 223, 232, 0),
+        rgba(255, 223, 232, 0.68) 24%,
+        rgba(255, 223, 232, 0.68) 76%,
+        rgba(255, 223, 232, 0)
+      );
+      opacity: 0.65;
+      pointer-events: none;
+    }
+
+    .hero-script::after {
+      content: "♡";
+      position: absolute;
+      left: 50%;
+      bottom: -0.18em;
+      transform: translateX(-50%);
+      font-size: 0.42em;
+      color: transparent;
+      -webkit-text-stroke: 1.4px rgba(255, 223, 232, 0.9);
+      text-shadow: 0 0 14px rgba(255, 210, 220, 0.35);
+      opacity: 0.9;
+      pointer-events: none;
     }
 
     .hero-kicker {
@@ -460,16 +485,6 @@
       }
     }
 
-    @keyframes heartPulse {
-      0%,
-      100% {
-        transform: scale(1);
-      }
-      50% {
-        transform: scale(1.18);
-      }
-    }
-
     @media (prefers-reduced-motion: reduce) {
       .hero-script,
       .hero-kicker,
@@ -483,10 +498,6 @@
         transform: none;
         filter: none;
         clip-path: inset(0 0 0 0);
-      }
-
-      .hero-heart {
-        animation: none;
       }
     }
 
@@ -1036,7 +1047,7 @@
         <div class="hero-content">
           <img class="hero-logo is-hidden" src="./images/hero_logo.png" alt="Monograma de Alejandro y Alejandra" aria-hidden="true" />
           <div class="hero-copy" aria-label="Alejandro y Alejandra, Oct 17, 2026">
-            <p class="hero-script">We <span class="hero-heart" aria-hidden="true">♥</span> Do</p>
+            <p class="hero-script">We Do</p>
             <p class="hero-kicker">Together with their families</p>
             <p class="hero-couple">Alejandro <em>and</em> Alejandra</p>
             <p class="hero-invite">Invite you to their wedding celebration</p>
