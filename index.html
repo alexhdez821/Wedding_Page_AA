@@ -320,13 +320,14 @@
 
     .hero-script {
       position: relative;
-      margin: 0 0 0.3rem;
-      font-family: "Great Vibes", cursive;
-      font-size: clamp(4rem, 14vw, 8.2rem);
-      font-weight: 400;
-      line-height: 0.88;
-      color: rgba(255, 255, 255, 0.94);
-      letter-spacing: 0.015em;
+      margin: 0 0 0.4rem;
+      font-family: "Cinzel", serif;
+      font-size: clamp(0.82rem, 2vw, 1.12rem);
+      font-weight: 500;
+      line-height: 1.3;
+      text-transform: uppercase;
+      color: rgba(255, 249, 244, 0.9);
+      letter-spacing: 0.28em;
       opacity: 0;
       transform: translateX(-32px);
       filter: blur(4px);
@@ -354,17 +355,7 @@
     }
 
     .hero-script::after {
-      content: "♡";
-      position: absolute;
-      left: 50%;
-      bottom: -0.18em;
-      transform: translateX(-50%);
-      font-size: 0.42em;
-      color: transparent;
-      -webkit-text-stroke: 1.4px rgba(255, 223, 232, 0.9);
-      text-shadow: 0 0 14px rgba(255, 210, 220, 0.35);
-      opacity: 0.9;
-      pointer-events: none;
+      content: "";
     }
 
     .hero-kicker {
@@ -1046,18 +1037,15 @@
       <div class="container">
         <div class="hero-content">
           <img class="hero-logo is-hidden" src="./images/hero_logo.png" alt="Monograma de Alejandro y Alejandra" aria-hidden="true" />
-          <div class="hero-copy" aria-label="Alejandro y Alejandra, Oct 17, 2026">
-            <p class="hero-script">We Do</p>
+          <div class="hero-copy" aria-label="Formal wedding invitation for Alejandro and Alejandra on Saturday, October 17, 2026 at 1:30 PM">
+            <p class="hero-script">The Honor of Your Presence is Requested</p>
             <p class="hero-kicker">Together with their families</p>
-            <p class="hero-couple">Alejandro <em>and</em> Alejandra</p>
-            <p class="hero-invite">Invite you to their wedding celebration</p>
-            <p class="hero-date">Oct 17</p>
+            <p class="hero-couple">Alejandro <em>&amp;</em> Alejandra</p>
+            <p class="hero-invite">Request the pleasure of your company at their wedding ceremony</p>
             <div class="hero-date-box" aria-label="Saturday, October 17, 2026 at 1:30 PM">
-              <span class="hero-date-chip">Saturday</span>
+              <span class="hero-date-chip">Saturday, October 17, 2026</span>
               <span class="hero-symbol" aria-hidden="true">✦</span>
-              <span class="hero-date-chip">Oct 17, 2026</span>
-              <span class="hero-symbol" aria-hidden="true">✦</span>
-              <span class="hero-time">At 1:30 PM</span>
+              <span class="hero-time">1:30 PM</span>
             </div>
           </div>
         </div>
