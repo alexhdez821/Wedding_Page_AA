@@ -1082,7 +1082,6 @@
       <nav class="menu-links">
         <a href="#hero">Inicio</a>
         <a href="#saludo">Mensaje</a>
-        <a href="#countdown">Cuenta regresiva</a>
         <a href="#historia">Historia</a>
         <a href="#viaje">Viaje</a>
         <a href="#fotos">Fotos</a>
@@ -1095,22 +1094,7 @@
     <section class="section hero" id="hero">
       <div class="container">
         <div class="hero-content">
-          <img class="hero-logo is-hidden" src="./images/hero_logo.png" alt="Monograma de Alejandro y Alejandra" aria-hidden="true" />
-          <div class="hero-copy" aria-label="Invitación formal para la boda de Alejandro y Alejandra el sábado 17 de octubre de 2026 a la 1:00 PM">
-            <p class="hero-script">Nos Casamos</p>
-            <p class="hero-kicker">JUNTO A NUESTRAS FAMILIAS</p>
-            <p class="hero-couple">ALEJANDRO &amp; ALEJANDRA</p>
-            <p class="hero-invite">TE INVITAN A CELEBRAR SU BODA</p>
-            <div class="hero-date-box" aria-label="Sábado 17 de octubre, 1:00 PM">
-              <p class="hero-date-side">SÁBADO</p>
-              <div class="hero-date-center">
-                <p class="hero-date-month">OCTUBRE</p>
-                <p class="hero-date-main">17</p>
-              </div>
-              <p class="hero-date-side">1:00 PM</p>
-            </div>
-            <p class="hero-year">2026</p>
-          </div>
+          <img class="hero-logo" src="./images/hero_logo.png" alt="Monograma de Alejandro y Alejandra" />
         </div>
       </div>
     </section>
@@ -1125,7 +1109,6 @@
               Junto a nuestros seres queridos, nosotros, Alejandro y Alejandra, queremos invitarte a celebrar el santo sacramento de nuestro matrimonio.
             </p>
             <p class="greeting-date">Sábado 17 de Octubre de 2026</p>
-            <p class="greeting-time">La ceremonia empieza a la 1pm</p>
           </div>
           <figure class="greeting-image">
             <img src="./images/784E6B64-AB33-4F6B-B3EB-C94B731F4558.png" alt="Alejandro y Alejandra" />
@@ -1134,33 +1117,6 @@
       </div>
     </section>
 
-    <section class="section countdown-section" id="countdown">
-      <div class="container">
-        <div class="countdown-shell">
-          <div class="count-grid" id="countdownGrid" aria-label="Tiempo restante para la boda">
-            <div class="count-unit">
-              <span class="count-number" id="days">--</span>
-              <div class="count-label">Días</div>
-            </div>
-            <span class="count-separator" aria-hidden="true">:</span>
-            <div class="count-unit">
-              <span class="count-number" id="hours">--</span>
-              <div class="count-label">Horas</div>
-            </div>
-            <span class="count-separator" aria-hidden="true">:</span>
-            <div class="count-unit">
-              <span class="count-number" id="minutes">--</span>
-              <div class="count-label">Minutos</div>
-            </div>
-            <span class="count-separator" aria-hidden="true">:</span>
-            <div class="count-unit">
-              <span class="count-number" id="seconds">--</span>
-              <div class="count-label">Segundos</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
 
     <section class="section content-section" id="historia">
       <div class="container">
@@ -1373,32 +1329,6 @@
     preloadHistorySlides();
     renderHistorySlide(currentHistorySlide);
 
-    const weddingDate = new Date("2026-10-17T16:00:00").getTime();
-
-    function updateCountdown() {
-      const now = new Date().getTime();
-      const distance = weddingDate - now;
-
-      if (distance <= 0) {
-        document.getElementById("countdownGrid").innerHTML = `
-          <div class="count-finished">Hoy — ¡Nos casamos!</div>
-        `;
-        return;
-      }
-
-      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((distance / (1000 * 60 * 60)) % 24);
-      const minutes = Math.floor((distance / (1000 * 60)) % 60);
-      const seconds = Math.floor((distance / 1000) % 60);
-
-      document.getElementById("days").textContent = days;
-      document.getElementById("hours").textContent = String(hours).padStart(2, "0");
-      document.getElementById("minutes").textContent = String(minutes).padStart(2, "0");
-      document.getElementById("seconds").textContent = String(seconds).padStart(2, "0");
-    }
-
-    updateCountdown();
-    setInterval(updateCountdown, 1000);
   </script>
 </body>
 </html>
