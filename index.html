@@ -1073,6 +1073,13 @@
     const historyNext = document.getElementById("historyNext");
     let currentHistorySlide = 0;
 
+    function preloadHistorySlides() {
+      historySlides.forEach((slide) => {
+        const image = new Image();
+        image.src = slide.src;
+      });
+    }
+
     function renderHistorySlide(index) {
       if (!historyImage || !historyCaption) return;
       const slide = historySlides[index];
@@ -1093,6 +1100,7 @@
 
     if (historyPrev) historyPrev.addEventListener("click", showPreviousHistorySlide);
     if (historyNext) historyNext.addEventListener("click", showNextHistorySlide);
+    preloadHistorySlides();
     renderHistorySlide(currentHistorySlide);
 
     const weddingDate = new Date("2026-10-17T16:00:00").getTime();
