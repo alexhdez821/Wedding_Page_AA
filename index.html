@@ -7,7 +7,7 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Great+Vibes&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600&family=Cormorant+Garamond:wght@400;500;600;700&family=Great+Vibes&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 
   <style>
     :root {
@@ -314,12 +314,30 @@
       text-shadow: 0 4px 18px rgba(0, 0, 0, 0.28);
     }
 
+    .hero-ornament {
+      width: min(520px, 88vw);
+      height: 1px;
+      background: linear-gradient(
+        90deg,
+        rgba(255, 248, 240, 0),
+        rgba(255, 248, 240, 0.82) 20%,
+        rgba(255, 248, 240, 0.82) 80%,
+        rgba(255, 248, 240, 0)
+      );
+      opacity: 0;
+      transform: translateX(-24px);
+      clip-path: inset(0 100% 0 0);
+      animation: heroTextReveal 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.2s forwards;
+    }
+
     .hero-names {
       margin: 0;
-      font-family: "Great Vibes", cursive;
-      font-size: clamp(2.7rem, 8.5vw, 6rem);
-      letter-spacing: 0.03em;
-      line-height: 0.95;
+      font-family: "Cinzel", serif;
+      font-size: clamp(2rem, 6.4vw, 4.8rem);
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      line-height: 1.05;
+      text-transform: uppercase;
       opacity: 0;
       transform: translateX(-38px);
       filter: blur(6px);
@@ -342,6 +360,18 @@
       animation: heroTextReveal 1s cubic-bezier(0.22, 1, 0.36, 1) 0.5s forwards;
     }
 
+    .hero-symbol {
+      margin: 0.25rem 0;
+      font-family: "Cormorant Garamond", serif;
+      font-size: clamp(1.2rem, 2.6vw, 1.8rem);
+      letter-spacing: 0.18em;
+      opacity: 0;
+      transform: translateX(-18px);
+      filter: blur(3px);
+      clip-path: inset(0 100% 0 0);
+      animation: heroTextReveal 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.35s forwards;
+    }
+
     @keyframes heroTextReveal {
       to {
         opacity: 1;
@@ -353,19 +383,14 @@
 
     @media (prefers-reduced-motion: reduce) {
       .hero-names,
-      .hero-date {
+      .hero-date,
+      .hero-symbol,
+      .hero-ornament {
         animation: none;
         opacity: 1;
         transform: none;
         filter: none;
         clip-path: inset(0 0 0 0);
-      }
-
-      .hero-date {
-        transition: none;
-        opacity: 1;
-        transform: none;
-        filter: none;
       }
     }
 
@@ -915,8 +940,13 @@
         <div class="hero-content">
           <img class="hero-logo is-hidden" src="./images/hero_logo.png" alt="Monograma de Alejandro y Alejandra" aria-hidden="true" />
           <div class="hero-copy" aria-label="Alejandro y Alejandra, Oct 17, 2026">
+            <span class="hero-ornament" aria-hidden="true"></span>
+            <p class="hero-symbol" aria-hidden="true">✦ ✧ ✦</p>
             <p class="hero-names">Alejandro &amp; Alejandra</p>
+            <p class="hero-symbol" aria-hidden="true">❦</p>
             <p class="hero-date">Oct 17, 2026</p>
+            <p class="hero-symbol" aria-hidden="true">✦ ✧ ✦</p>
+            <span class="hero-ornament" aria-hidden="true"></span>
           </div>
         </div>
       </div>
