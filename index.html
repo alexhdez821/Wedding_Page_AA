@@ -862,33 +862,210 @@
       margin-bottom: 8px;
     }
 
-    .travel-grid,
-    .photo-grid {
+    .travel-grid {
       display: grid;
       gap: 20px;
       margin-top: 28px;
-    }
-
-    .travel-grid {
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
-    .photo-grid {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-    }
-
-    .photo-item {
-      aspect-ratio: 4 / 5;
+    .fotos-showcase {
+      margin-top: clamp(2rem, 4vw, 2.8rem);
+      position: relative;
+      border-radius: clamp(22px, 3vw, 30px);
       overflow: hidden;
-      border-radius: 22px;
-      box-shadow: var(--shadow);
-      border: 1px solid var(--line);
+      border: 1px solid rgba(134, 103, 86, 0.2);
+      box-shadow: 0 24px 60px rgba(74, 54, 44, 0.18);
+      background: #e8ddd3;
+      isolation: isolate;
     }
 
-    .photo-item img {
+    .fotos-showcase::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 22% 12%, rgba(255, 255, 255, 0.32), transparent 44%);
+      pointer-events: none;
+      z-index: 3;
+    }
+
+    .fotos-stage {
+      position: relative;
+      aspect-ratio: 16 / 10;
+      min-height: 340px;
+    }
+
+    .fotos-slide {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      transform: scale(1.045);
+      transition: opacity 0.9s ease, transform 6.5s ease;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .fotos-slide.active {
+      opacity: 1;
+      transform: scale(1.01);
+      pointer-events: auto;
+      z-index: 1;
+    }
+
+    .fotos-slide img {
       width: 100%;
       height: 100%;
       object-fit: cover;
+      filter: saturate(108%) contrast(1.06);
+    }
+
+    .fotos-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(38, 28, 24, 0.12) 10%, rgba(38, 28, 24, 0.64) 100%);
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    .fotos-caption-wrap {
+      position: absolute;
+      left: clamp(1rem, 4vw, 2.25rem);
+      right: clamp(1rem, 4vw, 2.25rem);
+      bottom: clamp(1.1rem, 3vw, 1.8rem);
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 1.2rem;
+      z-index: 4;
+    }
+
+    .fotos-caption {
+      color: #fffaf4;
+      text-shadow: 0 6px 16px rgba(18, 12, 9, 0.35);
+    }
+
+    .fotos-caption-title {
+      font-family: "Cormorant Garamond", serif;
+      font-size: clamp(1.4rem, 3vw, 2rem);
+      margin: 0;
+      line-height: 1.1;
+      font-weight: 600;
+    }
+
+    .fotos-caption-text {
+      margin-top: 0.45rem;
+      font-size: clamp(0.88rem, 1.8vw, 1rem);
+      color: rgba(255, 250, 244, 0.9);
+    }
+
+    .fotos-counter {
+      font-family: "Cormorant Garamond", serif;
+      color: rgba(255, 245, 236, 0.88);
+      letter-spacing: 0.06em;
+      font-size: 0.96rem;
+      white-space: nowrap;
+    }
+
+    .fotos-nav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 48px;
+      height: 48px;
+      border: none;
+      border-radius: 999px;
+      color: #fff;
+      background: rgba(25, 18, 15, 0.32);
+      backdrop-filter: blur(6px);
+      box-shadow: 0 10px 28px rgba(16, 10, 8, 0.28);
+      cursor: pointer;
+      transition: transform 0.2s ease, background 0.2s ease;
+      z-index: 5;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+    }
+
+    .fotos-nav:hover {
+      background: rgba(25, 18, 15, 0.5);
+      transform: translateY(-50%) scale(1.04);
+    }
+
+    .fotos-nav.prev {
+      left: clamp(0.7rem, 2vw, 1.2rem);
+    }
+
+    .fotos-nav.next {
+      right: clamp(0.7rem, 2vw, 1.2rem);
+    }
+
+    .fotos-progress {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: rgba(255, 255, 255, 0.16);
+      z-index: 6;
+      overflow: hidden;
+    }
+
+    .fotos-progress span {
+      display: block;
+      height: 100%;
+      width: 0;
+      background: linear-gradient(90deg, #f6dfcf, #fff7ef);
+      transition: width linear;
+    }
+
+    .fotos-thumbs {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .fotos-thumb {
+      border: none;
+      padding: 0;
+      margin: 0;
+      border-radius: 14px;
+      overflow: hidden;
+      cursor: pointer;
+      box-shadow: 0 8px 20px rgba(68, 49, 40, 0.18);
+      opacity: 0.72;
+      transform: translateY(0);
+      transition: opacity 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+      background: transparent;
+    }
+
+    .fotos-thumb img {
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      object-fit: cover;
+      display: block;
+    }
+
+    .fotos-thumb:hover,
+    .fotos-thumb.active {
+      opacity: 1;
+      transform: translateY(-2px);
+      box-shadow: 0 12px 26px rgba(68, 49, 40, 0.24);
+    }
+
+    .fotos-thumb:focus-visible,
+    .fotos-nav:focus-visible {
+      outline: 2px solid #fffaf4;
+      outline-offset: 2px;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .fotos-slide,
+      .fotos-progress span,
+      .fotos-thumb {
+        transition: none;
+      }
     }
 
     .confirm-button {
@@ -915,9 +1092,12 @@
     }
 
     @media (max-width: 900px) {
-      .travel-grid,
-      .photo-grid {
+      .travel-grid {
         grid-template-columns: 1fr;
+      }
+
+      .fotos-thumbs {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
       }
     }
 
@@ -1069,6 +1249,23 @@
         font-size: 1.15rem;
       }
 
+      .fotos-stage {
+        min-height: 270px;
+      }
+
+      .fotos-nav {
+        width: 42px;
+        height: 42px;
+      }
+
+      .fotos-caption-wrap {
+        align-items: flex-end;
+      }
+
+      .fotos-thumbs {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
       .section-copy {
         font-size: 0.98rem;
       }
@@ -1205,17 +1402,22 @@
             Una selección de recuerdos y momentos especiales.
           </p>
 
-          <div class="photo-grid">
-            <figure class="photo-item">
-              <img src="https://images.unsplash.com/photo-1522673607200-164d1b6ce486?auto=format&fit=crop&w=900&q=80" alt="Foto 1">
-            </figure>
-            <figure class="photo-item">
-              <img src="https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=900&q=80" alt="Foto 2">
-            </figure>
-            <figure class="photo-item">
-              <img src="https://images.unsplash.com/photo-1469371670807-013ccf25f16a?auto=format&fit=crop&w=900&q=80" alt="Foto 3">
-            </figure>
+          <div class="fotos-showcase" id="fotosShowcase" aria-label="Galería de fotos del compromiso" tabindex="0">
+            <div class="fotos-progress" aria-hidden="true"><span id="fotosProgressBar"></span></div>
+            <div class="fotos-stage" id="fotosStage"></div>
+            <div class="fotos-overlay" aria-hidden="true"></div>
+            <button class="fotos-nav prev" id="fotosPrev" type="button" aria-label="Foto anterior">‹</button>
+            <button class="fotos-nav next" id="fotosNext" type="button" aria-label="Foto siguiente">›</button>
+            <div class="fotos-caption-wrap">
+              <div class="fotos-caption">
+                <h3 class="fotos-caption-title" id="fotosCaptionTitle">Momentos especiales</h3>
+                <p class="fotos-caption-text" id="fotosCaptionText"></p>
+              </div>
+              <div class="fotos-counter" id="fotosCounter">01 / 01</div>
+            </div>
           </div>
+
+          <div class="fotos-thumbs" id="fotosThumbs" aria-label="Miniaturas de la galería"></div>
         </div>
       </div>
     </section>
@@ -1377,6 +1579,168 @@
     if (historyNext) historyNext.addEventListener("click", showNextHistorySlide);
     preloadHistorySlides();
     renderHistorySlide(currentHistorySlide);
+
+    const fotosSlides = [
+      { src: "./images/NH_1.jpg", alt: "Alejandra y Alejandro en concierto", title: "Nuestro comienzo", text: "El inicio de muchas aventuras, con música y sonrisas." },
+      { src: "./images/NH_2.jpg", alt: "Alejandra y Alejandro sirviendo juntos", title: "Fe y propósito", text: "Momentos que fortalecieron nuestro camino en equipo." },
+      { src: "./images/NH_3.jpg", alt: "La propuesta de matrimonio", title: "El gran sí", text: "Un instante inolvidable que marcó nuestro para siempre." },
+      { src: "./images/NH_4.jpg", alt: "Fiesta de compromiso", title: "Celebración en familia", text: "Rodeados de amor, anunciamos la fecha de nuestra boda." },
+      { src: "./images/greeting_photo.jpg", alt: "Foto romántica de la pareja", title: "Con el corazón lleno", text: "Cada recuerdo nos acerca más al altar." }
+    ];
+
+    const fotosShowcase = document.getElementById("fotosShowcase");
+    const fotosStage = document.getElementById("fotosStage");
+    const fotosThumbs = document.getElementById("fotosThumbs");
+    const fotosPrev = document.getElementById("fotosPrev");
+    const fotosNext = document.getElementById("fotosNext");
+    const fotosCaptionTitle = document.getElementById("fotosCaptionTitle");
+    const fotosCaptionText = document.getElementById("fotosCaptionText");
+    const fotosCounter = document.getElementById("fotosCounter");
+    const fotosProgressBar = document.getElementById("fotosProgressBar");
+
+    const fotosInterval = 6200;
+    let fotosCurrentIndex = 0;
+    let fotosAutoplayTimer = null;
+
+    function preloadFotosSlides() {
+      fotosSlides.forEach((slide) => {
+        const image = new Image();
+        image.src = slide.src;
+      });
+    }
+
+    function buildFotosSlides() {
+      if (!fotosStage || !fotosThumbs) return;
+
+      fotosStage.innerHTML = "";
+      fotosThumbs.innerHTML = "";
+
+      fotosSlides.forEach((slide, index) => {
+        const item = document.createElement("figure");
+        item.className = `fotos-slide${index === 0 ? " active" : ""}`;
+
+        const image = document.createElement("img");
+        image.src = slide.src;
+        image.alt = slide.alt;
+        image.loading = index === 0 ? "eager" : "lazy";
+
+        item.appendChild(image);
+        fotosStage.appendChild(item);
+
+        const thumbButton = document.createElement("button");
+        thumbButton.className = `fotos-thumb${index === 0 ? " active" : ""}`;
+        thumbButton.type = "button";
+        thumbButton.setAttribute("aria-label", `Ver foto ${index + 1}`);
+
+        const thumbImage = document.createElement("img");
+        thumbImage.src = slide.src;
+        thumbImage.alt = slide.alt;
+        thumbImage.loading = "lazy";
+
+        thumbButton.appendChild(thumbImage);
+        thumbButton.addEventListener("click", () => setFotosSlide(index, true));
+        fotosThumbs.appendChild(thumbButton);
+      });
+    }
+
+    function animateFotosProgress() {
+      if (!fotosProgressBar) return;
+      fotosProgressBar.style.transition = "none";
+      fotosProgressBar.style.width = "0%";
+      void fotosProgressBar.offsetWidth;
+      fotosProgressBar.style.transition = `width ${fotosInterval}ms linear`;
+      fotosProgressBar.style.width = "100%";
+    }
+
+    function setFotosSlide(index, resetAutoplay = false) {
+      if (!fotosStage || !fotosThumbs || !fotosCaptionTitle || !fotosCaptionText || !fotosCounter) return;
+      fotosCurrentIndex = index;
+
+      fotosStage.querySelectorAll(".fotos-slide").forEach((slide, slideIndex) => {
+        slide.classList.toggle("active", slideIndex === index);
+      });
+      fotosThumbs.querySelectorAll(".fotos-thumb").forEach((thumb, thumbIndex) => {
+        thumb.classList.toggle("active", thumbIndex === index);
+      });
+
+      const slideData = fotosSlides[index];
+      fotosCaptionTitle.textContent = slideData.title;
+      fotosCaptionText.textContent = slideData.text;
+      fotosCounter.textContent = `${String(index + 1).padStart(2, "0")} / ${String(fotosSlides.length).padStart(2, "0")}`;
+      animateFotosProgress();
+
+      if (resetAutoplay) startFotosAutoplay();
+    }
+
+    function nextFotosSlide() {
+      setFotosSlide((fotosCurrentIndex + 1) % fotosSlides.length);
+    }
+
+    function previousFotosSlide() {
+      setFotosSlide((fotosCurrentIndex - 1 + fotosSlides.length) % fotosSlides.length);
+    }
+
+    function startFotosAutoplay() {
+      if (fotosAutoplayTimer) window.clearInterval(fotosAutoplayTimer);
+      animateFotosProgress();
+      fotosAutoplayTimer = window.setInterval(nextFotosSlide, fotosInterval);
+    }
+
+    function stopFotosAutoplay() {
+      if (fotosAutoplayTimer) {
+        window.clearInterval(fotosAutoplayTimer);
+        fotosAutoplayTimer = null;
+      }
+      if (fotosProgressBar) {
+        fotosProgressBar.style.transition = "none";
+        fotosProgressBar.style.width = "0%";
+      }
+    }
+
+    function enableFotosInteractions() {
+      if (!fotosShowcase || !fotosPrev || !fotosNext) return;
+
+      fotosPrev.addEventListener("click", () => { previousFotosSlide(); startFotosAutoplay(); });
+      fotosNext.addEventListener("click", () => { nextFotosSlide(); startFotosAutoplay(); });
+
+      fotosShowcase.addEventListener("mouseenter", stopFotosAutoplay);
+      fotosShowcase.addEventListener("mouseleave", startFotosAutoplay);
+      fotosShowcase.addEventListener("focusin", stopFotosAutoplay);
+      fotosShowcase.addEventListener("focusout", (event) => {
+        if (!fotosShowcase.contains(event.relatedTarget)) startFotosAutoplay();
+      });
+
+      fotosShowcase.addEventListener("keydown", (event) => {
+        if (event.key === "ArrowRight") {
+          event.preventDefault();
+          nextFotosSlide();
+          startFotosAutoplay();
+        } else if (event.key === "ArrowLeft") {
+          event.preventDefault();
+          previousFotosSlide();
+          startFotosAutoplay();
+        }
+      });
+
+      let touchStartX = 0;
+      fotosShowcase.addEventListener("touchstart", (event) => {
+        touchStartX = event.changedTouches[0].clientX;
+      }, { passive: true });
+
+      fotosShowcase.addEventListener("touchend", (event) => {
+        const touchEndX = event.changedTouches[0].clientX;
+        if (Math.abs(touchEndX - touchStartX) < 40) return;
+        if (touchEndX < touchStartX) nextFotosSlide();
+        else previousFotosSlide();
+        startFotosAutoplay();
+      }, { passive: true });
+    }
+
+    preloadFotosSlides();
+    buildFotosSlides();
+    setFotosSlide(0);
+    enableFotosInteractions();
+    startFotosAutoplay();
 
   </script>
 </body>
