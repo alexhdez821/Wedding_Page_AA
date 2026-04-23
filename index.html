@@ -869,201 +869,91 @@
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
-    .fotos-showcase {
-      margin-top: clamp(2rem, 4vw, 2.8rem);
-      position: relative;
-      border-radius: clamp(22px, 3vw, 30px);
-      overflow: hidden;
-      border: 1px solid rgba(134, 103, 86, 0.2);
-      box-shadow: 0 24px 60px rgba(74, 54, 44, 0.18);
-      background: #e8ddd3;
-      isolation: isolate;
-    }
-
-    .fotos-showcase::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(circle at 22% 12%, rgba(255, 255, 255, 0.32), transparent 44%);
-      pointer-events: none;
-      z-index: 3;
-    }
-
-    .fotos-stage {
-      position: relative;
-      aspect-ratio: 16 / 10;
-      min-height: 340px;
-    }
-
-    .fotos-slide {
-      position: absolute;
-      inset: 0;
-      opacity: 0;
-      transform: scale(1.045);
-      transition: opacity 0.9s ease, transform 6.5s ease;
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    .fotos-slide.active {
-      opacity: 1;
-      transform: scale(1.01);
-      pointer-events: auto;
-      z-index: 1;
-    }
-
-    .fotos-slide img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      filter: saturate(108%) contrast(1.06);
-    }
-
-    .fotos-overlay {
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(180deg, rgba(38, 28, 24, 0.12) 10%, rgba(38, 28, 24, 0.64) 100%);
-      z-index: 2;
-      pointer-events: none;
-    }
-
-    .fotos-caption-wrap {
-      position: absolute;
-      left: clamp(1rem, 4vw, 2.25rem);
-      right: clamp(1rem, 4vw, 2.25rem);
-      bottom: clamp(1.1rem, 3vw, 1.8rem);
-      display: flex;
-      align-items: end;
-      justify-content: space-between;
-      gap: 1.2rem;
-      z-index: 4;
-    }
-
-    .fotos-caption {
-      color: #fffaf4;
-      text-shadow: 0 6px 16px rgba(18, 12, 9, 0.35);
-    }
-
-    .fotos-caption-title {
-      font-family: "Cormorant Garamond", serif;
-      font-size: clamp(1.4rem, 3vw, 2rem);
-      margin: 0;
-      line-height: 1.1;
-      font-weight: 600;
-    }
-
-    .fotos-caption-text {
-      margin-top: 0.45rem;
-      font-size: clamp(0.88rem, 1.8vw, 1rem);
-      color: rgba(255, 250, 244, 0.9);
-    }
-
-    .fotos-counter {
-      font-family: "Cormorant Garamond", serif;
-      color: rgba(255, 245, 236, 0.88);
-      letter-spacing: 0.06em;
-      font-size: 0.96rem;
-      white-space: nowrap;
-    }
-
-    .fotos-nav {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 48px;
-      height: 48px;
-      border: none;
-      border-radius: 999px;
-      color: #fff;
-      background: rgba(25, 18, 15, 0.32);
-      backdrop-filter: blur(6px);
-      box-shadow: 0 10px 28px rgba(16, 10, 8, 0.28);
-      cursor: pointer;
-      transition: transform 0.2s ease, background 0.2s ease;
-      z-index: 5;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.3rem;
-    }
-
-    .fotos-nav:hover {
-      background: rgba(25, 18, 15, 0.5);
-      transform: translateY(-50%) scale(1.04);
-    }
-
-    .fotos-nav.prev {
-      left: clamp(0.7rem, 2vw, 1.2rem);
-    }
-
-    .fotos-nav.next {
-      right: clamp(0.7rem, 2vw, 1.2rem);
-    }
-
-    .fotos-progress {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 3px;
-      background: rgba(255, 255, 255, 0.16);
-      z-index: 6;
-      overflow: hidden;
-    }
-
-    .fotos-progress span {
-      display: block;
-      height: 100%;
-      width: 0;
-      background: linear-gradient(90deg, #f6dfcf, #fff7ef);
-      transition: width linear;
-    }
-
-    .fotos-thumbs {
+    .fotos-story {
+      margin-top: clamp(1.8rem, 6vw, 2.8rem);
+      width: min(100%, 700px);
+      margin-inline: auto;
       display: grid;
-      grid-template-columns: repeat(5, minmax(0, 1fr));
-      gap: 10px;
-      margin-top: 14px;
+      gap: clamp(1.5rem, 4vw, 2.5rem);
     }
 
-    .fotos-thumb {
-      border: none;
-      padding: 0;
-      margin: 0;
-      border-radius: 14px;
-      overflow: hidden;
-      cursor: pointer;
-      box-shadow: 0 8px 20px rgba(68, 49, 40, 0.18);
-      opacity: 0.72;
-      transform: translateY(0);
-      transition: opacity 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
-      background: transparent;
+    .fotos-block {
+      display: grid;
+      gap: 0.75rem;
+      margin-top: clamp(0.4rem, 1.6vw, 0.8rem);
+      opacity: 0;
+      transform: translateY(26px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
     }
 
-    .fotos-thumb img {
-      width: 100%;
-      aspect-ratio: 4 / 3;
-      object-fit: cover;
-      display: block;
-    }
-
-    .fotos-thumb:hover,
-    .fotos-thumb.active {
+    .fotos-block.is-visible {
       opacity: 1;
-      transform: translateY(-2px);
-      box-shadow: 0 12px 26px rgba(68, 49, 40, 0.24);
+      transform: translateY(0);
     }
 
-    .fotos-thumb:focus-visible,
-    .fotos-nav:focus-visible {
-      outline: 2px solid #fffaf4;
-      outline-offset: 2px;
+    .fotos-frame {
+      margin: 0;
+      width: 100%;
+    }
+
+    .fotos-block.offset-left {
+      padding-right: clamp(0.5rem, 4vw, 1.8rem);
+    }
+
+    .fotos-block.offset-right {
+      padding-left: clamp(0.5rem, 4vw, 1.8rem);
+    }
+
+    .fotos-frame img {
+      width: 100%;
+      border-radius: clamp(18px, 4.8vw, 24px);
+      box-shadow: 0 10px 28px rgba(67, 50, 40, 0.12);
+      object-fit: cover;
+      background: #efe7e0;
+    }
+
+    .fotos-frame figcaption,
+    .fotos-block-caption {
+      text-align: center;
+      font-size: 0.9rem;
+      line-height: 1.6;
+      color: rgba(89, 71, 61, 0.78);
+      font-family: "Inter", sans-serif;
+      letter-spacing: 0.01em;
+    }
+
+    .fotos-grid-two {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: clamp(0.8rem, 2.6vw, 1.1rem);
+    }
+
+    .fotos-frame.portrait img {
+      aspect-ratio: 4 / 5;
+    }
+
+    .fotos-phrase {
+      margin: 0;
+      text-align: center;
+      font-family: "Cormorant Garamond", serif;
+      font-size: clamp(1.25rem, 5.3vw, 1.75rem);
+      line-height: 1.45;
+      color: rgba(78, 59, 50, 0.9);
+      letter-spacing: 0.01em;
+      padding: clamp(0.6rem, 2.5vw, 1rem) clamp(0.8rem, 3vw, 1.4rem);
+    }
+
+    .fotos-phrase::before,
+    .fotos-phrase::after {
+      content: "✦";
+      color: rgba(160, 120, 98, 0.7);
+      font-size: 0.8em;
+      margin: 0 0.45rem;
+      vertical-align: middle;
     }
 
     @media (prefers-reduced-motion: reduce) {
-      .fotos-slide,
-      .fotos-progress span,
-      .fotos-thumb {
+      .fotos-block {
         transition: none;
       }
     }
@@ -1094,10 +984,6 @@
     @media (max-width: 900px) {
       .travel-grid {
         grid-template-columns: 1fr;
-      }
-
-      .fotos-thumbs {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
       }
     }
 
@@ -1249,21 +1135,17 @@
         font-size: 1.15rem;
       }
 
-      .fotos-stage {
-        min-height: 270px;
+      .fotos-story {
+        width: min(100%, 650px);
       }
 
-      .fotos-nav {
-        width: 42px;
-        height: 42px;
+      .fotos-grid-two {
+        gap: 0.7rem;
       }
 
-      .fotos-caption-wrap {
-        align-items: flex-end;
-      }
-
-      .fotos-thumbs {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+      .fotos-block.offset-left,
+      .fotos-block.offset-right {
+        padding-inline: clamp(0.35rem, 2.5vw, 0.8rem);
       }
 
       .section-copy {
@@ -1402,22 +1284,7 @@
             Una selección de recuerdos y momentos especiales.
           </p>
 
-          <div class="fotos-showcase" id="fotosShowcase" aria-label="Galería de fotos del compromiso" tabindex="0">
-            <div class="fotos-progress" aria-hidden="true"><span id="fotosProgressBar"></span></div>
-            <div class="fotos-stage" id="fotosStage"></div>
-            <div class="fotos-overlay" aria-hidden="true"></div>
-            <button class="fotos-nav prev" id="fotosPrev" type="button" aria-label="Foto anterior">‹</button>
-            <button class="fotos-nav next" id="fotosNext" type="button" aria-label="Foto siguiente">›</button>
-            <div class="fotos-caption-wrap">
-              <div class="fotos-caption">
-                <h3 class="fotos-caption-title" id="fotosCaptionTitle">Momentos especiales</h3>
-                <p class="fotos-caption-text" id="fotosCaptionText"></p>
-              </div>
-              <div class="fotos-counter" id="fotosCounter">01 / 01</div>
-            </div>
-          </div>
-
-          <div class="fotos-thumbs" id="fotosThumbs" aria-label="Miniaturas de la galería"></div>
+          <div class="fotos-story" id="fotosStory" aria-label="Historia fotográfica del compromiso"></div>
         </div>
       </div>
     </section>
@@ -1588,19 +1455,7 @@
       { src: "./images/greeting_photo.jpg", alt: "Foto romántica de la pareja", title: "Con el corazón lleno", text: "Cada recuerdo nos acerca más al altar." }
     ];
 
-    const fotosShowcase = document.getElementById("fotosShowcase");
-    const fotosStage = document.getElementById("fotosStage");
-    const fotosThumbs = document.getElementById("fotosThumbs");
-    const fotosPrev = document.getElementById("fotosPrev");
-    const fotosNext = document.getElementById("fotosNext");
-    const fotosCaptionTitle = document.getElementById("fotosCaptionTitle");
-    const fotosCaptionText = document.getElementById("fotosCaptionText");
-    const fotosCounter = document.getElementById("fotosCounter");
-    const fotosProgressBar = document.getElementById("fotosProgressBar");
-
-    const fotosInterval = 6200;
-    let fotosCurrentIndex = 0;
-    let fotosAutoplayTimer = null;
+    const fotosStory = document.getElementById("fotosStory");
 
     function preloadFotosSlides() {
       fotosSlides.forEach((slide) => {
@@ -1609,138 +1464,99 @@
       });
     }
 
-    function buildFotosSlides() {
-      if (!fotosStage || !fotosThumbs) return;
+    function createFotoFrame(slide, { variant = "default", eager = false } = {}) {
+      const figure = document.createElement("figure");
+      figure.className = `fotos-frame${variant === "portrait" ? " portrait" : ""}`;
 
-      fotosStage.innerHTML = "";
-      fotosThumbs.innerHTML = "";
+      const image = document.createElement("img");
+      image.src = slide.src;
+      image.alt = slide.alt;
+      image.loading = eager ? "eager" : "lazy";
+      image.decoding = "async";
+      figure.appendChild(image);
 
-      fotosSlides.forEach((slide, index) => {
-        const item = document.createElement("figure");
-        item.className = `fotos-slide${index === 0 ? " active" : ""}`;
-
-        const image = document.createElement("img");
-        image.src = slide.src;
-        image.alt = slide.alt;
-        image.loading = index === 0 ? "eager" : "lazy";
-
-        item.appendChild(image);
-        fotosStage.appendChild(item);
-
-        const thumbButton = document.createElement("button");
-        thumbButton.className = `fotos-thumb${index === 0 ? " active" : ""}`;
-        thumbButton.type = "button";
-        thumbButton.setAttribute("aria-label", `Ver foto ${index + 1}`);
-
-        const thumbImage = document.createElement("img");
-        thumbImage.src = slide.src;
-        thumbImage.alt = slide.alt;
-        thumbImage.loading = "lazy";
-
-        thumbButton.appendChild(thumbImage);
-        thumbButton.addEventListener("click", () => setFotosSlide(index, true));
-        fotosThumbs.appendChild(thumbButton);
-      });
-    }
-
-    function animateFotosProgress() {
-      if (!fotosProgressBar) return;
-      fotosProgressBar.style.transition = "none";
-      fotosProgressBar.style.width = "0%";
-      void fotosProgressBar.offsetWidth;
-      fotosProgressBar.style.transition = `width ${fotosInterval}ms linear`;
-      fotosProgressBar.style.width = "100%";
-    }
-
-    function setFotosSlide(index, resetAutoplay = false) {
-      if (!fotosStage || !fotosThumbs || !fotosCaptionTitle || !fotosCaptionText || !fotosCounter) return;
-      fotosCurrentIndex = index;
-
-      fotosStage.querySelectorAll(".fotos-slide").forEach((slide, slideIndex) => {
-        slide.classList.toggle("active", slideIndex === index);
-      });
-      fotosThumbs.querySelectorAll(".fotos-thumb").forEach((thumb, thumbIndex) => {
-        thumb.classList.toggle("active", thumbIndex === index);
-      });
-
-      const slideData = fotosSlides[index];
-      fotosCaptionTitle.textContent = slideData.title;
-      fotosCaptionText.textContent = slideData.text;
-      fotosCounter.textContent = `${String(index + 1).padStart(2, "0")} / ${String(fotosSlides.length).padStart(2, "0")}`;
-      animateFotosProgress();
-
-      if (resetAutoplay) startFotosAutoplay();
-    }
-
-    function nextFotosSlide() {
-      setFotosSlide((fotosCurrentIndex + 1) % fotosSlides.length);
-    }
-
-    function previousFotosSlide() {
-      setFotosSlide((fotosCurrentIndex - 1 + fotosSlides.length) % fotosSlides.length);
-    }
-
-    function startFotosAutoplay() {
-      if (fotosAutoplayTimer) window.clearInterval(fotosAutoplayTimer);
-      animateFotosProgress();
-      fotosAutoplayTimer = window.setInterval(nextFotosSlide, fotosInterval);
-    }
-
-    function stopFotosAutoplay() {
-      if (fotosAutoplayTimer) {
-        window.clearInterval(fotosAutoplayTimer);
-        fotosAutoplayTimer = null;
+      if (slide.text) {
+        const caption = document.createElement("figcaption");
+        caption.textContent = slide.text;
+        figure.appendChild(caption);
       }
-      if (fotosProgressBar) {
-        fotosProgressBar.style.transition = "none";
-        fotosProgressBar.style.width = "0%";
-      }
+      return figure;
     }
 
-    function enableFotosInteractions() {
-      if (!fotosShowcase || !fotosPrev || !fotosNext) return;
+    function createPhraseBlock(text, extraClass = "") {
+      const phraseBlock = document.createElement("article");
+      phraseBlock.className = `fotos-block${extraClass ? ` ${extraClass}` : ""}`;
+      const phrase = document.createElement("p");
+      phrase.className = "fotos-phrase";
+      phrase.textContent = text;
+      phraseBlock.appendChild(phrase);
+      return phraseBlock;
+    }
 
-      fotosPrev.addEventListener("click", () => { previousFotosSlide(); startFotosAutoplay(); });
-      fotosNext.addEventListener("click", () => { nextFotosSlide(); startFotosAutoplay(); });
+    function buildFotosStory() {
+      if (!fotosStory) return;
+      fotosStory.innerHTML = "";
 
-      fotosShowcase.addEventListener("mouseenter", stopFotosAutoplay);
-      fotosShowcase.addEventListener("mouseleave", startFotosAutoplay);
-      fotosShowcase.addEventListener("focusin", stopFotosAutoplay);
-      fotosShowcase.addEventListener("focusout", (event) => {
-        if (!fotosShowcase.contains(event.relatedTarget)) startFotosAutoplay();
+      const blockOne = document.createElement("article");
+      blockOne.className = "fotos-block offset-right";
+      blockOne.appendChild(createFotoFrame(fotosSlides[0], { eager: true }));
+      fotosStory.appendChild(blockOne);
+
+      fotosStory.appendChild(createPhraseBlock("Cada mirada nos recuerda que este amor ya era destino."));
+
+      const blockTwo = document.createElement("article");
+      blockTwo.className = "fotos-block offset-left";
+      const twoColumnGrid = document.createElement("div");
+      twoColumnGrid.className = "fotos-grid-two";
+      twoColumnGrid.appendChild(createFotoFrame(fotosSlides[1]));
+      twoColumnGrid.appendChild(createFotoFrame(fotosSlides[2]));
+      blockTwo.appendChild(twoColumnGrid);
+      const gridCaption = document.createElement("p");
+      gridCaption.className = "fotos-block-caption";
+      gridCaption.textContent = "Dos momentos, una misma promesa.";
+      blockTwo.appendChild(gridCaption);
+      fotosStory.appendChild(blockTwo);
+
+      fotosStory.appendChild(createPhraseBlock("Entre risas, silencios y fe, fuimos escribiendo nuestro para siempre.", "offset-right"));
+
+      const blockThree = document.createElement("article");
+      blockThree.className = "fotos-block offset-right";
+      blockThree.appendChild(createFotoFrame(fotosSlides[3], { variant: "portrait" }));
+      fotosStory.appendChild(blockThree);
+
+      fotosStory.appendChild(createPhraseBlock("Ahora caminamos al altar con el corazón en calma y lleno de gratitud.", "offset-left"));
+
+      const blockFour = document.createElement("article");
+      blockFour.className = "fotos-block offset-left";
+      blockFour.appendChild(createFotoFrame(fotosSlides[4]));
+      fotosStory.appendChild(blockFour);
+    }
+
+    function initFotosReveal() {
+      const blocks = document.querySelectorAll(".fotos-block");
+      if (!blocks.length) return;
+      if (!("IntersectionObserver" in window)) {
+        blocks.forEach((block) => block.classList.add("is-visible"));
+        return;
+      }
+
+      const observer = new IntersectionObserver((entries, currentObserver) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add("is-visible");
+          currentObserver.unobserve(entry.target);
+        });
+      }, {
+        threshold: 0.2,
+        rootMargin: "0px 0px -8% 0px"
       });
 
-      fotosShowcase.addEventListener("keydown", (event) => {
-        if (event.key === "ArrowRight") {
-          event.preventDefault();
-          nextFotosSlide();
-          startFotosAutoplay();
-        } else if (event.key === "ArrowLeft") {
-          event.preventDefault();
-          previousFotosSlide();
-          startFotosAutoplay();
-        }
-      });
-
-      let touchStartX = 0;
-      fotosShowcase.addEventListener("touchstart", (event) => {
-        touchStartX = event.changedTouches[0].clientX;
-      }, { passive: true });
-
-      fotosShowcase.addEventListener("touchend", (event) => {
-        const touchEndX = event.changedTouches[0].clientX;
-        if (Math.abs(touchEndX - touchStartX) < 40) return;
-        if (touchEndX < touchStartX) nextFotosSlide();
-        else previousFotosSlide();
-        startFotosAutoplay();
-      }, { passive: true });
+      blocks.forEach((block) => observer.observe(block));
     }
 
     preloadFotosSlides();
-    buildFotosSlides();
-    setFotosSlide(0);
-    enableFotosInteractions();
-    startFotosAutoplay();
+    buildFotosStory();
+    initFotosReveal();
 
   </script>
 </body>
