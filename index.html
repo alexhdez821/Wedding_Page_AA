@@ -896,6 +896,14 @@
       width: 100%;
     }
 
+    .fotos-block.offset-left {
+      padding-right: clamp(0.5rem, 4vw, 1.8rem);
+    }
+
+    .fotos-block.offset-right {
+      padding-left: clamp(0.5rem, 4vw, 1.8rem);
+    }
+
     .fotos-frame img {
       width: 100%;
       border-radius: clamp(18px, 4.8vw, 24px);
@@ -922,6 +930,26 @@
 
     .fotos-frame.portrait img {
       aspect-ratio: 4 / 5;
+    }
+
+    .fotos-phrase {
+      margin: 0;
+      text-align: center;
+      font-family: "Cormorant Garamond", serif;
+      font-size: clamp(1.25rem, 5.3vw, 1.75rem);
+      line-height: 1.45;
+      color: rgba(78, 59, 50, 0.9);
+      letter-spacing: 0.01em;
+      padding: clamp(0.6rem, 2.5vw, 1rem) clamp(0.8rem, 3vw, 1.4rem);
+    }
+
+    .fotos-phrase::before,
+    .fotos-phrase::after {
+      content: "✦";
+      color: rgba(160, 120, 98, 0.7);
+      font-size: 0.8em;
+      margin: 0 0.45rem;
+      vertical-align: middle;
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -1113,6 +1141,11 @@
 
       .fotos-grid-two {
         gap: 0.7rem;
+      }
+
+      .fotos-block.offset-left,
+      .fotos-block.offset-right {
+        padding-inline: clamp(0.35rem, 2.5vw, 0.8rem);
       }
 
       .section-copy {
@@ -1450,17 +1483,29 @@
       return figure;
     }
 
+    function createPhraseBlock(text, extraClass = "") {
+      const phraseBlock = document.createElement("article");
+      phraseBlock.className = `fotos-block${extraClass ? ` ${extraClass}` : ""}`;
+      const phrase = document.createElement("p");
+      phrase.className = "fotos-phrase";
+      phrase.textContent = text;
+      phraseBlock.appendChild(phrase);
+      return phraseBlock;
+    }
+
     function buildFotosStory() {
       if (!fotosStory) return;
       fotosStory.innerHTML = "";
 
       const blockOne = document.createElement("article");
-      blockOne.className = "fotos-block";
+      blockOne.className = "fotos-block offset-right";
       blockOne.appendChild(createFotoFrame(fotosSlides[0], { eager: true }));
       fotosStory.appendChild(blockOne);
 
+      fotosStory.appendChild(createPhraseBlock("Cada mirada nos recuerda que este amor ya era destino."));
+
       const blockTwo = document.createElement("article");
-      blockTwo.className = "fotos-block";
+      blockTwo.className = "fotos-block offset-left";
       const twoColumnGrid = document.createElement("div");
       twoColumnGrid.className = "fotos-grid-two";
       twoColumnGrid.appendChild(createFotoFrame(fotosSlides[1]));
@@ -1472,13 +1517,17 @@
       blockTwo.appendChild(gridCaption);
       fotosStory.appendChild(blockTwo);
 
+      fotosStory.appendChild(createPhraseBlock("Entre risas, silencios y fe, fuimos escribiendo nuestro para siempre.", "offset-right"));
+
       const blockThree = document.createElement("article");
-      blockThree.className = "fotos-block";
+      blockThree.className = "fotos-block offset-right";
       blockThree.appendChild(createFotoFrame(fotosSlides[3], { variant: "portrait" }));
       fotosStory.appendChild(blockThree);
 
+      fotosStory.appendChild(createPhraseBlock("Ahora caminamos al altar con el corazón en calma y lleno de gratitud.", "offset-left"));
+
       const blockFour = document.createElement("article");
-      blockFour.className = "fotos-block";
+      blockFour.className = "fotos-block offset-left";
       blockFour.appendChild(createFotoFrame(fotosSlides[4]));
       fotosStory.appendChild(blockFour);
     }
