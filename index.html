@@ -53,7 +53,10 @@
       display: grid;
       place-items: center;
       padding: 20px;
-      background: radial-gradient(circle at top, rgba(255, 246, 238, 0.98) 0%, rgba(248, 236, 225, 0.98) 46%, rgba(238, 221, 206, 0.98) 100%);
+      background-image: linear-gradient(135deg, rgba(48, 35, 30, 0.52), rgba(87, 62, 52, 0.38)), url("./images/greeting_photo.jpg");
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
       opacity: 1;
       visibility: visible;
       transition: opacity 0.45s ease, visibility 0.45s ease;
@@ -71,7 +74,7 @@
       aspect-ratio: 9 / 16;
       border-radius: 18px;
       overflow: visible;
-      background: #777d64;
+      background: #6e7560;
       box-shadow: 0 26px 56px rgba(35, 31, 26, 0.35);
       border: 1px solid rgba(42, 38, 32, 0.22);
       perspective: 1800px;
@@ -82,7 +85,9 @@
     .intro-envelope-base {
       position: absolute;
       inset: 0;
-      background: #777d64;
+      background-image: linear-gradient(150deg, rgba(109, 118, 93, 0.88), rgba(71, 78, 61, 0.9)), url("./images/64.jpeg");
+      background-size: cover;
+      background-position: center;
       z-index: 1;
       border-radius: 18px;
       overflow: hidden;
@@ -114,22 +119,27 @@
     .intro-letter .script {
       display: block;
       font-family: "Great Vibes", cursive;
-      font-size: clamp(2rem, 7vw, 3rem);
+      font-size: clamp(2.2rem, 7vw, 3.2rem);
       margin-bottom: 0.35rem;
+      color: #745447;
+      text-shadow: 0 4px 12px rgba(80, 55, 44, 0.18);
     }
 
     .intro-letter .subtitle {
-      font-size: clamp(0.95rem, 2.4vw, 1.18rem);
-      letter-spacing: 0.03em;
-      color: rgba(91, 71, 61, 0.9);
-      font-weight: 500;
+      font-family: "Cormorant Garamond", serif;
+      font-size: clamp(1.2rem, 2.9vw, 1.55rem);
+      letter-spacing: 0.04em;
+      color: rgba(84, 61, 52, 0.95);
+      font-weight: 600;
+      font-style: italic;
     }
 
     .intro-letter .footer {
-      font-size: clamp(0.8rem, 2vw, 1rem);
+      font-family: "Cinzel", serif;
+      font-size: clamp(0.8rem, 2vw, 1.02rem);
       text-transform: uppercase;
-      letter-spacing: 0.13em;
-      color: rgba(91, 71, 61, 0.86);
+      letter-spacing: 0.16em;
+      color: rgba(96, 71, 60, 0.9);
     }
 
     .intro-flap {
