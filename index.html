@@ -97,11 +97,13 @@
       border-radius: 16px;
       background: linear-gradient(176deg, #fff8f1 0%, #f5eade 100%);
       box-shadow: 0 12px 26px rgba(53, 41, 34, 0.2);
-      display: grid;
-      place-items: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
       text-align: center;
       color: #5e4a3f;
-      padding: 1.3rem;
+      padding: 1.6rem 1.3rem 1.1rem;
       transform: translateY(30%) scale(0.92);
       opacity: 0;
       animation: introLetterForward 1.35s cubic-bezier(0.22, 1, 0.36, 1) 1.45s forwards;
@@ -117,9 +119,16 @@
     }
 
     .intro-letter .subtitle {
-      font-size: clamp(0.62rem, 1.8vw, 0.8rem);
+      font-size: clamp(0.95rem, 2.4vw, 1.18rem);
+      letter-spacing: 0.03em;
+      color: rgba(91, 71, 61, 0.9);
+      font-weight: 500;
+    }
+
+    .intro-letter .footer {
+      font-size: clamp(0.8rem, 2vw, 1rem);
       text-transform: uppercase;
-      letter-spacing: 0.2em;
+      letter-spacing: 0.13em;
       color: rgba(91, 71, 61, 0.86);
     }
 
@@ -1392,7 +1401,8 @@
       <div class="intro-envelope-base"></div>
       <div class="intro-letter">
         <span class="script">Nuestra boda</span>
-        <span class="subtitle">Bienvenidos</span>
+        <span class="subtitle">Alejandro and Alejandra</span>
+        <span class="footer">Estás invitado</span>
       </div>
       <div class="intro-flap intro-flap-left" aria-hidden="true"></div>
       <div class="intro-flap intro-flap-right" aria-hidden="true"></div>
