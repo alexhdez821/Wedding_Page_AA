@@ -70,11 +70,12 @@
       width: min(92vw, 430px);
       aspect-ratio: 9 / 16;
       border-radius: 18px;
-      overflow: hidden;
+      overflow: visible;
       background: #777d64;
       box-shadow: 0 26px 56px rgba(35, 31, 26, 0.35);
       border: 1px solid rgba(42, 38, 32, 0.22);
-      perspective: 1650px;
+      perspective: 1800px;
+      transform-style: preserve-3d;
       isolation: isolate;
     }
 
@@ -83,6 +84,8 @@
       inset: 0;
       background: #777d64;
       z-index: 1;
+      border-radius: 18px;
+      overflow: hidden;
     }
 
     .intro-letter {
@@ -99,10 +102,11 @@
       text-align: center;
       color: #5e4a3f;
       padding: 1.3rem;
-      transform: translateY(28%) scale(0.95);
+      transform: translateY(30%) scale(0.92);
       opacity: 0;
-      animation: introLetterReveal 1.08s cubic-bezier(0.22, 1, 0.36, 1) 1.55s forwards;
-      z-index: 2;
+      animation: introLetterForward 1.35s cubic-bezier(0.22, 1, 0.36, 1) 1.45s forwards;
+      z-index: 14;
+      will-change: transform, opacity;
     }
 
     .intro-letter .script {
@@ -124,6 +128,8 @@
       inset: 0;
       z-index: 4;
       pointer-events: none;
+      border-radius: 18px;
+      overflow: hidden;
     }
 
     .intro-flap-left {
@@ -168,7 +174,9 @@
       box-shadow:
         0 10px 20px rgba(35, 31, 26, 0.22),
         inset 0 -8px 12px rgba(0, 0, 0, 0.12);
-      animation: introTopFlapOpen 1.2s cubic-bezier(0.22, 1, 0.36, 1) 0.9s forwards;
+      animation: introTopFlapOpen 1.05s cubic-bezier(0.22, 1, 0.36, 1) 0.72s forwards;
+      transform-style: preserve-3d;
+      backface-visibility: hidden;
       z-index: 8;
     }
 
@@ -196,15 +204,40 @@
     }
 
     @keyframes introTopFlapOpen {
-      to {
-        transform: rotateX(-170deg);
+      0% {
+        transform: rotateX(0deg) translateY(0);
+      }
+
+      72% {
+        transform: rotateX(-118deg) translateY(-5px);
+      }
+
+      100% {
+        transform: rotateX(-145deg) translateY(-10px);
       }
     }
 
-    @keyframes introLetterReveal {
-      to {
-        transform: translateY(0) scale(1);
+    @keyframes introLetterForward {
+      0% {
+        transform: translateY(30%) scale(0.92);
+        opacity: 0;
+        box-shadow: 0 12px 26px rgba(53, 41, 34, 0.2);
+      }
+
+      36% {
         opacity: 1;
+      }
+
+      72% {
+        transform: translateY(-10%) scale(1.06);
+        opacity: 1;
+        box-shadow: 0 22px 44px rgba(53, 41, 34, 0.24);
+      }
+
+      100% {
+        transform: translateY(-18%) scale(1.14);
+        opacity: 1;
+        box-shadow: 0 34px 74px rgba(35, 25, 20, 0.34);
       }
     }
 
@@ -684,12 +717,12 @@
       }
 
       .intro-flap-top {
-        transform: rotateX(-175deg);
+        transform: rotateX(-145deg) translateY(-10px);
       }
 
       .intro-letter {
         opacity: 1;
-        transform: translateY(0) scale(1);
+        transform: translateY(-18%) scale(1.08);
       }
 
       .wax-seal {
@@ -1538,7 +1571,18 @@
       if (reduceMotion) {
         window.requestAnimationFrame(completeIntroAnimation);
       } else {
-        window.setTimeout(completeIntroAnimation, 3300);
+        const introLetter = document.querySelector(".intro-letter");
+
+        if (introLetter) {
+          introLetter.addEventListener("animationend", (event) => {
+            if (event.animationName === "introLetterForward") {
+              completeIntroAnimation();
+            }
+          });
+        } else {
+          window.setTimeout(completeIntroAnimation, 3200);
+        }
+
         introOverlay.addEventListener("click", completeIntroAnimation, { once: true });
         document.addEventListener("keydown", (event) => {
           if (event.key === "Escape") {
