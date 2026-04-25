@@ -42,6 +42,169 @@
       overflow-x: hidden;
     }
 
+    body.intro-active {
+      overflow: hidden;
+    }
+
+    .intro-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 2100;
+      display: grid;
+      place-items: center;
+      padding: 20px;
+      background: radial-gradient(circle at top, rgba(255, 246, 238, 0.98) 0%, rgba(248, 236, 225, 0.98) 46%, rgba(238, 221, 206, 0.98) 100%);
+      opacity: 1;
+      visibility: visible;
+      transition: opacity 0.45s ease, visibility 0.45s ease;
+    }
+
+    .intro-overlay.is-complete {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .intro-envelope {
+      position: relative;
+      width: min(86vw, 460px);
+      aspect-ratio: 9 / 16;
+      border-radius: 24px;
+      overflow: hidden;
+      background: #83886f;
+      box-shadow: 0 24px 54px rgba(35, 31, 26, 0.34);
+      border: 1px solid rgba(43, 39, 32, 0.22);
+      perspective: 1500px;
+      isolation: isolate;
+    }
+
+    .intro-envelope::before,
+    .intro-envelope::after {
+      content: "";
+      position: absolute;
+      inset: -24% auto -24% auto;
+      width: 58%;
+      background: linear-gradient(180deg, rgba(0, 0, 0, 0.14), rgba(0, 0, 0, 0.02));
+      filter: blur(0.2px);
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .intro-envelope::before {
+      left: -24%;
+      transform: rotate(-28deg);
+    }
+
+    .intro-envelope::after {
+      right: -24%;
+      transform: rotate(28deg);
+    }
+
+    .intro-letter {
+      position: absolute;
+      inset: 16% 10% 12%;
+      border-radius: 14px;
+      background: linear-gradient(170deg, #fff8f1 0%, #f5eadf 100%);
+      box-shadow: 0 10px 24px rgba(53, 41, 34, 0.18);
+      display: grid;
+      place-items: center;
+      text-align: center;
+      color: #5e4a3f;
+      padding: 1.2rem;
+      transform: translateY(22%) scale(0.95);
+      opacity: 0;
+      animation: introLetterReveal 1s cubic-bezier(0.22, 1, 0.36, 1) 1.02s forwards;
+      z-index: 2;
+    }
+
+    .intro-letter .script {
+      display: block;
+      font-family: "Great Vibes", cursive;
+      font-size: clamp(2rem, 7vw, 3rem);
+      margin-bottom: 0.35rem;
+    }
+
+    .intro-letter .subtitle {
+      font-size: clamp(0.62rem, 1.8vw, 0.8rem);
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: rgba(91, 71, 61, 0.86);
+    }
+
+    .intro-flap {
+      position: absolute;
+      inset: 0;
+      background: #7d8269;
+      z-index: 4;
+      will-change: transform;
+    }
+
+    .intro-flap.top {
+      clip-path: polygon(0 0, 100% 0, 50% 52%);
+      transform-origin: top center;
+      background: linear-gradient(180deg, #8e9379 0%, #777c64 100%);
+      box-shadow: 0 8px 16px rgba(38, 34, 28, 0.18);
+      animation: introTopFlapOpen 1s cubic-bezier(0.22, 1, 0.36, 1) 0.55s forwards;
+    }
+
+    .intro-flap.bottom {
+      clip-path: polygon(0 100%, 100% 100%, 50% 48%);
+      background: linear-gradient(180deg, #71765f 0%, #878d72 100%);
+      animation: introBottomSettle 0.9s ease-out 0.7s forwards;
+    }
+
+    .wax-seal {
+      position: absolute;
+      left: 22%;
+      top: 52%;
+      width: clamp(74px, 16vw, 94px);
+      aspect-ratio: 1 / 1;
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      background: radial-gradient(circle at 28% 30%, #cba084 0%, #b88468 44%, #8f5f4a 100%);
+      border: 3px solid rgba(109, 70, 54, 0.55);
+      box-shadow: 0 10px 20px rgba(54, 31, 23, 0.36);
+      z-index: 6;
+      display: grid;
+      place-items: center;
+      animation: introSealRelease 0.55s ease 0.22s forwards;
+    }
+
+    .wax-seal span {
+      font-size: clamp(1.4rem, 4.2vw, 2rem);
+      color: rgba(90, 56, 42, 0.72);
+      transform: rotate(-14deg);
+    }
+
+    @keyframes introTopFlapOpen {
+      to {
+        transform: rotateX(-170deg);
+      }
+    }
+
+    @keyframes introBottomSettle {
+      to {
+        transform: translateY(7%);
+      }
+    }
+
+    @keyframes introLetterReveal {
+      to {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+      }
+    }
+
+    @keyframes introSealRelease {
+      40% {
+        transform: translate(-50%, -50%) scale(1.06);
+      }
+      to {
+        transform: translate(-50%, -50%) scale(0.72);
+        opacity: 0;
+      }
+    }
+
     h1, h2, h3, .brand, .count-number {
       font-family: "Cormorant Garamond", serif;
       margin: 0;
@@ -501,6 +664,30 @@
     }
 
     @media (prefers-reduced-motion: reduce) {
+      .intro-flap.top,
+      .intro-flap.bottom,
+      .intro-letter,
+      .wax-seal {
+        animation: none;
+      }
+
+      .intro-flap.top {
+        transform: rotateX(-175deg);
+      }
+
+      .intro-flap.bottom {
+        transform: translateY(7%);
+      }
+
+      .intro-letter {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+
+      .wax-seal {
+        opacity: 0;
+      }
+
       .hero-script,
       .hero-kicker,
       .hero-couple,
@@ -1159,6 +1346,18 @@
   </style>
 </head>
 <body>
+  <div class="intro-overlay" id="introOverlay" aria-hidden="false">
+    <div class="intro-envelope" role="img" aria-label="Sobre de invitación con sello, abriéndose">
+      <div class="intro-letter">
+          <span class="script">Nuestra boda</span>
+          <span class="subtitle">Bienvenidos</span>
+      </div>
+      <div class="intro-flap top" aria-hidden="true"></div>
+      <div class="intro-flap bottom" aria-hidden="true"></div>
+      <div class="wax-seal" aria-hidden="true"><span>❦</span></div>
+    </div>
+  </div>
+
   <header class="site-header">
     <div class="header-inner">
       <button class="menu-btn" id="menuToggle" aria-label="Abrir menú" type="button">
@@ -1308,6 +1507,36 @@
   </footer>
 
   <script>
+    const introOverlay = document.getElementById("introOverlay");
+    let introCompleted = false;
+
+    function completeIntroAnimation() {
+      if (!introOverlay || introCompleted) return;
+      introCompleted = true;
+      introOverlay.classList.add("is-complete");
+      document.body.classList.remove("intro-active");
+      window.setTimeout(() => {
+        introOverlay.setAttribute("aria-hidden", "true");
+      }, 460);
+    }
+
+    if (introOverlay) {
+      const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      document.body.classList.add("intro-active");
+
+      if (reduceMotion) {
+        window.requestAnimationFrame(completeIntroAnimation);
+      } else {
+        window.setTimeout(completeIntroAnimation, 2300);
+        introOverlay.addEventListener("click", completeIntroAnimation, { once: true });
+        document.addEventListener("keydown", (event) => {
+          if (event.key === "Escape") {
+            completeIntroAnimation();
+          }
+        }, { once: true });
+      }
+    }
+
     const menuPanel = document.getElementById("menuPanel");
     const menuToggle = document.getElementById("menuToggle");
     const menuClose = document.getElementById("menuClose");
