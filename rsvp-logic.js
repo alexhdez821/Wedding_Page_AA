@@ -175,9 +175,60 @@ function getDetailsButtonsMarkup() {
     <div class="details-actions">
       <a class="btn btn-primary" href="${WEDDING_DETAILS_IMAGE_URL_ES}">Ver detalles</a>
       <a class="btn btn-secondary" href="${WEDDING_DETAILS_IMAGE_URL_EN}">See details</a>
+      <button class="btn btn-secondary" type="button" data-save-photo="es">Guardar invitación en Fotos</button>
+      <button class="btn btn-secondary" type="button" data-save-photo="en">Save invitation to Photos</button>
     </div>
-    <p class="details-help">La imagen se abrirá directamente para que puedas guardarla en Fotos (Photo Library) en iPhone/Android.</p>
+    <p class="details-help">En iPhone/Android usa los botones de guardar para abrir el menú de compartir y elegir “Guardar imagen” (Save Image).</p>
   `;
+}
+
+async function saveInvitationToPhotoLibrary(languageKey) {
+  const imageUrl = languageKey === "en" ? WEDDING_DETAILS_IMAGE_URL_EN : WEDDING_DETAILS_IMAGE_URL_ES;
+  const fileName = languageKey === "en" ? "WEDDING_INVITATION_ENGLISH.png" : "INVITACION_FINAL_ESPANOL.png";
+
+  if (!navigator.share) {
+    window.open(imageUrl, "_blank", "noopener");
+    return;
+  }
+
+  const response = await fetch(imageUrl);
+  if (!response.ok) {
+    throw new Error("No se pudo descargar la imagen.");
+  }
+
+  const blob = await response.blob();
+  const imageFile = new File([blob], fileName, { type: blob.type || "image/png" });
+
+  if (navigator.canShare && !navigator.canShare({ files: [imageFile] })) {
+    window.open(imageUrl, "_blank", "noopener");
+    return;
+  }
+
+  await navigator.share({
+    files: [imageFile],
+    title: "Invitación de boda",
+    text: "Guárdala en tu galería/fotos.",
+  });
+}
+
+function attachSavePhotoHandlers(resultContainer) {
+  const savePhotoButtons = resultContainer.querySelectorAll("[data-save-photo]");
+  savePhotoButtons.forEach((button) => {
+    button.addEventListener("click", async () => {
+      const languageKey = button.getAttribute("data-save-photo") || "es";
+      try {
+        await saveInvitationToPhotoLibrary(languageKey);
+      } catch (error) {
+        if (error?.name === "AbortError") return;
+        console.error("Save invitation to photo library failed", error);
+        window.open(
+          languageKey === "en" ? WEDDING_DETAILS_IMAGE_URL_EN : WEDDING_DETAILS_IMAGE_URL_ES,
+          "_blank",
+          "noopener"
+        );
+      }
+    });
+  });
 }
 
 function renderVerifiedDetailsCard(resultContainer) {
@@ -188,6 +239,8 @@ function renderVerifiedDetailsCard(resultContainer) {
       ${getDetailsButtonsMarkup()}
     </div>
   `;
+
+  attachSavePhotoHandlers(resultContainer);
 }
 
 function renderAlreadySubmittedMessage(resultContainer, guest, responseRecord, supabase) {
