@@ -557,6 +557,14 @@
       );
     }
 
+    .hero-frame {
+      position: absolute;
+      inset: clamp(18px, 3vw, 44px);
+      border: 1px solid rgba(255, 255, 255, 0.9);
+      pointer-events: none;
+      z-index: 2;
+    }
+
     .countdown-section::after {
       background: linear-gradient(
         180deg,
@@ -1544,6 +1552,7 @@
 
   <main>
     <section class="section hero" id="hero">
+      <div class="hero-frame" aria-hidden="true"></div>
       <div class="container">
         <div class="hero-content">
           <img class="hero-logo" src="./images/New Website Logo.png" alt="Monograma de Alejandro y Alejandra" />
