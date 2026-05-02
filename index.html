@@ -599,53 +599,61 @@
     .hero-brand-stack {
       position: absolute;
       left: 50%;
-      top: 18vh;
+      top: clamp(70px, 13vh, 150px);
       transform: translateX(-50%);
       z-index: 20;
       width: min(88vw, 760px);
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: flex-start;
-      gap: clamp(10px, 1.4vw, 22px);
       text-align: center;
       pointer-events: none;
     }
 
     .hero-aa-logo {
       display: block;
-      width: clamp(240px, 30vw, 500px);
+      width: clamp(230px, 28vw, 460px);
       height: auto;
+      margin-bottom: clamp(18px, 2.2vw, 34px);
     }
 
     .hero-names {
-      margin: 0;
+      margin: 0 0 clamp(10px, 1.1vw, 18px);
+      font-family: "Cinzel", serif;
       font-size: clamp(0.85rem, 1.3vw, 1.4rem);
+      font-weight: 400;
+      text-transform: uppercase;
       letter-spacing: clamp(0.16em, 0.35vw, 0.34em);
-      color: white;
+      color: rgba(255, 255, 255, 0.99);
       line-height: 1.2;
+      text-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
     }
 
     .hero-date {
       margin: 0;
+      font-family: "Cormorant Garamond", serif;
       font-size: clamp(0.78rem, 1.05vw, 1.1rem);
-      letter-spacing: 0.08em;
-      color: white;
+      font-weight: 500;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: rgba(255, 244, 233, 0.95);
       line-height: 1.2;
+      text-shadow: 0 3px 8px rgba(20, 12, 8, 0.42);
     }
 
     @media (max-width: 768px) {
       .hero-brand-stack {
-        top: 13vh;
+        top: clamp(62px, 10vh, 110px);
         width: min(88vw, 390px);
-        gap: 8px;
       }
 
       .hero-aa-logo {
-        width: clamp(170px, 60vw, 280px);
+        width: clamp(165px, 56vw, 270px);
+        margin-bottom: clamp(12px, 3vw, 20px);
       }
 
       .hero-names {
+        margin-bottom: clamp(7px, 2vw, 12px);
         font-size: clamp(0.68rem, 3vw, 0.9rem);
         letter-spacing: 0.14em;
       }
