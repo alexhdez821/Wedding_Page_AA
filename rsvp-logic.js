@@ -173,10 +173,10 @@ function hideDeadlineNote() {
 function getDetailsButtonsMarkup() {
   return `
     <div class="details-actions">
-      <a class="btn btn-primary" href="${WEDDING_DETAILS_IMAGE_URL_ES}" target="_blank" rel="noopener noreferrer" download="detalles-boda-es.jpg">Ver detalles</a>
-      <a class="btn btn-secondary" href="${WEDDING_DETAILS_IMAGE_URL_EN}" target="_blank" rel="noopener noreferrer" download="wedding-details-en.jpg">See details</a>
+      <a class="btn btn-primary" href="${WEDDING_DETAILS_IMAGE_URL_ES}">Ver detalles</a>
+      <a class="btn btn-secondary" href="${WEDDING_DETAILS_IMAGE_URL_EN}">See details</a>
     </div>
-    <p class="details-help">Se abrirá la imagen para que puedas guardarla en tu librería de fotos (you can save it to your photo library).</p>
+    <p class="details-help">La imagen se abrirá directamente para que puedas guardarla en Fotos (Photo Library) en iPhone/Android.</p>
   `;
 }
 
