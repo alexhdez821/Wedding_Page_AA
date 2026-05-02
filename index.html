@@ -595,7 +595,7 @@
     .hero-brand {
       position: absolute;
       left: 50%;
-      top: clamp(120px, 22vh, 240px);
+      top: clamp(90px, 18vh, 190px);
       transform: translateX(-50%);
       display: flex;
       flex-direction: column;
@@ -604,6 +604,13 @@
       width: min(90vw, 900px);
       text-align: center;
       z-index: 3;
+    }
+
+    .hero-brand,
+    .hero-logo-wrap,
+    .hero-monogram,
+    .hero-title-stack {
+      top: clamp(90px, 18vh, 190px);
     }
 
     .hero-logo {
@@ -1369,9 +1376,16 @@
       }
 
       .hero-brand {
-        top: clamp(90px, 18vh, 150px);
+        top: clamp(70px, 14vh, 130px);
         gap: 8px;
         width: min(88vw, 420px);
+      }
+
+      .hero-brand,
+      .hero-logo-wrap,
+      .hero-monogram,
+      .hero-title-stack {
+        top: clamp(70px, 14vh, 130px);
       }
 
       .hero-logo {
