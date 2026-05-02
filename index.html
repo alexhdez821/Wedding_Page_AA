@@ -592,40 +592,67 @@
       overflow: visible;
     }
 
-    .hero-brand {
+    .hero {
+      position: relative;
+    }
+
+    .hero-brand-stack {
       position: absolute;
       left: 50%;
-      top: clamp(90px, 18vh, 190px);
+      top: 18vh;
       transform: translateX(-50%);
+      z-index: 20;
+      width: min(88vw, 760px);
       display: flex;
       flex-direction: column;
       align-items: center;
+      justify-content: flex-start;
       gap: clamp(10px, 1.4vw, 22px);
-      width: min(90vw, 900px);
       text-align: center;
-      z-index: 3;
+      pointer-events: none;
     }
 
-    .hero-brand,
-    .hero-logo-wrap,
-    .hero-monogram,
-    .hero-title-stack {
-      top: clamp(90px, 18vh, 190px);
-    }
-
-    .hero-logo {
-      width: clamp(240px, 38vw, 560px);
-      max-width: 100%;
+    .hero-aa-logo {
+      display: block;
+      width: clamp(240px, 30vw, 500px);
       height: auto;
-      object-fit: contain;
-      transition: opacity 1.1s cubic-bezier(0.22, 1, 0.36, 1),
-        transform 1.1s cubic-bezier(0.22, 1, 0.36, 1),
-        filter 1.1s cubic-bezier(0.22, 1, 0.36, 1);
-      transform-origin: center;
     }
 
-    .hero-logo.is-hidden {
-      display: none;
+    .hero-names {
+      margin: 0;
+      font-size: clamp(0.85rem, 1.3vw, 1.4rem);
+      letter-spacing: clamp(0.16em, 0.35vw, 0.34em);
+      color: white;
+      line-height: 1.2;
+    }
+
+    .hero-date {
+      margin: 0;
+      font-size: clamp(0.78rem, 1.05vw, 1.1rem);
+      letter-spacing: 0.08em;
+      color: white;
+      line-height: 1.2;
+    }
+
+    @media (max-width: 768px) {
+      .hero-brand-stack {
+        top: 13vh;
+        width: min(88vw, 390px);
+        gap: 8px;
+      }
+
+      .hero-aa-logo {
+        width: clamp(170px, 60vw, 280px);
+      }
+
+      .hero-names {
+        font-size: clamp(0.68rem, 3vw, 0.9rem);
+        letter-spacing: 0.14em;
+      }
+
+      .hero-date {
+        font-size: clamp(0.65rem, 2.7vw, 0.82rem);
+      }
     }
 
     .hero-copy {
@@ -1584,11 +1611,11 @@
     <section class="section hero" id="hero">
       <div class="hero-frame" aria-hidden="true"></div>
       <div class="container">
-        <div class="hero-content hero-brand">
-          <img class="hero-logo" src="./images/New Website Logo.png" alt="Monograma de Alejandro y Alejandra" />
-          <div class="hero-copy hero-copy-custom">
-            <h1 class="hero-couple hero-couple-custom">ALEJANDRO &amp; ALEJANDRA</h1>
-            <p class="hero-date-script">17 OCTUBRE 2026</p>
+        <div class="hero-content">
+          <div class="hero-brand-stack">
+            <img class="hero-aa-logo" src="./images/New Website Logo.png" alt="Alejandro y Alejandra monogram">
+            <div class="hero-names">ALEJANDRO &amp; ALEJANDRA</div>
+            <div class="hero-date">17 OCTUBRE 2026</div>
           </div>
         </div>
       </div>
