@@ -1,5 +1,5 @@
-const WEDDING_DETAILS_IMAGE_URL_ES = "https://images.unsplash.com/photo-1522673607200-164d1b6ce486?auto=format&fit=crop&w=1400&q=80";
-const WEDDING_DETAILS_IMAGE_URL_EN = "https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=1400&q=80";
+const WEDDING_DETAILS_IMAGE_URL_ES = "images/INVITACION_FINAL_ESPANOL.png";
+const WEDDING_DETAILS_IMAGE_URL_EN = "images/INVITACION_FINAL_INGLES.png";
 
 function normalizeName(value) {
   return value
