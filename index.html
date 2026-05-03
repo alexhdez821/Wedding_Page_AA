@@ -7,7 +7,7 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600&family=Cormorant+Garamond:wght@400;500;600;700&family=Great+Vibes&family=Inter:wght@300;400;500;600&family=Bodoni+Moda:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Allura&family=Cinzel:wght@500;600&family=Cormorant+Garamond:wght@400;500;600;700&family=Great+Vibes&family=Inter:wght@300;400;500;600&family=Monsieur+La+Doulaise&family=Bodoni+Moda:wght@400;500&display=swap" rel="stylesheet">
 
   <style>
     :root {
@@ -1026,7 +1026,7 @@
     }
 
     .greeting-section {
-      background: #f8f0e8;
+      background: #f8f3ed;
       padding: clamp(6.5rem, 11vh, 9.5rem) 0;
     }
 
@@ -1053,37 +1053,48 @@
       aspect-ratio: 4 / 5;
       object-fit: cover;
       display: block;
-      border-radius: 8px;
+      border-radius: 0;
+      border: 1.25px solid #556b2f;
       margin: 0 auto;
     }
 
     .greeting-content {
       max-width: 620px;
+      text-align: center;
     }
 
     .greeting-title {
-      font-family: "Great Vibes", cursive;
+      font-family: "Monsieur La Doulaise", cursive;
       font-weight: 400;
-      font-size: clamp(3.1rem, 7.5vw, 5.5rem);
-      line-height: 1;
-      color: #53453e;
+      font-size: clamp(3.7rem, 8.5vw, 6.2rem);
+      line-height: 0.96;
+      color: #4b4039;
       margin-bottom: clamp(1.1rem, 2.8vw, 1.85rem);
     }
 
-    .greeting-text {
-      font-family: "Inter", sans-serif;
-      font-size: clamp(1.02rem, 1.8vw, 1.26rem);
-      line-height: 1.85;
+    .greeting-copy {
+      font-family: "Cinzel", serif;
+      font-size: clamp(0.95rem, 1.3vw, 1.08rem);
+      line-height: 1.9;
+      letter-spacing: 0.02em;
       color: #4c4039;
+    }
+
+    .greeting-copy p {
+      margin: 0 0 1.2rem;
+    }
+
+    .greeting-copy p:last-child {
+      margin-bottom: 0;
     }
 
     .greeting-date {
       margin-top: clamp(1.8rem, 3.5vw, 2.7rem);
-      font-family: "Cormorant Garamond", serif;
-      font-weight: 600;
-      font-size: clamp(1.4rem, 2.8vw, 2.05rem);
-      letter-spacing: 0.055em;
+      font-family: "Allura", cursive;
+      font-size: clamp(2rem, 4.4vw, 3rem);
+      line-height: 1.15;
       color: #3f312b;
+      text-shadow: 0 0.4px 0 rgba(63, 49, 43, 0.35);
     }
 
     .greeting-time {
@@ -1498,18 +1509,18 @@
       }
 
       .greeting-title {
-        font-size: clamp(2.8rem, 14vw, 4rem);
+        font-size: clamp(3.2rem, 16vw, 4.6rem);
         margin-bottom: 1rem;
       }
 
-      .greeting-text {
-        font-size: 1rem;
-        line-height: 1.72;
+      .greeting-copy {
+        font-size: 0.94rem;
+        line-height: 1.78;
       }
 
       .greeting-date {
         margin-top: 1.6rem;
-        font-size: clamp(1.28rem, 6.2vw, 1.72rem);
+        font-size: clamp(1.8rem, 10vw, 2.4rem);
       }
 
       .greeting-time {
@@ -1640,10 +1651,22 @@
       <div class="container">
         <div class="greeting-wrapper">
           <div class="greeting-content">
-            <h2 class="greeting-title">Estás invitado!</h2>
-            <p class="greeting-text">
-              Junto a nuestros seres queridos, nosotros, Alejandro y Alejandra, queremos invitarte a celebrar el santo sacramento de nuestro matrimonio.
-            </p>
+            <h2 class="greeting-title">¡Estás invitado!</h2>
+            <div class="greeting-copy">
+              <p>Con la bendición de Dios<br>
+              y en compañía de nuestros seres queridos,</p>
+
+              <p>nosotros,<br>
+              Alejandro y Alejandra</p>
+
+              <p>te invitamos a celebrar con nosotros<br>
+              el Santo Sacramento de nuestro Matrimonio.</p>
+
+              <p>Con gratitud por el amor que Dios<br>
+              ha puesto en nuestras vidas,<br>
+              queremos compartir contigo este día tan especial<br>
+              en el que uniremos nuestros corazones ante Su presencia.</p>
+            </div>
             <p class="greeting-date">Sábado 17 de Octubre de 2026</p>
           </div>
           <figure class="greeting-image">
