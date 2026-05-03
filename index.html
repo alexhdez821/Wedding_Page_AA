@@ -1370,6 +1370,38 @@
       transform: translateY(-1px);
     }
 
+    .zelle-card {
+      margin: 1.35rem auto 0;
+      width: min(100%, 430px);
+      padding: clamp(1rem, 2.8vw, 1.3rem) clamp(1rem, 4vw, 1.6rem);
+      border-radius: 14px;
+      border: 1px solid rgba(236, 223, 196, 0.7);
+      background: rgba(249, 243, 233, 0.92);
+      box-shadow: 0 9px 24px rgba(38, 50, 21, 0.2);
+      text-align: center;
+    }
+
+    .zelle-card-label {
+      display: block;
+      margin: 0 0 0.36rem;
+      font-family: "Pinyon Script", cursive;
+      font-size: clamp(1.8rem, 4vw, 2.35rem);
+      font-weight: 400;
+      line-height: 1;
+      color: #6b5a3a;
+    }
+
+    .zelle-card-email {
+      margin: 0;
+      font-family: "Cormorant Garamond", "Times New Roman", Times, serif;
+      font-size: clamp(1.02rem, 2.6vw, 1.24rem);
+      letter-spacing: 0.03em;
+      line-height: 1.45;
+      color: #3f3328;
+      overflow-wrap: anywhere;
+      word-break: break-word;
+    }
+
     .hotel-button,
     .hotel-link,
     .guest-guide-hotel-button {
@@ -1949,13 +1981,15 @@
             <h3 class="gifts-section-title">Regalos</h3>
             <p>
               Su presencia en nuestra boda es el regalo más importante para nosotros.
-              Si desean tener un detalle con nosotros, lo recibiremos con mucho cariño y gratitud.
-              Pueden hacerlo con una tarjeta, efectivo o una aportación por Zelle, lo cual será una bendición para comenzar esta nueva etapa juntos.
+              
+              Si desean tener un detalle con nosotros, lo recibiremos con mucho cariño y gratitud. Pueden hacerlo con una tarjeta, efectivo o una aportación por Zelle al correo que aparece abajo.
+              
               Gracias por acompañarnos y por ser parte de este día tan especial.
             </p>
 
-            <div class="details-buttons">
-              <a href="#" class="details-button">Zelle</a>
+            <div class="zelle-card" aria-label="Información de aportación por Zelle">
+              <span class="zelle-card-label">Zelle</span>
+              <p class="zelle-card-email">alejandroyalejandraboda@gmail.com</p>
             </div>
           </div>
         </div>
