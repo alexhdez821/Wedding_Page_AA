@@ -26,6 +26,15 @@
       --container: min(1120px, 92%);
     }
 
+
+    @font-face {
+      font-family: "Safira March";
+      src: local("Safira March"), local("SafiraMarch");
+      font-style: normal;
+      font-weight: 400;
+      font-display: swap;
+    }
+
     * {
       box-sizing: border-box;
     }
@@ -1344,7 +1353,7 @@
 
     .hotel-buttons .details-button {
       flex: 1 1 calc(33.333% - 0.72rem);
-      max-width: 280px;
+      max-width: 265px;
     }
 
     .details-button {
@@ -1352,16 +1361,7 @@
       justify-content: center;
       align-items: center;
       text-align: center;
-      padding: 0.72rem 1.05rem;
-      min-height: 48px;
-      border-radius: 0;
-      border: 1px solid rgba(85, 107, 47, 0.28);
-      background: #f8f3ed;
-      color: #3d342f;
-      font-family: "Inter", sans-serif;
-      font-size: 0.92rem;
-      font-weight: 500;
-      line-height: 1.35;
+      text-decoration: none;
       transition: background 0.2s ease, transform 0.2s ease;
     }
 
@@ -1370,31 +1370,29 @@
       transform: translateY(-1px);
     }
 
-    .zelle-card {
+    .lace-card {
       position: relative;
       isolation: isolate;
-      margin: 1.5rem auto 0;
-      width: min(100%, 500px);
-      padding: clamp(1.1rem, 3vw, 1.55rem) clamp(1.1rem, 5vw, 2rem);
       background: linear-gradient(180deg, #fffef9 0%, #f9f4ea 100%);
       border: 1px solid rgba(192, 173, 143, 0.6);
       box-shadow: 0 10px 22px rgba(39, 50, 24, 0.16);
+      color: #111111;
       text-align: center;
     }
 
-    .zelle-card::before,
-    .zelle-card::after {
+    .lace-card::before,
+    .lace-card::after {
       content: "";
       position: absolute;
       inset: 7px;
       pointer-events: none;
     }
 
-    .zelle-card::before {
+    .lace-card::before {
       border: 1px solid rgba(190, 171, 141, 0.56);
     }
 
-    .zelle-card::after {
+    .lace-card::after {
       inset: -7px;
       background:
         radial-gradient(circle at 8px 50%, rgba(255, 252, 245, 0.96) 58%, transparent 61%) left center / 16px 14px repeat-y,
@@ -1403,6 +1401,12 @@
         radial-gradient(circle at 50% calc(100% - 8px), rgba(255, 252, 245, 0.96) 58%, transparent 61%) center bottom / 14px 16px repeat-x;
       filter: drop-shadow(0 2px 1px rgba(157, 140, 116, 0.24));
       z-index: -1;
+    }
+
+    .zelle-card {
+      margin: 1.5rem auto 0;
+      width: min(100%, 500px);
+      padding: clamp(1.1rem, 3vw, 1.55rem) clamp(1.1rem, 5vw, 2rem);
     }
 
     .zelle-card-label {
@@ -1434,9 +1438,19 @@
     .hotel-button,
     .hotel-link,
     .guest-guide-hotel-button {
-      font-family: "Times New Roman", Times, serif;
+      width: 100%;
+      min-height: 98px;
+      padding: 0.9rem 1rem;
+      font-family: "Times New Roman", "Bodoni Moda", serif;
+      font-size: clamp(0.82rem, 1.25vw, 0.94rem);
+      font-weight: 600;
+      line-height: 1.35;
       text-transform: uppercase;
-      letter-spacing: 0.04em;
+      letter-spacing: 0.035em;
+      color: #111111;
+      white-space: normal;
+      overflow-wrap: anywhere;
+      word-break: normal;
     }
 
     .content-inner {
@@ -2000,9 +2014,9 @@
             </p>
 
             <div class="details-buttons hotel-buttons">
-              <a href="https://www.marriott.com/en-us/hotels/phxde-delta-hotels-phoenix-mesa/overview/" class="details-button hotel-button" target="_blank" rel="noopener noreferrer">DELTA HOTELS BY MARRIOTT PHOENIX MESA</a>
-              <a href="https://www.hyatt.com/hyatt-place/en-US/phxzm-hyatt-place-phoenix-mesa?src=agn_koddi_crp_chico_ppc_22061088841_Conversion_Place_Google_Search_English_PHXZM_Mesa_Paid_Brand_CrossDevice_1x1_google_Koddi-TopUp-Evergreen-Brand_e_hyatt%20place%20phoenix%20mesa&gad_source=1&gad_campaignid=22061088841&gclid=CjwKCAjw5NvPBhAoEiwA_2egfnzCsEbgLWj4bPhCMuQ4aEaHjlPuWgAAyCZpl2w3og_k-y41baJevBoClmcQAvD_BwE" class="details-button hotel-button" target="_blank" rel="noopener noreferrer">HYATT PLACE PHOENIX/MESA</a>
-              <a href="https://www.marriott.com/en-us/hotels/phxww-sheraton-mesa-hotel-at-wrigleyville-west/overview/" class="details-button hotel-button" target="_blank" rel="noopener noreferrer">SHERATON MESA HOTEL AT WRIGLEYVILLE WEST</a>
+              <a href="https://www.marriott.com/en-us/hotels/phxde-delta-hotels-phoenix-mesa/overview/" class="details-button lace-card hotel-button" target="_blank" rel="noopener noreferrer">DELTA HOTELS BY MARRIOTT PHOENIX MESA</a>
+              <a href="https://www.hyatt.com/hyatt-place/en-US/phxzm-hyatt-place-phoenix-mesa?src=agn_koddi_crp_chico_ppc_22061088841_Conversion_Place_Google_Search_English_PHXZM_Mesa_Paid_Brand_CrossDevice_1x1_google_Koddi-TopUp-Evergreen-Brand_e_hyatt%20place%20phoenix%20mesa&gad_source=1&gad_campaignid=22061088841&gclid=CjwKCAjw5NvPBhAoEiwA_2egfnzCsEbgLWj4bPhCMuQ4aEaHjlPuWgAAyCZpl2w3og_k-y41baJevBoClmcQAvD_BwE" class="details-button lace-card hotel-button" target="_blank" rel="noopener noreferrer">HYATT PLACE PHOENIX/MESA</a>
+              <a href="https://www.marriott.com/en-us/hotels/phxww-sheraton-mesa-hotel-at-wrigleyville-west/overview/" class="details-button lace-card hotel-button" target="_blank" rel="noopener noreferrer">SHERATON MESA HOTEL AT WRIGLEYVILLE WEST</a>
             </div>
           </div>
 
@@ -2016,7 +2030,7 @@
               Gracias por acompañarnos y por ser parte de este día tan especial!
             </p>
 
-            <div class="zelle-card" aria-label="Información de aportación por Zelle">
+            <div class="zelle-card lace-card" aria-label="Información de aportación por Zelle">
               <span class="zelle-card-label">Zelle</span>
               <p class="zelle-card-email">alejandroyalejandraboda@gmail.com</p>
             </div>
