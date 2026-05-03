@@ -1624,6 +1624,7 @@
       <nav class="menu-links">
         <a href="#hero">Inicio</a>
         <a href="#saludo">Mensaje</a>
+        <a href="#countdown">Cuenta regresiva</a>
         <a href="#historia">Historia</a>
         <a href="#viaje">Viaje</a>
         <a href="#fotos">Fotos</a>
@@ -1672,6 +1673,35 @@
           <figure class="greeting-image">
             <img src="./images/784E6B64-AB33-4F6B-B3EB-C94B731F4558.png" alt="Alejandro y Alejandra" />
           </figure>
+        </div>
+      </div>
+    </section>
+
+
+    <section class="section countdown-section" id="countdown">
+      <div class="container">
+        <div class="countdown-shell">
+          <div class="count-grid" id="countdownGrid" aria-label="Tiempo restante para la boda">
+            <div class="count-unit">
+              <span class="count-number" id="days">--</span>
+              <div class="count-label">Días</div>
+            </div>
+            <span class="count-separator" aria-hidden="true">:</span>
+            <div class="count-unit">
+              <span class="count-number" id="hours">--</span>
+              <div class="count-label">Horas</div>
+            </div>
+            <span class="count-separator" aria-hidden="true">:</span>
+            <div class="count-unit">
+              <span class="count-number" id="minutes">--</span>
+              <div class="count-label">Minutos</div>
+            </div>
+            <span class="count-separator" aria-hidden="true">:</span>
+            <div class="count-unit">
+              <span class="count-number" id="seconds">--</span>
+              <div class="count-label">Segundos</div>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -1944,6 +1974,34 @@
     if (historyNext) historyNext.addEventListener("click", showNextHistorySlide);
     preloadHistorySlides();
     renderHistorySlide(currentHistorySlide);
+
+
+    const weddingDate = new Date("2026-10-17T16:00:00").getTime();
+
+    function updateCountdown() {
+      const now = new Date().getTime();
+      const distance = weddingDate - now;
+
+      if (distance <= 0) {
+        document.getElementById("countdownGrid").innerHTML = `
+          <div class="count-finished">Hoy — ¡Nos casamos!</div>
+        `;
+        return;
+      }
+
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((distance / (1000 * 60 * 60)) % 24);
+      const minutes = Math.floor((distance / (1000 * 60)) % 60);
+      const seconds = Math.floor((distance / 1000) % 60);
+
+      document.getElementById("days").textContent = days;
+      document.getElementById("hours").textContent = String(hours).padStart(2, "0");
+      document.getElementById("minutes").textContent = String(minutes).padStart(2, "0");
+      document.getElementById("seconds").textContent = String(seconds).padStart(2, "0");
+    }
+
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
 
     const fotosSlides = [
       { src: "./images/NH_1.jpg", alt: "Alejandra y Alejandro en concierto", title: "Nuestro comienzo", text: "El inicio de muchas aventuras, con música y sonrisas." },
