@@ -2309,6 +2309,11 @@
     window.addEventListener("scroll", updateHeaderVisibility, { passive: true });
     window.addEventListener("resize", updateHeaderVisibility);
 
+    // Defensive cleanup: ensure no legacy wheel handlers hijack scrolling for zoom.
+    window.onwheel = null;
+    document.onwheel = null;
+    if (document.body) document.body.onwheel = null;
+
     const historySlides = [
       {
         src: "./images/NH_1.jpg",
