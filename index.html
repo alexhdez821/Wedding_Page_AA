@@ -7,7 +7,7 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Allura&family=Cinzel:wght@500;600&family=Cormorant+Garamond:wght@400;500;600;700&family=Great+Vibes&family=Inter:wght@300;400;500;600&family=Monsieur+La+Doulaise&family=Bodoni+Moda:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Allura&family=Cinzel:wght@500;600&family=Cormorant+Garamond:wght@400;500;600;700&family=Great+Vibes&family=Inter:wght@300;400;500;600&family=Monsieur+La+Doulaise&family=Bodoni+Moda:wght@400;500&family=Pinyon+Script&display=swap" rel="stylesheet">
 
   <style>
     :root {
@@ -1316,6 +1316,14 @@
       color: #fff9f3;
     }
 
+    .guest-guide-card-title,
+    .guest-guide-subtitle,
+    .hotel-section-title,
+    .gifts-section-title {
+      font-family: "Pinyon Script", cursive;
+      font-weight: 400;
+    }
+
     .details-block p {
       margin: 0.9rem auto 1.2rem;
       max-width: 760px;
@@ -1360,6 +1368,14 @@
     .details-button:hover {
       background: #efe7dd;
       transform: translateY(-1px);
+    }
+
+    .hotel-button,
+    .hotel-link,
+    .guest-guide-hotel-button {
+      font-family: "Times New Roman", Times, serif;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
     }
 
     .content-inner {
@@ -1917,20 +1933,20 @@
           </h2>
 
           <div class="details-block">
-            <h3>Dónde Hospedarse</h3>
+            <h3 class="hotel-section-title">Dónde Hospedarse</h3>
             <p>
               Para nuestros invitados que nos acompañan desde fuera, compartimos algunas opciones de hospedaje cercanas al lugar de la recepción para que encuentren una estancia cómoda y conveniente.
             </p>
 
             <div class="details-buttons hotel-buttons">
-              <a href="https://www.marriott.com/en-us/hotels/phxde-delta-hotels-phoenix-mesa/overview/" class="details-button" target="_blank" rel="noopener noreferrer">Delta Hotels by Marriott Phoenix Mesa</a>
-              <a href="https://www.hyatt.com/hyatt-place/en-US/phxzm-hyatt-place-phoenix-mesa?src=agn_koddi_crp_chico_ppc_22061088841_Conversion_Place_Google_Search_English_PHXZM_Mesa_Paid_Brand_CrossDevice_1x1_google_Koddi-TopUp-Evergreen-Brand_e_hyatt%20place%20phoenix%20mesa&gad_source=1&gad_campaignid=22061088841&gclid=CjwKCAjw5NvPBhAoEiwA_2egfnzCsEbgLWj4bPhCMuQ4aEaHjlPuWgAAyCZpl2w3og_k-y41baJevBoClmcQAvD_BwE" class="details-button" target="_blank" rel="noopener noreferrer">Hyatt Place Phoenix/Mesa</a>
-              <a href="https://www.marriott.com/en-us/hotels/phxww-sheraton-mesa-hotel-at-wrigleyville-west/overview/" class="details-button" target="_blank" rel="noopener noreferrer">Sheraton Mesa Hotel at Wrigleyville West</a>
+              <a href="https://www.marriott.com/en-us/hotels/phxde-delta-hotels-phoenix-mesa/overview/" class="details-button hotel-button" target="_blank" rel="noopener noreferrer">DELTA HOTELS BY MARRIOTT PHOENIX MESA</a>
+              <a href="https://www.hyatt.com/hyatt-place/en-US/phxzm-hyatt-place-phoenix-mesa?src=agn_koddi_crp_chico_ppc_22061088841_Conversion_Place_Google_Search_English_PHXZM_Mesa_Paid_Brand_CrossDevice_1x1_google_Koddi-TopUp-Evergreen-Brand_e_hyatt%20place%20phoenix%20mesa&gad_source=1&gad_campaignid=22061088841&gclid=CjwKCAjw5NvPBhAoEiwA_2egfnzCsEbgLWj4bPhCMuQ4aEaHjlPuWgAAyCZpl2w3og_k-y41baJevBoClmcQAvD_BwE" class="details-button hotel-button" target="_blank" rel="noopener noreferrer">HYATT PLACE PHOENIX/MESA</a>
+              <a href="https://www.marriott.com/en-us/hotels/phxww-sheraton-mesa-hotel-at-wrigleyville-west/overview/" class="details-button hotel-button" target="_blank" rel="noopener noreferrer">SHERATON MESA HOTEL AT WRIGLEYVILLE WEST</a>
             </div>
           </div>
 
           <div class="details-block">
-            <h3>Regalos</h3>
+            <h3 class="gifts-section-title">Regalos</h3>
             <p>
               Su presencia en nuestra boda es el regalo más importante para nosotros.
               Si desean tener un detalle con nosotros, lo recibiremos con mucho cariño y gratitud.
