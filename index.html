@@ -1344,6 +1344,32 @@
       white-space: pre-line;
     }
 
+    .faq-section {
+      background: var(--bg);
+      padding-block: clamp(5rem, 10vw, 7rem);
+    }
+
+    .faq-wrapper {
+      display: grid;
+      grid-template-columns: minmax(280px, 380px) minmax(0, 1fr);
+      gap: clamp(2rem, 5vw, 5rem);
+      align-items: start;
+    }
+
+    .faq-photo { margin: 0; max-width: 380px; width: 100%; justify-self: center; }
+    .faq-photo img { width: 100%; aspect-ratio: 3/4; object-fit: cover; border: 1px solid rgba(35, 26, 22, 0.75); display: block; }
+    .faq-title { margin: 0 0 1.75rem; font-family: "Cinzel", serif; font-size: clamp(1.8rem, 3.1vw, 2.8rem); font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; color: #3f342f; }
+    .faq-list { display: grid; gap: 0.25rem; }
+    .faq-item { border-top: 1px solid rgba(70, 51, 41, 0.2); padding: 0.2rem 0; }
+    .faq-item:last-child { border-bottom: 1px solid rgba(70, 51, 41, 0.2); }
+    .faq-question { width: 100%; border: 0; background: transparent; color: var(--text); padding: 1.15rem 0; margin: 0; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 1.2rem; font-family: "Cormorant Garamond", serif; font-size: clamp(1.1rem, 2.15vw, 1.35rem); text-align: left; }
+    .faq-question:focus-visible { outline: 1px solid rgba(114, 79, 61, 0.55); outline-offset: 4px; }
+    .faq-icon { flex-shrink: 0; font-family: "Cinzel", serif; font-size: 1.25rem; line-height: 1; color: rgba(74, 54, 43, 0.85); transition: transform 0.24s ease; }
+    .faq-item.is-open .faq-icon { transform: rotate(45deg); }
+    .faq-answer { max-height: 0; overflow: hidden; opacity: 0; transition: max-height 0.34s ease, opacity 0.28s ease, padding-bottom 0.3s ease; padding: 0 2rem 0 0; }
+    .faq-item.is-open .faq-answer { opacity: 1; padding-bottom: 1.2rem; }
+    .faq-answer p { margin: 0; font-family: "Inter", sans-serif; font-size: clamp(0.98rem, 1.75vw, 1.08rem); line-height: 1.75; color: var(--muted); }
+
     .details-buttons {
       display: flex;
       flex-wrap: wrap;
@@ -1859,6 +1885,11 @@
       .details-title {
         letter-spacing: 0.01em;
       }
+      .faq-wrapper { grid-template-columns: 1fr; gap: 1.8rem; }
+      .faq-photo { max-width: min(82vw, 360px); }
+      .faq-title { margin-bottom: 1.15rem; }
+      .faq-question { padding: 1rem 0; }
+      .faq-answer { padding-right: 0; }
 
       .hotel-buttons .details-button,
       .details-buttons:not(.hotel-buttons) .details-button {
@@ -1922,6 +1953,7 @@
         <a href="#countdown">Cuenta regresiva</a>
         <a href="#historia">Historia</a>
         <a href="#detalles">Detalles</a>
+        <a href="#preguntas-frecuentes">Preguntas frecuentes</a>
         <a href="#viaje">Viaje</a>
         <a href="#fotos">Fotos</a>
         <a href="#confirmar">Confirmar</a>
@@ -2069,6 +2101,49 @@
             <div class="zelle-card lace-card" aria-label="Información de aportación por Zelle">
               <span class="zelle-card-label">Zelle</span>
               <p class="zelle-card-email zelle-email gift-email">alejandroyalejandraboda@gmail.com</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section faq-section" id="preguntas-frecuentes">
+      <div class="container">
+        <div class="faq-wrapper">
+          <figure class="faq-photo">
+            <img src="./images/64.jpeg" alt="Alejandro y Alejandra en retrato" loading="lazy" decoding="async">
+          </figure>
+          <div class="faq-content">
+            <h2 class="faq-title">Preguntas Frecuentes</h2>
+            <div class="faq-list">
+              <article class="faq-item">
+                <button class="faq-question" type="button" aria-expanded="false">
+                  <span>No puedo ver los detalles ni los horarios del evento. ¿Dónde los encuentro?</span>
+                  <span class="faq-icon" aria-hidden="true">+</span>
+                </button>
+                <div class="faq-answer"><p>Todos los detalles del evento, incluyendo horarios y ubicación, serán revelados después de confirmar su asistencia. Al completar su RSVP, recibirán una imagen con la información completa de nuestra boda, la cual podrán guardar en su teléfono para tenerla a la mano.</p></div>
+              </article>
+              <article class="faq-item">
+                <button class="faq-question" type="button" aria-expanded="false">
+                  <span>¿Puedo llevar más invitados de los que aparecen en mi invitación?</span>
+                  <span class="faq-icon" aria-hidden="true">+</span>
+                </button>
+                <div class="faq-answer"><p>Con mucho gusto pueden comunicarse personalmente con nosotros o escribirnos a alejandroyalejandra@gmail.com para solicitar invitados adicionales. Aunque no podemos garantizar que haya espacios disponibles, haremos lo posible por acomodarlos si la capacidad nos lo permite.</p></div>
+              </article>
+              <article class="faq-item">
+                <button class="faq-question" type="button" aria-expanded="false">
+                  <span>¿Qué pasa si no confirmo mi asistencia antes de la fecha límite?</span>
+                  <span class="faq-icon" aria-hidden="true">+</span>
+                </button>
+                <div class="faq-answer"><p>Debido a que contamos con un número limitado de lugares, les pedimos de corazón que confirmen su asistencia antes del 30 de Junio, 2026. Si no recibimos su RSVP a tiempo, es posible que ese lugar sea ofrecido a otro invitado. Si por alguna razón no pudieron confirmar a tiempo, por favor comuníquense directamente con nosotros y con gusto revisaremos si aún es posible acomodarlos.</p></div>
+              </article>
+              <article class="faq-item">
+                <button class="faq-question" type="button" aria-expanded="false">
+                  <span>¿Tienen bloques de habitaciones en los hoteles recomendados?</span>
+                  <span class="faq-icon" aria-hidden="true">+</span>
+                </button>
+                <div class="faq-answer"><p>Por el momento, lamentablemente no contamos con bloques de habitaciones para el fin de semana de la boda. Sin embargo, hemos compartido tres recomendaciones de hoteles con diferentes precios, ubicaciones y amenidades, para que cada invitado pueda elegir la opción que mejor se acomode a sus necesidades.</p></div>
+              </article>
             </div>
           </div>
         </div>
@@ -2452,6 +2527,19 @@
     preloadFotosSlides();
     buildFotosStory();
     initFotosReveal();
+
+    const faqItems = document.querySelectorAll(".faq-item");
+    faqItems.forEach((item) => {
+      const trigger = item.querySelector(".faq-question");
+      const answer = item.querySelector(".faq-answer");
+      if (!trigger || !answer) return;
+      trigger.addEventListener("click", () => {
+        const isOpen = item.classList.contains("is-open");
+        item.classList.toggle("is-open", !isOpen);
+        trigger.setAttribute("aria-expanded", String(!isOpen));
+        answer.style.maxHeight = isOpen ? "0px" : `${answer.scrollHeight}px`;
+      });
+    });
 
   </script>
 </body>
