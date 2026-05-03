@@ -1249,6 +1249,101 @@
       margin-top: 20px;
     }
 
+    .details-section {
+      background: var(--bg);
+      justify-content: center;
+    }
+
+    .details-panel {
+      width: min(960px, 100%);
+      margin: 0 auto;
+      background: #556b2f;
+      border-radius: clamp(20px, 3vw, 30px);
+      padding: clamp(1.8rem, 4vw, 3.1rem) clamp(1.2rem, 3.6vw, 2.8rem);
+      box-shadow: 0 20px 48px rgba(56, 67, 37, 0.24);
+      color: #f8f3ed;
+      text-align: center;
+    }
+
+    .details-title {
+      margin: 0 0 clamp(1.5rem, 3.2vw, 2.2rem);
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      font-family: "Cinzel", serif;
+      font-size: clamp(2.1rem, 5vw, 3.3rem);
+      line-height: 1.05;
+    }
+
+    .details-title span,
+    .details-title em {
+      display: block;
+    }
+
+    .details-title em {
+      font-style: normal;
+    }
+
+    .details-block + .details-block {
+      margin-top: clamp(1.8rem, 3.8vw, 2.8rem);
+      padding-top: clamp(1.7rem, 3.4vw, 2.3rem);
+      border-top: 1px solid rgba(248, 243, 237, 0.3);
+    }
+
+    .details-block h3 {
+      margin: 0;
+      font-family: "Allura", cursive;
+      font-size: clamp(2rem, 4.2vw, 2.8rem);
+      font-weight: 400;
+      line-height: 1.05;
+      color: #fff9f3;
+    }
+
+    .details-block p {
+      margin: 0.9rem auto 1.2rem;
+      max-width: 760px;
+      font-family: "Cormorant Garamond", serif;
+      font-size: clamp(1.02rem, 2vw, 1.2rem);
+      line-height: 1.7;
+      letter-spacing: 0.01em;
+      color: rgba(255, 250, 245, 0.95);
+      white-space: pre-line;
+    }
+
+    .details-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.72rem;
+    }
+
+    .hotel-buttons .details-button {
+      flex: 1 1 calc(33.333% - 0.72rem);
+      max-width: 280px;
+    }
+
+    .details-button {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 0.72rem 1.05rem;
+      min-height: 48px;
+      border-radius: 8px;
+      border: 1px solid rgba(85, 107, 47, 0.28);
+      background: #f8f3ed;
+      color: #3d342f;
+      font-family: "Inter", sans-serif;
+      font-size: 0.92rem;
+      font-weight: 500;
+      line-height: 1.35;
+      transition: background 0.2s ease, transform 0.2s ease;
+    }
+
+    .details-button:hover {
+      background: #efe7dd;
+      transform: translateY(-1px);
+    }
+
     .content-inner {
       max-width: 900px;
       margin: 0 auto;
@@ -1607,6 +1702,26 @@
         padding-inline: clamp(0.35rem, 2.5vw, 0.8rem);
       }
 
+      .details-section {
+        min-height: calc(100svh - var(--header-h));
+      }
+
+      .details-panel {
+        width: min(660px, 100%);
+        padding: 1.6rem 1rem;
+      }
+
+      .details-title {
+        letter-spacing: 0.12em;
+      }
+
+      .hotel-buttons .details-button,
+      .details-buttons:not(.hotel-buttons) .details-button {
+        flex: 1 1 100%;
+        width: 100%;
+        max-width: 100%;
+      }
+
       .section-copy {
         font-size: 0.98rem;
       }
@@ -1661,6 +1776,7 @@
         <a href="#saludo">Mensaje</a>
         <a href="#countdown">Cuenta regresiva</a>
         <a href="#historia">Historia</a>
+        <a href="#detalles">Detalles</a>
         <a href="#viaje">Viaje</a>
         <a href="#fotos">Fotos</a>
         <a href="#confirmar">Confirmar</a>
@@ -1767,6 +1883,44 @@
               <p>Hoy, con amor y gratitud, esperamos con alegría el día en que, ante Dios y nuestros seres queridos, uniremos nuestras vidas para siempre.</p>
 
               <p>17 de octubre de 2026</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="detalles" class="details-section page-section section">
+      <div class="container">
+        <div class="details-panel">
+          <h2 class="details-title">
+            <span>Los</span>
+            <em>Detalles</em>
+          </h2>
+
+          <div class="details-block">
+            <h3>Dónde Hospedarse</h3>
+            <p>
+              Para nuestros invitados que nos acompañan desde fuera, compartimos algunas opciones de hospedaje cercanas al lugar de la recepción para que encuentren una estancia cómoda y conveniente.
+            </p>
+
+            <div class="details-buttons hotel-buttons">
+              <a href="#" class="details-button">Delta Hotels by Marriott Phoenix Mesa</a>
+              <a href="#" class="details-button">Hyatt Place Phoenix/Mesa</a>
+              <a href="#" class="details-button">Sheraton Mesa Hotel at Wrigleyville West</a>
+            </div>
+          </div>
+
+          <div class="details-block">
+            <h3>Regalos</h3>
+            <p>
+              Su presencia en nuestra boda es el regalo más importante para nosotros.
+              Si desean tener un detalle con nosotros, lo recibiremos con mucho cariño y gratitud.
+              Pueden hacerlo con una tarjeta, efectivo o una aportación por Zelle, lo cual será una bendición para comenzar esta nueva etapa juntos.
+              Gracias por acompañarnos y por ser parte de este día tan especial.
+            </p>
+
+            <div class="details-buttons">
+              <a href="#" class="details-button">Zelle</a>
             </div>
           </div>
         </div>
