@@ -1107,7 +1107,7 @@
     .history-wrapper {
       display: grid;
       grid-template-columns: minmax(320px, 1fr) minmax(280px, 0.95fr);
-      grid-template-areas: "content image";
+      grid-template-areas: "image content";
       align-items: center;
       column-gap: clamp(2.5rem, 6vw, 6rem);
       row-gap: 2rem;
@@ -1125,7 +1125,7 @@
       aspect-ratio: 4 / 5;
       object-fit: cover;
       display: block;
-      border-radius: 8px;
+      border-radius: 0;
       margin: 0 auto;
       transition: opacity 0.45s ease, transform 0.55s ease, filter 0.55s ease;
       opacity: 1;
@@ -1185,11 +1185,13 @@
     .history-caption {
       margin-top: 14px;
       text-align: center;
-      font-size: 0.98rem;
-      color: var(--muted);
+      font-size: 0.92rem;
+      color: rgba(89, 71, 61, 0.76);
       min-height: 2.2em;
-      line-height: 1.45;
+      line-height: 1.55;
       padding: 0 10px;
+      letter-spacing: 0.01em;
+      font-family: "Cormorant Garamond", serif;
       transition: opacity 0.35s ease, transform 0.35s ease;
     }
 
@@ -1211,9 +1213,30 @@
       max-width: 620px;
     }
 
+    .history-content .section-title {
+      margin-bottom: 1rem;
+      font-family: "Monsieur La Doulaise", cursive;
+      font-size: clamp(3.2rem, 7vw, 5rem);
+      line-height: 1;
+      text-transform: none;
+      letter-spacing: 0;
+    }
+
     .history-content .section-copy {
       margin: 0;
       max-width: 100%;
+      font-family: "Cormorant Garamond", serif;
+      font-size: clamp(1.08rem, 1.8vw, 1.2rem);
+      line-height: 1.85;
+      color: rgba(78, 59, 50, 0.9);
+    }
+
+    .history-content .section-copy p {
+      margin: 0 0 1.15rem;
+    }
+
+    .history-content .section-copy p:last-child {
+      margin-bottom: 0;
     }
 
     .history-content .card {
@@ -1537,11 +1560,15 @@
 
       .history-content {
         max-width: 100%;
-        text-align: center;
+        text-align: left;
       }
 
       .history-content .section-copy {
-        margin: 0 auto;
+        margin: 0;
+      }
+
+      .history-content .section-title {
+        text-align: center;
       }
 
       .history-image img {
@@ -1721,15 +1748,14 @@
             </figcaption>
           </figure>
           <div class="history-content">
-            <h2 class="section-title">Nuestra historia</h2>
-            <p class="section-copy">
-              Aquí irá su historia. Este espacio puede contar cómo se conocieron, cómo ha crecido su relación y lo especial que es compartir este día con su familia y amigos.
-            </p>
-
-            <div class="card">
-              <p>
-                Por ahora dejé esta sección limpia y elegante para que después podamos escribir el texto real con el tono que ustedes quieran.
-              </p>
+            <h2 class="section-title">Nuestra Historia</h2>
+            <div class="section-copy">
+              <p>A veces, Dios escribe las historias más hermosas de la manera más inesperada, y la nuestra comenzó con un sencillo mensaje de “Feliz Cumpleaños” que Alejandro me envió el 16 de marzo de 2024, en mi cumpleaños. Lo que parecía un pequeño detalle, terminó siendo el comienzo de una historia que cambiaría nuestras vidas para siempre.</p>
+              <p>Desde ese día, nuestras conversaciones nunca se detuvieron. Entre largas pláticas, risas, oraciones y momentos compartidos, fuimos descubriendo cuánto teníamos en común. Nuestra fe, nuestras raíces, nuestros sueños y la manera en que vemos la vida nos hicieron sentir, poco a poco, que Dios nos estaba guiando el uno hacia el otro, y que habíamos encontrado aquello por lo que tanto habíamos orado.</p>
+              <p>El 19 de octubre de 2024, en un día lluvioso que siempre llevaremos en el corazón, Alejandro me pidió que fuera su novia, y esa noche, llenos de felicidad, bailamos bajo la lluvia, agradeciendo a Dios por lo que estaba comenzando entre nosotros.</p>
+              <p>Un año después, mientras seguíamos poniendo nuestra relación en las manos de Dios, Alejandro me pidió que fuera su esposa el 18 de octubre de 2025, rodeados de los hermosos colores del otoño en Flagstaff, Arizona.</p>
+              <p>Y hoy, con el corazón lleno de amor y gratitud, y con la certeza de haber sido respuesta a nuestras oraciones, esperamos con alegría el día en que, ante Dios y rodeados de nuestra familia y amigos, uniremos nuestras vidas para siempre.</p>
+              <p>17 de octubre de 2026</p>
             </div>
           </div>
         </div>
