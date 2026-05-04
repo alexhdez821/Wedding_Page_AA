@@ -345,12 +345,16 @@ export function initRsvpFlow() {
         .from("guest_list")
         .select("id, first_name, last_name, allowed_plus_one, max_guests, rsvp_pair_id")
         .eq("invited", true)
-        .ilike("first_name", firstName)
-        .ilike("last_name", lastName)
-        .limit(10);
+        .limit(500);
 
       if (guestError) {
         console.error("Guest lookup failed", guestError);
+        if (String(guestError?.message || "").toLowerCase().includes("apikey") ||
+            String(guestError?.message || "").toLowerCase().includes("invalid") ||
+            String(guestError?.message || "").toLowerCase().includes("jwt")) {
+          lookupError.textContent = "RSVP is temporarily unavailable due to configuration. Please try again later.";
+          return;
+        }
         lookupError.textContent = getFriendlyLookupError(guestError);
         return;
       }
