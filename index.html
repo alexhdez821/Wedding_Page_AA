@@ -1056,6 +1056,21 @@
       z-index: 1;
     }
 
+    @media (max-width: 768px) {
+      #historia::before {
+        top: 50%;
+        left: 50%;
+        width: 100vh;
+        height: 100vw;
+        inset: auto;
+        transform: translate(-50%, -50%) rotate(90deg) scale(1.35);
+        transform-origin: center;
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: contain;
+      }
+    }
+
     .greeting-section {
       background: #f8f3ed;
       padding: clamp(6.5rem, 11vh, 9.5rem) 0;
