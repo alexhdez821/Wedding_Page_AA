@@ -1034,6 +1034,28 @@
       background: var(--bg);
     }
 
+    #historia {
+      position: relative;
+      overflow: hidden;
+    }
+
+    #historia::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image: url("./images/lacepg2.png");
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: contain;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    #historia .container {
+      position: relative;
+      z-index: 1;
+    }
+
     .greeting-section {
       background: #f8f3ed;
       padding: clamp(6.5rem, 11vh, 9.5rem) 0;
