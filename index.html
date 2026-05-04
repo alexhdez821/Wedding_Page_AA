@@ -1584,6 +1584,8 @@
 
     .collage-card {
       break-inside: avoid;
+      height: auto;
+      overflow: visible;
       margin: 0 0 clamp(0.9rem, 1.9vw, 1.45rem);
       background: rgba(255, 252, 248, 0.95);
       border: 1px solid rgba(126, 97, 80, 0.16);
@@ -1595,10 +1597,10 @@
     .collage-card img {
       display: block;
       width: 100%;
-      aspect-ratio: var(--ratio, 4 / 5);
-      object-fit: cover;
-      object-position: center 35%;
+      height: auto;
+      object-fit: contain;
       background: #efe7e0;
+      border-radius: 0;
     }
 
     @media (hover: hover) and (pointer: fine) {
@@ -2100,13 +2102,14 @@
     <section class="section collage-section" id="fotos">
       <div class="container">
         <div class="engagement-collage" aria-label="Galería de fotos de compromiso">
-          <figure class="collage-card" style="--ratio: 4 / 5;"><img src="images/47.jpg" alt="Alejandro y Alejandra en retrato romántico durante su sesión." loading="lazy" decoding="async"></figure>
-          <figure class="collage-card" style="--ratio: 16 / 10;"><img src="images/85.jpg" alt="La pareja abrazada sonriendo en una toma horizontal elegante." loading="lazy" decoding="async"></figure>
-          <figure class="collage-card" style="--ratio: 3 / 4;"><img src="images/151.jpg" alt="Primer plano de Alejandro y Alejandra compartiendo una mirada especial." loading="lazy" decoding="async"></figure>
-          <figure class="collage-card" style="--ratio: 5 / 4;"><img src="images/37.jpg" alt="Alejandro y Alejandra posando juntos en una fotografía artística." loading="lazy" decoding="async"></figure>
-          <figure class="collage-card" style="--ratio: 4 / 5;"><img src="images/194.jpg" alt="Momento natural de la pareja durante su sesión de compromiso." loading="lazy" decoding="async"></figure>
-          <figure class="collage-card" style="--ratio: 16 / 10;"><img src="images/14.jpg" alt="Toma horizontal de la pareja en exteriores con luz suave." loading="lazy" decoding="async"></figure>
-          <figure class="collage-card" style="--ratio: 3 / 4;"><img src="images/167.jpg" alt="Retrato vertical de Alejandro y Alejandra en pose romántica." loading="lazy" decoding="async"></figure>
+          <figure class="collage-card"><img src="images/47.jpg" alt="Alejandro y Alejandra en retrato romántico durante su sesión." loading="lazy" decoding="async"></figure>
+          <figure class="collage-card"><img src="images/85 (1).jpg" alt="La pareja abrazada sonriendo en una toma horizontal elegante." loading="lazy" decoding="async"></figure>
+          <figure class="collage-card"><img src="images/151.jpg" alt="Primer plano de Alejandro y Alejandra compartiendo una mirada especial." loading="lazy" decoding="async"></figure>
+          <figure class="collage-card"><img src="images/37.jpg" alt="Alejandro y Alejandra posando juntos en una fotografía artística." loading="lazy" decoding="async"></figure>
+          <figure class="collage-card"><img src="images/194.jpg" alt="Momento natural de la pareja durante su sesión de compromiso." loading="lazy" decoding="async"></figure>
+          <figure class="collage-card"><img src="images/14.jpg" alt="Toma horizontal de la pareja en exteriores con luz suave." loading="lazy" decoding="async"></figure>
+          <figure class="collage-card"><img src="images/167.jpg" alt="Retrato vertical de Alejandro y Alejandra en pose romántica." loading="lazy" decoding="async"></figure>
+          <figure class="collage-card"><img src="images/200.jpg" alt="Alejandro y Alejandra compartiendo un momento especial durante su sesión de fotos." loading="lazy" decoding="async"></figure>
         </div>
       </div>
     </section>
