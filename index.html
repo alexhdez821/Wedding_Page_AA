@@ -1544,6 +1544,35 @@
       text-align: left;
     }
 
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 900ms ease, transform 900ms ease;
+      will-change: opacity, transform;
+    }
+
+    .reveal.reveal-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .reveal-scale {
+      opacity: 0;
+      transform: translateY(12px) scale(0.96);
+      transition: opacity 1000ms ease, transform 1000ms ease;
+      will-change: opacity, transform;
+    }
+
+    .reveal-scale.reveal-visible {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+
+    .reveal-delay-1 { transition-delay: 120ms; }
+    .reveal-delay-2 { transition-delay: 240ms; }
+    .reveal-delay-3 { transition-delay: 360ms; }
+    .reveal-delay-4 { transition-delay: 480ms; }
+
     .timeline {
       display: grid;
       gap: 18px;
@@ -1857,6 +1886,16 @@
         margin-bottom: 0.95rem;
       }
     }
+
+    @media (prefers-reduced-motion: reduce) {
+      .reveal,
+      .reveal-scale {
+        opacity: 1;
+        transform: none;
+        transition: none;
+        will-change: auto;
+      }
+    }
   </style>
 </head>
 <body>
@@ -1914,8 +1953,8 @@
     <section class="section hero" id="hero">
       <div class="hero-frame" aria-hidden="true"></div>
       <div class="container">
-        <div class="hero-content">
-          <div class="hero-brand-stack">
+        <div class="hero-content reveal">
+          <div class="hero-brand-stack reveal reveal-delay-1">
             <img class="hero-aa-logo" src="./images/New Website Logo.png" alt="Alejandro y Alejandra monogram">
             <div class="hero-names">ALEJANDRO &amp; ALEJANDRA</div>
             <div class="hero-date">17 OCTUBRE 2026</div>
@@ -1928,9 +1967,9 @@
     <section class="section greeting-section" id="saludo">
       <div class="container">
         <div class="greeting-wrapper">
-          <div class="greeting-content">
-            <h2 class="greeting-title">¡Estás invitado!</h2>
-            <div class="greeting-copy">
+          <div class="greeting-content reveal">
+            <h2 class="greeting-title reveal reveal-delay-1">¡Estás invitado!</h2>
+            <div class="greeting-copy reveal reveal-delay-2">
               <p>Con la bendición de Dios<br>
               y en compañía de nuestros seres queridos,</p>
 
@@ -1945,9 +1984,9 @@
               queremos compartir contigo este día tan especial<br>
               en el que uniremos nuestros corazones ante Su presencia.</p>
             </div>
-            <p class="greeting-date">Sábado 17 de Octubre de 2026</p>
+            <p class="greeting-date reveal reveal-delay-3">Sábado 17 de Octubre de 2026</p>
           </div>
-          <figure class="greeting-image">
+          <figure class="greeting-image reveal-scale reveal-delay-2">
             <img src="./images/784E6B64-AB33-4F6B-B3EB-C94B731F4558.png" alt="Alejandro y Alejandra" />
           </figure>
         </div>
@@ -1957,7 +1996,7 @@
 
     <section class="section countdown-section" id="countdown">
       <div class="container">
-        <div class="countdown-shell">
+        <div class="countdown-shell reveal-scale">
           <div class="count-grid" id="countdownGrid" aria-label="Tiempo restante para la boda">
             <div class="count-unit">
               <span class="count-number" id="days">--</span>
@@ -1987,7 +2026,7 @@
     <section class="section content-section" id="historia">
       <div class="container">
         <div class="history-wrapper">
-          <figure class="history-image">
+          <figure class="history-image reveal-scale">
             <div class="history-slideshow">
               <button class="history-nav prev" id="historyPrev" type="button" aria-label="Foto anterior">&#10094;</button>
               <img id="historySlideImage" src="./images/NH_1.jpg" alt="Nuestra historia - foto 1" />
@@ -1997,9 +2036,9 @@
               Nuestro comienzo: una foto que nos recuerda los primeros momentos de nuestra historia.
             </figcaption>
           </figure>
-          <div class="history-content">
-            <h2 class="section-title story-title">NUESTRA HISTORIA</h2>
-            <div class="section-copy story-text">
+          <div class="history-content reveal reveal-delay-1">
+            <h2 class="section-title story-title reveal reveal-delay-1">NUESTRA HISTORIA</h2>
+            <div class="section-copy story-text reveal reveal-delay-2">
               <p>Nuestra historia comenzó con un sencillo mensaje de “Feliz Cumpleaños” que Alejandro me envió el 16 de marzo de 2024. Lo que parecía un pequeño detalle se convirtió, sin que lo imagináramos, en el inicio de una historia que Dios ya estaba escribiendo para nosotros.</p>
 
               <p>Desde entonces, entre pláticas, risas, oraciones y momentos compartidos, fuimos descubriendo que nuestras vidas comenzaban a encontrarse de una manera especial. Nuestra fe, nuestras raíces y nuestros sueños nos hicieron sentir que Dios nos guiaba el uno hacia el otro.</p>
@@ -2017,27 +2056,27 @@
 
     <section id="detalles" class="details-section guest-guide-section page-section section">
       <div class="container guest-guide-content">
-        <div class="details-panel">
-          <h2 class="details-title guest-guide-title">
+        <div class="details-panel reveal">
+          <h2 class="details-title guest-guide-title reveal reveal-delay-1">
             <span class="title-serif guest-guide-title__serif">GUIA</span>
             <span class="title-script guest-guide-title__script">para nuestros</span>
             <span class="title-serif guest-guide-title__serif">INVITADOS</span>
           </h2>
 
-          <div class="details-block">
+          <div class="details-block reveal reveal-delay-2">
             <h3 class="hotel-section-title">Dónde Hospedarse</h3>
             <p>
               Para nuestros invitados que nos acompañan desde fuera, queremos compartir algunas opciones de hospedaje cercanas al lugar de la recepción. No contamos con habitaciones reservadas, pero esperamos que estas recomendaciones les ayuden a encontrar una estancia cómoda y conveniente.
             </p>
 
-            <div class="details-buttons hotel-buttons">
-              <a href="https://www.marriott.com/en-us/hotels/phxde-delta-hotels-phoenix-mesa/overview/" class="details-button lace-card hotel-button" target="_blank" rel="noopener noreferrer">DELTA HOTELS BY MARRIOTT PHOENIX MESA</a>
-              <a href="https://www.hyatt.com/hyatt-place/en-US/phxzm-hyatt-place-phoenix-mesa?src=agn_koddi_crp_chico_ppc_22061088841_Conversion_Place_Google_Search_English_PHXZM_Mesa_Paid_Brand_CrossDevice_1x1_google_Koddi-TopUp-Evergreen-Brand_e_hyatt%20place%20phoenix%20mesa&gad_source=1&gad_campaignid=22061088841&gclid=CjwKCAjw5NvPBhAoEiwA_2egfnzCsEbgLWj4bPhCMuQ4aEaHjlPuWgAAyCZpl2w3og_k-y41baJevBoClmcQAvD_BwE" class="details-button lace-card hotel-button" target="_blank" rel="noopener noreferrer">HYATT PLACE PHOENIX/MESA</a>
-              <a href="https://www.marriott.com/en-us/hotels/phxww-sheraton-mesa-hotel-at-wrigleyville-west/overview/" class="details-button lace-card hotel-button" target="_blank" rel="noopener noreferrer">SHERATON MESA HOTEL AT WRIGLEYVILLE WEST</a>
+            <div class="details-buttons hotel-buttons reveal reveal-delay-2">
+              <a href="https://www.marriott.com/en-us/hotels/phxde-delta-hotels-phoenix-mesa/overview/" class="details-button lace-card hotel-button reveal-scale reveal-delay-1" target="_blank" rel="noopener noreferrer">DELTA HOTELS BY MARRIOTT PHOENIX MESA</a>
+              <a href="https://www.hyatt.com/hyatt-place/en-US/phxzm-hyatt-place-phoenix-mesa?src=agn_koddi_crp_chico_ppc_22061088841_Conversion_Place_Google_Search_English_PHXZM_Mesa_Paid_Brand_CrossDevice_1x1_google_Koddi-TopUp-Evergreen-Brand_e_hyatt%20place%20phoenix%20mesa&gad_source=1&gad_campaignid=22061088841&gclid=CjwKCAjw5NvPBhAoEiwA_2egfnzCsEbgLWj4bPhCMuQ4aEaHjlPuWgAAyCZpl2w3og_k-y41baJevBoClmcQAvD_BwE" class="details-button lace-card hotel-button reveal-scale reveal-delay-2" target="_blank" rel="noopener noreferrer">HYATT PLACE PHOENIX/MESA</a>
+              <a href="https://www.marriott.com/en-us/hotels/phxww-sheraton-mesa-hotel-at-wrigleyville-west/overview/" class="details-button lace-card hotel-button reveal-scale reveal-delay-3" target="_blank" rel="noopener noreferrer">SHERATON MESA HOTEL AT WRIGLEYVILLE WEST</a>
             </div>
           </div>
 
-          <div class="details-block">
+          <div class="details-block reveal reveal-delay-2">
             <h3 class="gifts-section-title">Regalos</h3>
             <p>
               Su presencia en nuestra boda es el regalo más importante para nosotros.
@@ -2047,7 +2086,7 @@
               Gracias por acompañarnos y por ser parte de este día tan especial!
             </p>
 
-            <div class="zelle-card lace-card" aria-label="Información de aportación por Zelle">
+            <div class="zelle-card lace-card reveal-scale reveal-delay-3" aria-label="Información de aportación por Zelle">
               <span class="zelle-card-label">Zelle</span>
               <p class="zelle-card-email zelle-email gift-email">alejandroyalejandraboda@gmail.com</p>
             </div>
@@ -2059,34 +2098,34 @@
     <section class="section faq-section" id="preguntas-frecuentes">
       <div class="container">
         <div class="faq-wrapper">
-          <figure class="faq-photo">
+          <figure class="faq-photo reveal-scale">
             <img src="./images/64.jpeg" alt="Alejandro y Alejandra en retrato" loading="lazy" decoding="async">
           </figure>
-          <div class="faq-content">
-            <h2 class="faq-title">Preguntas Frecuentes</h2>
+          <div class="faq-content reveal reveal-delay-1">
+            <h2 class="faq-title reveal reveal-delay-1">Preguntas Frecuentes</h2>
             <div class="faq-list">
-              <article class="faq-item">
+              <article class="faq-item reveal reveal-delay-1">
                 <button class="faq-question" type="button" aria-expanded="false">
                   <span>No puedo ver los detalles ni los horarios del evento. ¿Dónde los encuentro?</span>
                   <span class="faq-icon" aria-hidden="true">+</span>
                 </button>
                 <div class="faq-answer"><p>Todos los detalles del evento, incluyendo horarios y ubicación, serán revelados después de confirmar su asistencia. Al completar su RSVP, recibirán una imagen con la información completa de nuestra boda, la cual podrán guardar en su teléfono para tenerla a la mano.</p></div>
               </article>
-              <article class="faq-item">
+              <article class="faq-item reveal reveal-delay-3">
                 <button class="faq-question" type="button" aria-expanded="false">
                   <span>¿Puedo llevar más invitados de los que aparecen en mi invitación?</span>
                   <span class="faq-icon" aria-hidden="true">+</span>
                 </button>
                 <div class="faq-answer"><p>Con mucho gusto pueden comunicarse personalmente con nosotros o escribirnos a alejandroyalejandra@gmail.com para solicitar invitados adicionales. Aunque no podemos garantizar que haya espacios disponibles, haremos lo posible por acomodarlos si la capacidad nos lo permite.</p></div>
               </article>
-              <article class="faq-item">
+              <article class="faq-item reveal reveal-delay-4">
                 <button class="faq-question" type="button" aria-expanded="false">
                   <span>¿Qué pasa si no confirmo mi asistencia antes de la fecha límite?</span>
                   <span class="faq-icon" aria-hidden="true">+</span>
                 </button>
                 <div class="faq-answer"><p>Debido a que contamos con un número limitado de lugares, les pedimos de corazón que confirmen su asistencia antes del 30 de Junio, 2026. Si no recibimos su RSVP a tiempo, es posible que ese lugar sea ofrecido a otro invitado. Si por alguna razón no pudieron confirmar a tiempo, por favor comuníquense directamente con nosotros y con gusto revisaremos si aún es posible acomodarlos.</p></div>
               </article>
-              <article class="faq-item">
+              <article class="faq-item reveal reveal-delay-2">
                 <button class="faq-question" type="button" aria-expanded="false">
                   <span>¿Tienen bloques de habitaciones en los hoteles recomendados?</span>
                   <span class="faq-icon" aria-hidden="true">+</span>
@@ -2102,27 +2141,27 @@
     <section class="section collage-section" id="fotos">
       <div class="container">
         <div class="engagement-collage" aria-label="Galería de fotos de compromiso">
-          <figure class="collage-card"><img src="images/47.jpg" alt="Alejandro y Alejandra en retrato romántico durante su sesión." loading="lazy" decoding="async"></figure>
-          <figure class="collage-card"><img src="images/85 (1).jpg" alt="La pareja abrazada sonriendo en una toma horizontal elegante." loading="lazy" decoding="async"></figure>
-          <figure class="collage-card"><img src="images/151.jpg" alt="Primer plano de Alejandro y Alejandra compartiendo una mirada especial." loading="lazy" decoding="async"></figure>
-          <figure class="collage-card"><img src="images/37.jpg" alt="Alejandro y Alejandra posando juntos en una fotografía artística." loading="lazy" decoding="async"></figure>
-          <figure class="collage-card"><img src="images/194.jpg" alt="Momento natural de la pareja durante su sesión de compromiso." loading="lazy" decoding="async"></figure>
-          <figure class="collage-card"><img src="images/14.jpg" alt="Toma horizontal de la pareja en exteriores con luz suave." loading="lazy" decoding="async"></figure>
-          <figure class="collage-card"><img src="images/167.jpg" alt="Retrato vertical de Alejandro y Alejandra en pose romántica." loading="lazy" decoding="async"></figure>
-          <figure class="collage-card"><img src="images/200.jpg" alt="Alejandro y Alejandra compartiendo un momento especial durante su sesión de fotos." loading="lazy" decoding="async"></figure>
+          <figure class="collage-card reveal-scale reveal-delay-1"><img src="images/47.jpg" alt="Alejandro y Alejandra en retrato romántico durante su sesión." loading="lazy" decoding="async"></figure>
+          <figure class="collage-card reveal-scale reveal-delay-2"><img src="images/85 (1).jpg" alt="La pareja abrazada sonriendo en una toma horizontal elegante." loading="lazy" decoding="async"></figure>
+          <figure class="collage-card reveal-scale reveal-delay-3"><img src="images/151.jpg" alt="Primer plano de Alejandro y Alejandra compartiendo una mirada especial." loading="lazy" decoding="async"></figure>
+          <figure class="collage-card reveal-scale reveal-delay-4"><img src="images/37.jpg" alt="Alejandro y Alejandra posando juntos en una fotografía artística." loading="lazy" decoding="async"></figure>
+          <figure class="collage-card reveal-scale reveal-delay-1"><img src="images/194.jpg" alt="Momento natural de la pareja durante su sesión de compromiso." loading="lazy" decoding="async"></figure>
+          <figure class="collage-card reveal-scale reveal-delay-2"><img src="images/14.jpg" alt="Toma horizontal de la pareja en exteriores con luz suave." loading="lazy" decoding="async"></figure>
+          <figure class="collage-card reveal-scale reveal-delay-3"><img src="images/167.jpg" alt="Retrato vertical de Alejandro y Alejandra en pose romántica." loading="lazy" decoding="async"></figure>
+          <figure class="collage-card reveal-scale reveal-delay-4"><img src="images/200.jpg" alt="Alejandro y Alejandra compartiendo un momento especial durante su sesión de fotos." loading="lazy" decoding="async"></figure>
         </div>
       </div>
     </section>
 
     <section class="section content-section" id="confirmar">
       <div class="container">
-        <div class="content-inner">
-          <h2 class="section-title">Confirmar asistencia</h2>
-          <p class="section-copy">
+        <div class="content-inner reveal">
+          <h2 class="section-title reveal reveal-delay-1">Confirmar asistencia</h2>
+          <p class="section-copy reveal reveal-delay-2">
             Nos haría muchísima ilusión contar con ustedes en este día tan importante.
           </p>
 
-          <a class="confirm-button" href="rsvp.html">Ir a confirmar</a>
+          <a class="confirm-button reveal reveal-delay-3" href="rsvp.html">Ir a confirmar</a>
         </div>
       </div>
     </section>
@@ -2357,6 +2396,31 @@
         trigger.setAttribute("aria-expanded", String(!isOpen));
         answer.style.maxHeight = isOpen ? "0px" : `${answer.scrollHeight}px`;
       });
+    });
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const revealElements = document.querySelectorAll(".reveal, .reveal-scale");
+      if (!revealElements.length) return;
+
+      const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      if (prefersReducedMotion) {
+        revealElements.forEach((element) => element.classList.add("reveal-visible"));
+        return;
+      }
+
+      const observer = new IntersectionObserver((entries, observerInstance) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("reveal-visible");
+            observerInstance.unobserve(entry.target);
+          }
+        });
+      }, {
+        threshold: 0.16,
+        rootMargin: "0px 0px -8% 0px"
+      });
+
+      revealElements.forEach((element) => observer.observe(element));
     });
 
   </script>
