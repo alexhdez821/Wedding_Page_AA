@@ -1070,11 +1070,19 @@
     .greeting-content {
       max-width: 620px;
       text-align: center;
-      background-image: url("images/lace 1.jpg");
+      background-image: url("images/Lace%201.jpg");
+      background-color: transparent;
       background-repeat: no-repeat;
       background-position: center;
       background-size: contain;
       padding: clamp(2.4rem, 5vw, 3.4rem) clamp(1.7rem, 4.5vw, 3rem);
+      position: relative;
+      z-index: 1;
+    }
+
+
+    .greeting-content > *,
+    .greeting-copy > * {
       position: relative;
       z-index: 1;
     }
@@ -1790,7 +1798,14 @@
         aspect-ratio: 4 / 5;
       }
 
-      .greeting-title {
+  
+    .greeting-content > *,
+    .greeting-copy > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    .greeting-title {
         font-size: clamp(3.2rem, 16vw, 4.6rem);
         margin-bottom: 1rem;
       }
