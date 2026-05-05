@@ -10,8 +10,8 @@ function normalizeName(value) {
     .toLowerCase();
 }
 
-function normalizeEmail(value) {
-  return value.trim().toLowerCase();
+function normalizePhone(value) {
+  return value.replace(/\D/g, "").trim();
 }
 
 function getResponseGroupKey(guest) {
@@ -67,12 +67,12 @@ function getFriendlyRsvpInsertError(error) {
   const combined = `${message} ${details}`;
 
   if (code === "23505" || combined.includes("duplicate key")) {
-    return "Parece que tu RSVP ya había sido registrado. Recarga la página para validar tu correo y ver los detalles.";
+    return "Parece que tu RSVP ya había sido registrado. Recarga la página para validar tu teléfono y ver los detalles.";
   }
 
   if (code === "42703" || combined.includes("column") || combined.includes("does not exist")) {
-    if (combined.includes("email")) {
-      return "Tu RSVP no se pudo guardar porque falta configurar la columna de correo en la base de datos. Por favor avísanos para corregirlo.";
+    if (combined.includes("phone")) {
+      return "Tu RSVP no se pudo guardar porque falta configurar la columna de teléfono en la base de datos. Por favor avísanos para corregirlo.";
     }
     if (combined.includes("additional_guest_names")) {
       return "Tu RSVP no se pudo guardar porque falta configurar invitados adicionales en la base de datos. Por favor avísanos para corregirlo.";
@@ -234,7 +234,7 @@ function attachSavePhotoHandlers(resultContainer) {
 function renderVerifiedDetailsCard(resultContainer) {
   resultContainer.innerHTML += `
     <div class="result-card success" role="status" aria-live="polite">
-      <h3>✅ Correo verificado</h3>
+      <h3>✅ Teléfono verificado</h3>
       <p>Ya puedes abrir los detalles en español o en inglés.</p>
       ${getDetailsButtonsMarkup()}
     </div>
@@ -244,23 +244,23 @@ function renderVerifiedDetailsCard(resultContainer) {
 }
 
 function renderAlreadySubmittedMessage(resultContainer, guest, responseRecord, supabase) {
-  const hasEmailOnRecord = Boolean(responseRecord?.email);
+  const hasPhoneOnRecord = Boolean(responseRecord?.phone);
   resultContainer.innerHTML = `
     <div class="result-card warning" role="status" aria-live="polite">
-      <p>Tu RSVP ya fue recibido. Si deseas ver los detalles, ingresa tu correo.</p>
+      <p>Tu RSVP ya fue recibido. Si deseas ver los detalles, ingresa tu teléfono.</p>
     </div>
 
-    <form id="emailVerificationForm" class="rsvp-form" novalidate>
+    <form id="phoneVerificationForm" class="rsvp-form" novalidate>
       <div>
-        <label for="verificationEmail">Correo electrónico</label>
-        <input id="verificationEmail" name="verificationEmail" type="email" autocomplete="email" required placeholder="tu-correo@ejemplo.com" />
+        <label for="verificationPhone">Número de teléfono</label>
+        <input id="verificationPhone" name="verificationPhone" type="tel" autocomplete="tel" inputmode="tel" required placeholder="(555) 123-4567" />
       </div>
-      <button class="btn btn-primary" type="submit">Validar correo y mostrar detalles</button>
+      <button class="btn btn-primary" type="submit">Validar teléfono y mostrar detalles</button>
       <p id="verificationError" class="form-error" aria-live="polite"></p>
     </form>
   `;
 
-  const verificationForm = document.getElementById("emailVerificationForm");
+  const verificationForm = document.getElementById("phoneVerificationForm");
   const verificationError = document.getElementById("verificationError");
 
   if (!verificationForm || !verificationError) return;
@@ -269,25 +269,25 @@ function renderAlreadySubmittedMessage(resultContainer, guest, responseRecord, s
     event.preventDefault();
     verificationError.textContent = "";
 
-    const emailInput = document.getElementById("verificationEmail");
-    const rawEmail = emailInput?.value ?? "";
-    const email = normalizeEmail(rawEmail);
+    const phoneInput = document.getElementById("verificationPhone");
+    const rawPhone = phoneInput?.value ?? "";
+    const phone = normalizePhone(rawPhone);
 
-    if (!email || !email.includes("@")) {
-      verificationError.textContent = "Por favor ingresa un correo válido.";
+    if (!phone || phone.length < 10) {
+      verificationError.textContent = "Por favor ingresa un teléfono válido (mínimo 10 dígitos).";
       return;
     }
 
-    // If the RSVP was created before we started collecting emails, let the guest register it once.
-    if (!hasEmailOnRecord) {
+    // If the RSVP was created before we started collecting phone numbers, let the guest register it once.
+    if (!hasPhoneOnRecord) {
       const { error: updateError } = await supabase
         .from("rsvp_responses")
-        .update({ email })
+        .update({ phone })
         .eq("id", responseRecord.id);
 
       if (updateError) {
-        console.error("Email registration for existing RSVP failed", updateError);
-        verificationError.textContent = "No se pudo registrar tu correo en este momento. Inténtalo de nuevo.";
+        console.error("Phone registration for existing RSVP failed", updateError);
+        verificationError.textContent = "No se pudo registrar tu teléfono en este momento. Inténtalo de nuevo.";
         return;
       }
 
@@ -296,8 +296,8 @@ function renderAlreadySubmittedMessage(resultContainer, guest, responseRecord, s
       return;
     }
 
-    if (normalizeEmail(responseRecord.email) !== email) {
-      verificationError.textContent = "Ese correo no coincide con el que usamos en tu RSVP.";
+    if (normalizePhone(responseRecord.phone || "") !== phone) {
+      verificationError.textContent = "Ese teléfono no coincide con el que usamos en tu RSVP.";
       return;
     }
 
@@ -402,7 +402,7 @@ export function initRsvpFlow() {
 
       const { data: existingResponse, error: responseError } = await supabase
         .from("rsvp_responses")
-        .select("id, guest_id, email")
+        .select("id, guest_id, phone")
         .eq("response_group", responseGroup)
         .maybeSingle();
 
@@ -485,9 +485,9 @@ export function initRsvpFlow() {
               .join("")}
           </div>
 
-          <div id="rsvpEmailWrap" hidden>
-            <label for="rsvpEmail">Correo para validar tu RSVP más adelante</label>
-            <input id="rsvpEmail" name="rsvpEmail" type="email" autocomplete="email" placeholder="tu-correo@ejemplo.com" />
+          <div id="rsvpPhoneWrap" hidden>
+            <label for="rsvpPhone">Teléfono para validar tu RSVP más adelante</label>
+            <input id="rsvpPhone" name="rsvpPhone" type="tel" autocomplete="tel" inputmode="tel" placeholder="(555) 123-4567" />
           </div>
 
           <button class="btn btn-primary" type="submit">Enviar RSVP</button>
@@ -503,14 +503,14 @@ export function initRsvpFlow() {
       const additionalGuestsWrap = document.getElementById("additionalGuestsWrap");
       const additionalGuestInputs = Array.from(responseForm?.querySelectorAll('input[name^="additionalGuest"]') || []);
       const needsPlusOneInputs = responseForm?.querySelectorAll('input[name="needsPlusOne"]');
-      const rsvpEmailWrap = document.getElementById("rsvpEmailWrap");
-      const rsvpEmailInput = document.getElementById("rsvpEmail");
+      const rsvpPhoneWrap = document.getElementById("rsvpPhoneWrap");
+      const rsvpPhoneInput = document.getElementById("rsvpPhone");
       const attendanceInputs = responseForm?.querySelectorAll('input[name="attending"]');
       const groupAttendanceInputSets = invitedGuests.map((_, index) =>
         responseForm?.querySelectorAll(`input[name="pairAttending${index}"]`)
       );
 
-      if (!responseForm || !submitError || !rsvpEmailInput) {
+      if (!responseForm || !submitError || !rsvpPhoneInput) {
         lookupError.textContent = "El formulario de RSVP no está disponible temporalmente. Recarga la página e inténtalo de nuevo.";
         return;
       }
@@ -524,19 +524,19 @@ export function initRsvpFlow() {
             ? 1
             : 0;
         const isAttending = attendingCount > 0;
-        const wasEmailHidden = rsvpEmailWrap?.hidden;
+        const wasPhoneHidden = rsvpPhoneWrap?.hidden;
         const wasAdditionalGuestsHidden = additionalGuestsWrap?.hidden;
 
-        if (rsvpEmailWrap && rsvpEmailInput) {
-          rsvpEmailWrap.hidden = !isAttending;
-          rsvpEmailInput.required = isAttending;
+        if (rsvpPhoneWrap && rsvpPhoneInput) {
+          rsvpPhoneWrap.hidden = !isAttending;
+          rsvpPhoneInput.required = isAttending;
 
           if (!isAttending) {
-            rsvpEmailInput.value = "";
+            rsvpPhoneInput.value = "";
           }
 
-          if (wasEmailHidden && !rsvpEmailWrap.hidden) {
-            focusRevealedQuestion(rsvpEmailWrap, rsvpEmailInput);
+          if (wasPhoneHidden && !rsvpPhoneWrap.hidden) {
+            focusRevealedQuestion(rsvpPhoneWrap, rsvpPhoneInput);
           }
         }
 
@@ -591,7 +591,7 @@ export function initRsvpFlow() {
         const attendingValue = responseForm.querySelector('input[name="attending"]:checked')?.value;
         let guestCount = attendingValue === "true" ? 1 : 0;
         let normalizedAttending = guestCount > 0;
-        const rsvpEmail = normalizeEmail(rsvpEmailInput.value || "");
+        const rsvpPhone = normalizePhone(rsvpPhoneInput.value || "");
 
         if (isGroupInvite) {
           const groupSelections = invitedGuests.map((_, index) =>
@@ -638,14 +638,14 @@ export function initRsvpFlow() {
 
         guestCount += additionalGuestNames.length;
 
-        if ((!rsvpEmail || !rsvpEmail.includes("@")) && normalizedAttending) {
-          submitError.textContent = "Por favor ingresa un correo válido.";
+        if ((!rsvpPhone || rsvpPhone.length < 10) && normalizedAttending) {
+          submitError.textContent = "Por favor ingresa un teléfono válido (mínimo 10 dígitos).";
           return;
         }
 
         const { data: duplicateResponse, error: duplicateLookupError } = await supabase
           .from("rsvp_responses")
-          .select("id, guest_id, email")
+          .select("id, guest_id, phone")
           .eq("response_group", responseGroup)
           .maybeSingle();
 
@@ -677,7 +677,7 @@ export function initRsvpFlow() {
           attending: normalizedAttending,
           guest_count: guestCount,
           plus_one_name: isSinglePlusOneResponse ? additionalGuestNames[0] : null,
-          email: normalizedAttending ? rsvpEmail : null,
+          phone: normalizedAttending ? rsvpPhone : null,
           submitted_at: new Date().toISOString()
         };
         if (additionalGuestNames.length > 0 && !isSinglePlusOneResponse) {
@@ -696,7 +696,7 @@ export function initRsvpFlow() {
           ? "¡Gracias! Tu RSVP ha sido guardado."
           : "Gracias por avisarnos 💛";
         const responseCopy = normalizedAttending
-          ? "Recibimos tu respuesta y usamos tu correo para validar el acceso a los detalles."
+          ? "Recibimos tu respuesta y usamos tu teléfono para validar el acceso a los detalles."
           : "Te vamos a extrañar en nuestro gran día, pero agradecemos mucho tu cariño y buenos deseos.";
         const confirmedGuestLabel = guestCount === 1 ? "persona" : "personas";
         const confirmedGuestMessage = normalizedAttending
