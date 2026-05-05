@@ -1700,13 +1700,14 @@
       position: relative;
       width: 100%;
       min-height: 100vh;
+      min-height: 100svh;
       background-image: url("./images/73.jpg");
       background-size: cover;
-      background-position: center;
+      background-position: center center;
       background-repeat: no-repeat;
       filter: none;
       display: flex;
-      align-items: center;
+      align-items: stretch;
       justify-content: center;
       text-align: center;
       overflow: hidden;
@@ -1734,18 +1735,32 @@
     #confirmar .confirmar-content {
       position: relative;
       z-index: 2;
-      width: min(900px, 92%);
+      width: 100%;
+      min-height: 100vh;
+      min-height: 100svh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
       margin: 0 auto;
-      padding: 2.2rem 1.25rem;
+      padding: 4rem 1.5rem 3rem;
+      box-sizing: border-box;
       color: #fff;
+    }
+
+    #confirmar .confirmar-text-group {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 0;
     }
 
     #confirmar .confirmar-date {
       margin: 0 0 1.15rem;
       font-family: "Cormorant Garamond", serif;
-      font-size: clamp(0.85rem, 1.4vw, 1.08rem);
+      font-size: clamp(0.85rem, 2vw, 1rem);
       font-weight: 500;
-      letter-spacing: 0.22em;
+      letter-spacing: 0.08em;
       text-transform: uppercase;
       color: rgba(255, 255, 255, 0.9);
     }
@@ -1753,7 +1768,7 @@
     #confirmar .confirmar-title {
       margin: 0 0 2rem;
       font-family: "Cormorant Garamond", serif;
-      font-size: clamp(2rem, 4.5vw, 4.2rem);
+      font-size: clamp(2rem, 5vw, 3.6rem);
       font-weight: 400;
       line-height: 1.05;
       letter-spacing: -0.02em;
@@ -1763,6 +1778,11 @@
 
     #confirmar .confirmar-title span {
       display: block;
+    }
+
+    #confirmar .confirm-button {
+      margin-top: 0;
+      margin-bottom: 0;
     }
 
     .confirm-button {
@@ -2027,23 +2047,22 @@
       }
 
       #confirmar.confirmar-section {
-        min-height: 100svh;
-        background-position: center;
+        background-position: center 38%;
       }
 
       #confirmar .confirmar-content {
-        padding: 1.6rem 1rem;
+        padding: 2.5rem 1.25rem;
       }
 
       #confirmar .confirmar-date {
-        margin-bottom: 0.9rem;
-        font-size: 0.84rem;
+        margin-bottom: 0.6rem;
+        font-size: 0.8rem;
       }
 
       #confirmar .confirmar-title {
-        font-size: clamp(2rem, 10vw, 3.2rem);
+        font-size: clamp(1.8rem, 8vw, 2.8rem);
         line-height: 1.05;
-        margin-bottom: 1.8rem;
+        margin-bottom: 0;
       }
 
       .confirm-button {
@@ -2051,6 +2070,14 @@
         padding: 0.82rem 2rem;
         font-size: 0.68rem;
         letter-spacing: 0.26em;
+      }
+    }
+
+    @media (min-width: 769px) {
+      #confirmar .confirmar-content {
+        justify-content: center;
+        gap: 2rem;
+        padding: 3rem 2rem;
       }
     }
 
@@ -2333,11 +2360,13 @@
 
     <section class="section confirmar-section" id="confirmar">
       <div class="confirmar-content reveal">
-        <p class="confirmar-date reveal reveal-delay-1">17.10.2026</p>
-        <h2 class="confirmar-title reveal reveal-delay-2">
-          <span>ESPERAMOS</span>
-          <span>TU PRESENCIA</span>
-        </h2>
+        <div class="confirmar-text-group">
+          <p class="confirmar-date reveal reveal-delay-1">17.10.2026</p>
+          <h2 class="confirmar-title reveal reveal-delay-2">
+            <span>ESPERAMOS</span>
+            <span>TU PRESENCIA</span>
+          </h2>
+        </div>
         <a class="confirm-button reveal reveal-delay-3" href="rsvp.html">Ir a confirmar</a>
       </div>
     </section>
