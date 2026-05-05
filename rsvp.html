@@ -851,28 +851,27 @@
               <h3>Busca tu invitación</h3>
 
               <p class="inline-note">
-                Ingresa tu nombre y apellido como aparecen en tu invitación.
+                Ingresa tu país y número de teléfono como aparecen en tu invitación.
               </p>
 
               <div class="form-grid">
                 <div>
-                  <label for="lookupFirstName">Nombre</label>
-                  <input
-                    id="lookupFirstName"
-                    name="lookupFirstName"
-                    type="text"
-                    autocomplete="given-name"
-                    required
-                  >
+                  <label for="lookupCountry">País</label>
+                  <select id="lookupCountry" name="lookupCountry" required>
+                    <option value="US">United States +1</option>
+                    <option value="MX">México +52</option>
+                  </select>
                 </div>
 
                 <div>
-                  <label for="lookupLastName">Apellido</label>
+                  <label for="lookupPhone">Número de teléfono</label>
                   <input
-                    id="lookupLastName"
-                    name="lookupLastName"
-                    type="text"
-                    autocomplete="family-name"
+                    id="lookupPhone"
+                    name="lookupPhone"
+                    type="tel"
+                    inputmode="tel"
+                    autocomplete="tel"
+                    placeholder="Ej. 602 123 4567"
                     required
                   >
                 </div>

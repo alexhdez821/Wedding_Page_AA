@@ -1,17 +1,42 @@
 const WEDDING_DETAILS_IMAGE_URL_ES = "images/INVITACION_FINAL_ESPANOL.png";
 const WEDDING_DETAILS_IMAGE_URL_EN = "images/INVITACION_FINAL_INGLES.png";
 
-function normalizeName(value) {
-  return value
-    .trim()
-    .replace(/\s+/g, " ")
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .toLowerCase();
-}
-
 function normalizePhone(value) {
   return value.replace(/\D/g, "").trim();
+}
+
+function normalizePhoneToE164(rawPhone, country) {
+  if (!rawPhone || !country) return null;
+
+  let digits = rawPhone.replace(/\D/g, "");
+
+  if (digits.startsWith("00")) {
+    digits = digits.slice(2);
+  }
+
+  if (country === "US") {
+    if (digits.length === 11 && digits.startsWith("1")) {
+      digits = digits.slice(1);
+    }
+
+    if (digits.length !== 10) return null;
+    return `+1${digits}`;
+  }
+
+  if (country === "MX") {
+    if (digits.length === 12 && digits.startsWith("52")) {
+      digits = digits.slice(2);
+    }
+
+    if (digits.length === 13 && digits.startsWith("521")) {
+      digits = digits.slice(3);
+    }
+
+    if (digits.length !== 10) return null;
+    return `+52${digits}`;
+  }
+
+  return null;
 }
 
 function getResponseGroupKey(guest) {
@@ -315,6 +340,16 @@ export function initRsvpFlow() {
 
   if (!lookupForm || !resultContainer || !lookupError) return;
 
+  const lookupCountryInput = document.getElementById("lookupCountry");
+  const lookupPhoneInput = document.getElementById("lookupPhone");
+  const updateLookupPhonePlaceholder = () => {
+    if (!lookupPhoneInput) return;
+    lookupPhoneInput.placeholder =
+      lookupCountryInput?.value === "MX" ? "Ej. 664 123 4567" : "Ej. 602 123 4567";
+  };
+  lookupCountryInput?.addEventListener("change", updateLookupPhonePlaceholder);
+  updateLookupPhonePlaceholder();
+
   if (!supabase) {
     lookupError.textContent = "El servicio de RSVP no está disponible en este momento. Inténtalo más tarde.";
     return;
@@ -326,40 +361,28 @@ export function initRsvpFlow() {
     lookupError.textContent = "";
     resultContainer.innerHTML = "";
 
-    const firstNameInput = document.getElementById("lookupFirstName");
-    const lastNameInput = document.getElementById("lookupLastName");
+    const selectedCountry = lookupCountryInput?.value ?? "";
+    const rawLookupPhone = lookupPhoneInput?.value ?? "";
+    const normalizedLookupPhone = normalizePhoneToE164(rawLookupPhone, selectedCountry);
 
-    const firstName = firstNameInput?.value?.trim() ?? "";
-    const lastName = lastNameInput?.value?.trim() ?? "";
-
-    if (!firstName || !lastName) {
-      lookupError.textContent = "Por favor ingresa nombre y apellido.";
+    if (!selectedCountry || !normalizedLookupPhone) {
+      lookupError.textContent = "Por favor ingresa un teléfono válido para el país seleccionado.";
       return;
     }
 
-    const normalizedFirstName = normalizeName(firstName);
-    const normalizedLastName = normalizeName(lastName);
-
     try {
-      const { data: possibleGuests, error: guestError } = await supabase
+      const { data: guest, error: guestError } = await supabase
         .from("guest_list")
         .select("id, first_name, last_name, allowed_plus_one, max_guests, rsvp_pair_id")
         .eq("invited", true)
-        .ilike("first_name", firstName)
-        .ilike("last_name", lastName)
-        .limit(10);
+        .eq("phone", normalizedLookupPhone)
+        .maybeSingle();
 
       if (guestError) {
         console.error("Guest lookup failed", guestError);
         lookupError.textContent = getFriendlyLookupError(guestError);
         return;
       }
-
-      const guest = (possibleGuests || []).find(
-        (entry) =>
-          normalizeName(entry.first_name || "") === normalizedFirstName &&
-          normalizeName(entry.last_name || "") === normalizedLastName
-      );
 
       if (!guest) {
         setLookupNotFound(resultContainer);
