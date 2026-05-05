@@ -1696,20 +1696,97 @@
       }
     }
 
+    #confirmar.confirmar-section {
+      position: relative;
+      width: 100%;
+      min-height: 100vh;
+      background-image: url("./images/73.jpg");
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      overflow: hidden;
+      isolation: isolate;
+    }
+
+    #confirmar.confirmar-section::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.44);
+      z-index: 1;
+    }
+
+    #confirmar.confirmar-section::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: rgba(20, 20, 20, 0.12);
+      backdrop-filter: saturate(0.75) grayscale(0.35);
+      -webkit-backdrop-filter: saturate(0.75) grayscale(0.35);
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    #confirmar .confirmar-content {
+      position: relative;
+      z-index: 2;
+      width: min(900px, 92%);
+      margin: 0 auto;
+      padding: 2.2rem 1.25rem;
+      color: #fff;
+    }
+
+    #confirmar .confirmar-date {
+      margin: 0 0 1.15rem;
+      font-family: "Cormorant Garamond", serif;
+      font-size: clamp(0.85rem, 1.4vw, 1.08rem);
+      font-weight: 500;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    #confirmar .confirmar-title {
+      margin: 0 0 2.6rem;
+      font-family: "Cormorant Garamond", serif;
+      font-size: clamp(2.7rem, 8vw, 7rem);
+      font-weight: 400;
+      line-height: 0.9;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #fff;
+    }
+
+    #confirmar .confirmar-title span {
+      display: block;
+    }
+
     .confirm-button {
-      display: inline-block;
-      margin-top: 28px;
-      padding: 14px 26px;
-      border-radius: 999px;
-      background: var(--accent);
-      color: white;
-      font-weight: 600;
-      transition: background 0.2s ease, transform 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 0;
+      min-width: 170px;
+      padding: 0.9rem 2.45rem;
+      border-radius: 1px;
+      background: rgba(255, 252, 244, 0.96);
+      color: #2f261f;
+      font-family: "Cinzel", serif;
+      font-size: 0.74rem;
+      font-weight: 500;
+      letter-spacing: 0.32em;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: background 0.25s ease, transform 0.25s ease;
     }
 
     .confirm-button:hover {
-      background: var(--accent-dark);
-      transform: translateY(-1px);
+      background: #ffffff;
+      transform: translateY(-2px);
     }
 
     footer {
@@ -1947,6 +2024,33 @@
 
       .menu-drawer {
         padding-top: 20px;
+      }
+
+      #confirmar.confirmar-section {
+        min-height: 100svh;
+        background-position: center;
+      }
+
+      #confirmar .confirmar-content {
+        padding: 1.6rem 1rem;
+      }
+
+      #confirmar .confirmar-date {
+        margin-bottom: 0.9rem;
+        font-size: 0.84rem;
+      }
+
+      #confirmar .confirmar-title {
+        font-size: clamp(2.35rem, 15vw, 4.6rem);
+        line-height: 0.95;
+        margin-bottom: 2.2rem;
+      }
+
+      .confirm-button {
+        min-width: 152px;
+        padding: 0.82rem 2rem;
+        font-size: 0.68rem;
+        letter-spacing: 0.26em;
       }
     }
 
@@ -2227,16 +2331,14 @@
       </div>
     </section>
 
-    <section class="section content-section" id="confirmar">
-      <div class="container">
-        <div class="content-inner reveal">
-          <h2 class="section-title reveal reveal-delay-1">Confirmar asistencia</h2>
-          <p class="section-copy reveal reveal-delay-2">
-            Nos haría muchísima ilusión contar con ustedes en este día tan importante.
-          </p>
-
-          <a class="confirm-button reveal reveal-delay-3" href="rsvp.html">Ir a confirmar</a>
-        </div>
+    <section class="section confirmar-section" id="confirmar">
+      <div class="confirmar-content reveal">
+        <p class="confirmar-date reveal reveal-delay-1">17.10.2026</p>
+        <h2 class="confirmar-title reveal reveal-delay-2">
+          <span>ESPERAMOS</span>
+          <span>TU PRESENCIA</span>
+        </h2>
+        <a class="confirm-button reveal reveal-delay-3" href="rsvp.html">Ir a confirmar</a>
       </div>
     </section>
   </main>
