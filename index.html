@@ -1074,6 +1074,7 @@
     }
 
     .nuestra-historia-section {
+      position: relative;
       background-image: url("./images/linen1.png");
       background-repeat: no-repeat;
       background-position: center;
@@ -1293,6 +1294,8 @@
 
     .history-content,
     .nuestra-historia-text {
+      position: relative;
+      z-index: 1;
       grid-area: content;
       text-align: center;
       width: 100%;
@@ -1321,11 +1324,13 @@
     }
 
     .nuestra-historia-title-wrap {
+      position: relative;
+      z-index: 3;
       display: inline-flex;
       align-items: center;
       justify-content: center;
       align-self: center;
-      background-image: url("./images/emboss2.png");
+      background-image: url("./images/emboss 2.png");
       background-repeat: no-repeat;
       background-position: center;
       background-size: 100% 100%;
@@ -1337,6 +1342,8 @@
     }
 
     .nuestra-historia-title {
+      position: relative;
+      z-index: 4;
       margin: 0;
       text-align: center;
       display: inline-block;
