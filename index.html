@@ -636,6 +636,7 @@
       color: rgba(255, 255, 255, 0.99);
       line-height: 1.2;
       text-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
+      white-space: nowrap;
     }
 
     .hero-date {
@@ -669,8 +670,12 @@
 
       .hero-names {
         margin-bottom: clamp(8px, 2vw, 12px);
-        font-size: clamp(1.4rem, 7.6vw, 2.4rem);
+        font-size: clamp(1.2rem, 6.7vw, 2.4rem);
         letter-spacing: 0.14em;
+        white-space: nowrap;
+        max-width: 100%;
+        padding-inline: clamp(6px, 3vw, 14px);
+        box-sizing: border-box;
       }
 
       .hero-date {
