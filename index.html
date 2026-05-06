@@ -1326,33 +1326,40 @@
     .nuestra-historia-title-wrap {
       position: relative;
       z-index: 3;
-      display: inline-flex;
+      display: flex;
       align-items: center;
       justify-content: center;
       align-self: center;
-      background-image: url("./images/emboss 2.png");
-      background-repeat: no-repeat;
-      background-position: center;
-      background-size: 100% 100%;
-      width: min(100%, 700px);
-      min-width: 620px;
-      min-height: 160px;
-      padding: 1.5rem 4.25rem;
+      width: min(100%, 720px);
+      max-width: 100%;
+      min-height: 188px;
       margin: 0 auto 1.5rem;
       box-sizing: border-box;
+      overflow: visible;
+    }
+
+    .nuestra-historia-title-bg {
+      display: block;
+      width: min(100%, 720px);
+      height: auto;
+      object-fit: contain;
     }
 
     .nuestra-historia-title {
-      position: relative;
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
       z-index: 4;
       margin: 0;
       text-align: center;
-      display: inline-block;
-      align-self: center;
+      display: block;
       background: transparent;
       padding: 0;
       border-radius: 0;
       box-shadow: none;
+      width: 70%;
+      max-width: 70%;
     }
 
     .history-content .section-copy,
@@ -2104,10 +2111,18 @@
       }
 
       .nuestra-historia-title-wrap {
-        width: min(100%, 620px);
-        min-height: 160px;
-        padding: 1.5rem 3rem;
+        width: 100%;
+        min-height: 0;
         margin-bottom: 1.2rem;
+      }
+
+      .nuestra-historia-title-bg {
+        width: min(100%, 620px);
+      }
+
+      .nuestra-historia-title {
+        width: 72%;
+        max-width: 72%;
       }
 
       .history-image img {
@@ -2365,6 +2380,7 @@
           </figure>
           <div class="history-content nuestra-historia-text reveal reveal-delay-1">
             <div class="nuestra-historia-title-wrap reveal reveal-delay-1">
+              <img class="nuestra-historia-title-bg" src="./images/emboss 2.png" alt="" aria-hidden="true" />
               <h2 class="section-title story-title nuestra-historia-title">Un Amor Escrito Por Dios</h2>
             </div>
             <div class="section-copy story-text reveal reveal-delay-2">
