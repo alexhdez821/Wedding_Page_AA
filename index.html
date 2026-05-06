@@ -669,8 +669,12 @@
 
       .hero-names {
         margin-bottom: clamp(8px, 2vw, 12px);
-        font-size: clamp(1.4rem, 7.6vw, 2.4rem);
-        letter-spacing: 0.14em;
+        font-size: clamp(1.2rem, 6.8vw, 2.2rem);
+        letter-spacing: 0.1em;
+        white-space: nowrap;
+        max-width: 100%;
+        overflow: hidden;
+        text-overflow: clip;
       }
 
       .hero-date {
