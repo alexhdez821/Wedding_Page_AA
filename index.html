@@ -1960,11 +1960,13 @@
         max-width: min(100%, 540px);
         padding: clamp(1.7rem, 5.2vw, 2.15rem) clamp(1.1rem, 4.6vw, 1.55rem);
         background-size: 100% 100%;
+        text-align: center;
       }
 
       .greeting-content-inner {
-        width: min(79%, 460px);
+        width: min(76%, 430px);
         padding: clamp(1.95rem, 6.6vw, 2.4rem) clamp(0.2rem, 1vw, 0.45rem) clamp(1.95rem, 6vw, 2.4rem);
+        text-align: center;
       }
 
       .greeting-image img {
@@ -1981,14 +1983,20 @@
 
     .greeting-title {
         font-size: clamp(2.6rem, 13.2vw, 3.9rem);
-        line-height: 0.95;
+        line-height: 0.8;
         margin-bottom: 0.7rem;
+        text-align: center;
+      }
+
+      .greeting-title .greeting-title-line {
+        display: block;
       }
 
       .greeting-copy {
         max-width: min(100%, 300px);
         font-size: 0.79rem;
         line-height: 1.2;
+        text-align: center;
       }
 
       .greeting-copy p {
@@ -1999,6 +2007,8 @@
         margin-top: 0.7rem;
         font-size: clamp(1.28rem, 6.9vw, 1.72rem);
         line-height: 1;
+        font-family: "Pinyon Script", cursive;
+        text-align: center;
       }
 
       .greeting-time {
@@ -2212,7 +2222,7 @@
         <div class="greeting-wrapper">
           <div class="greeting-content reveal">
             <div class="greeting-content-inner">
-              <h2 class="greeting-title reveal reveal-delay-1">¡Estás invitada!</h2>
+              <h2 class="greeting-title reveal reveal-delay-1"><span class="greeting-title-line">¡Estas</span> <span class="greeting-title-line">Invitado!</span></h2>
               <div class="greeting-copy reveal reveal-delay-2">
                 <p>Con la bendición de Dios<br>
                 y en compañía de nuestros seres queridos,</p>
