@@ -528,6 +528,26 @@
       padding: 0;
     }
 
+    .phone-inline-row {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 0.55rem;
+      align-items: center;
+    }
+
+    .phone-inline-row select {
+      width: auto;
+      min-width: 98px;
+      padding-left: 0.65rem;
+      padding-right: 1.65rem;
+      font-size: 0.88rem;
+      white-space: nowrap;
+    }
+
+    .phone-inline-row input {
+      min-width: 0;
+    }
+
     .plus-one-block {
       border-top: 1px solid var(--line);
       padding-top: 0.8rem;
@@ -733,6 +753,17 @@
         padding: 0.78rem 0.95rem;
         font-size: 0.96rem;
         background: rgba(255, 255, 255, 0.82);
+      }
+
+      .phone-inline-row {
+        gap: 0.45rem;
+      }
+
+      .phone-inline-row select {
+        min-width: 92px;
+        font-size: 0.82rem;
+        padding-left: 0.55rem;
+        padding-right: 1.45rem;
       }
 
       .btn-primary {
