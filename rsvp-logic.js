@@ -14,6 +14,26 @@ function normalizePhone(value) {
   return value.replace(/\D/g, "").trim();
 }
 
+function normalizePhoneByCountry(rawPhone, countryCode) {
+  const digits = normalizePhone(rawPhone);
+  const country = countryCode === "mx" ? "mx" : "us";
+
+  if (!digits) return { normalizedPhone: "", isValid: false };
+
+  const localLength = 10;
+  const phoneWithoutCountryPrefix =
+    country === "mx" && digits.startsWith("52") && digits.length > localLength
+      ? digits.slice(2)
+      : country === "us" && digits.startsWith("1") && digits.length > localLength
+        ? digits.slice(1)
+        : digits;
+
+  const isValid = phoneWithoutCountryPrefix.length >= localLength;
+  const normalizedPhone = isValid ? `+${country === "mx" ? "52" : "1"}${phoneWithoutCountryPrefix}` : "";
+
+  return { normalizedPhone, isValid };
+}
+
 function getResponseGroupKey(guest) {
   const pairId = (guest?.rsvp_pair_id || "").trim();
   if (pairId) return `pair:${pairId}`;
@@ -252,6 +272,13 @@ function renderAlreadySubmittedMessage(resultContainer, guest, responseRecord, s
 
     <form id="phoneVerificationForm" class="rsvp-form" novalidate>
       <div>
+        <label for="verificationPhoneCountry">Tipo de teléfono</label>
+        <select id="verificationPhoneCountry" name="verificationPhoneCountry">
+          <option value="us">US (+1)</option>
+          <option value="mx">México (+52)</option>
+        </select>
+      </div>
+      <div>
         <label for="verificationPhone">Número de teléfono</label>
         <input id="verificationPhone" name="verificationPhone" type="tel" autocomplete="tel" inputmode="tel" required placeholder="(555) 123-4567" />
       </div>
@@ -270,10 +297,11 @@ function renderAlreadySubmittedMessage(resultContainer, guest, responseRecord, s
     verificationError.textContent = "";
 
     const phoneInput = document.getElementById("verificationPhone");
+    const phoneCountryInput = document.getElementById("verificationPhoneCountry");
     const rawPhone = phoneInput?.value ?? "";
-    const phone = normalizePhone(rawPhone);
+    const { normalizedPhone: phone, isValid } = normalizePhoneByCountry(rawPhone, phoneCountryInput?.value);
 
-    if (!phone || phone.length < 10) {
+    if (!isValid) {
       verificationError.textContent = "Por favor ingresa un teléfono válido (mínimo 10 dígitos).";
       return;
     }
@@ -486,6 +514,11 @@ export function initRsvpFlow() {
           </div>
 
           <div id="rsvpPhoneWrap" hidden>
+            <label for="rsvpPhoneCountry">Tipo de teléfono</label>
+            <select id="rsvpPhoneCountry" name="rsvpPhoneCountry">
+              <option value="us">US (+1)</option>
+              <option value="mx">México (+52)</option>
+            </select>
             <label for="rsvpPhone">Teléfono para validar tu RSVP más adelante</label>
             <input id="rsvpPhone" name="rsvpPhone" type="tel" autocomplete="tel" inputmode="tel" placeholder="(555) 123-4567" />
           </div>
@@ -505,6 +538,7 @@ export function initRsvpFlow() {
       const needsPlusOneInputs = responseForm?.querySelectorAll('input[name="needsPlusOne"]');
       const rsvpPhoneWrap = document.getElementById("rsvpPhoneWrap");
       const rsvpPhoneInput = document.getElementById("rsvpPhone");
+      const rsvpPhoneCountryInput = document.getElementById("rsvpPhoneCountry");
       const attendanceInputs = responseForm?.querySelectorAll('input[name="attending"]');
       const groupAttendanceInputSets = invitedGuests.map((_, index) =>
         responseForm?.querySelectorAll(`input[name="pairAttending${index}"]`)
@@ -591,7 +625,10 @@ export function initRsvpFlow() {
         const attendingValue = responseForm.querySelector('input[name="attending"]:checked')?.value;
         let guestCount = attendingValue === "true" ? 1 : 0;
         let normalizedAttending = guestCount > 0;
-        const rsvpPhone = normalizePhone(rsvpPhoneInput.value || "");
+        const { normalizedPhone: rsvpPhone, isValid: isPhoneValid } = normalizePhoneByCountry(
+          rsvpPhoneInput.value || "",
+          rsvpPhoneCountryInput?.value
+        );
 
         if (isGroupInvite) {
           const groupSelections = invitedGuests.map((_, index) =>
@@ -638,7 +675,7 @@ export function initRsvpFlow() {
 
         guestCount += additionalGuestNames.length;
 
-        if ((!rsvpPhone || rsvpPhone.length < 10) && normalizedAttending) {
+        if (!isPhoneValid && normalizedAttending) {
           submitError.textContent = "Por favor ingresa un teléfono válido (mínimo 10 dígitos).";
           return;
         }
