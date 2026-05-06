@@ -193,8 +193,8 @@ function hideDeadlineNote() {
 function getDetailsButtonsMarkup() {
   return `
     <div class="details-actions">
-      <a class="btn btn-primary" href="${WEDDING_DETAILS_IMAGE_URL_ES}">Ver detalles</a>
-      <a class="btn btn-secondary" href="${WEDDING_DETAILS_IMAGE_URL_EN}">See details</a>
+      <a class="btn details-action-btn" href="${WEDDING_DETAILS_IMAGE_URL_ES}">Ver detalles</a>
+      <a class="btn details-action-btn" href="${WEDDING_DETAILS_IMAGE_URL_EN}">See details</a>
     </div>
   `;
 }
