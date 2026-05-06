@@ -1320,7 +1320,25 @@
       -webkit-text-stroke: 0;
     }
 
+    .nuestra-historia-title-wrap {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      align-self: center;
+      background-image: url("./images/emboss1.png");
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: 100% 100%;
+      padding: clamp(1rem, 2.2vw, 1.25rem) clamp(2.2rem, 5vw, 3rem);
+      min-width: min(100%, 560px);
+      min-height: clamp(92px, 14vw, 122px);
+      margin: 0 auto 1.5rem;
+      box-sizing: border-box;
+    }
+
     .nuestra-historia-title {
+      margin: 0;
+      text-align: center;
       display: inline-block;
       align-self: center;
       background: transparent;
@@ -2077,6 +2095,13 @@
         text-align: center;
       }
 
+      .nuestra-historia-title-wrap {
+        min-width: min(100%, 360px);
+        min-height: clamp(84px, 22vw, 102px);
+        padding: 0.95rem 1.5rem;
+        margin-bottom: 1.2rem;
+      }
+
       .history-image img {
         max-width: min(100%, 420px);
         aspect-ratio: 4 / 5;
@@ -2331,7 +2356,9 @@
             </figcaption>
           </figure>
           <div class="history-content nuestra-historia-text reveal reveal-delay-1">
-            <h2 class="section-title story-title nuestra-historia-title reveal reveal-delay-1">Un Amor Escrito Por Dios</h2>
+            <div class="nuestra-historia-title-wrap reveal reveal-delay-1">
+              <h2 class="section-title story-title nuestra-historia-title">Un Amor Escrito Por Dios</h2>
+            </div>
             <div class="section-copy story-text reveal reveal-delay-2">
               <p>Nuestra historia comenzó con un sencillo mensaje de “Feliz Cumpleaños” que Alejandro me envió el 16 de marzo de 2024. Lo que parecía un pequeño detalle se convirtió, sin que lo imagináramos, en el inicio de una historia que Dios ya estaba escribiendo para nosotros.</p>
 
