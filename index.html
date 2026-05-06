@@ -1958,15 +1958,20 @@
       .greeting-content {
         width: 100%;
         max-width: min(100%, 540px);
-        padding: clamp(1.7rem, 5.2vw, 2.15rem) clamp(1.1rem, 4.6vw, 1.55rem);
+        min-height: clamp(640px, 132vw, 760px);
+        padding: clamp(1.85rem, 5.6vw, 2.35rem) clamp(1.1rem, 4.6vw, 1.55rem);
         background-size: 100% 100%;
         text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
       }
 
       .greeting-content-inner {
         width: min(72%, 300px);
         margin: 0 auto;
-        padding: clamp(2.25rem, 7.2vw, 2.7rem) clamp(0.85rem, 2.8vw, 1.05rem) clamp(2.25rem, 7vw, 2.7rem);
+        min-height: clamp(470px, 95vw, 555px);
+        padding: clamp(2.6rem, 8.2vw, 3.2rem) clamp(0.85rem, 2.8vw, 1.05rem) clamp(2.6rem, 8vw, 3.2rem);
         box-sizing: border-box;
         text-align: center;
         display: flex;
