@@ -195,10 +195,7 @@ function getDetailsButtonsMarkup() {
     <div class="details-actions">
       <a class="btn btn-primary" href="${WEDDING_DETAILS_IMAGE_URL_ES}">Ver detalles</a>
       <a class="btn btn-secondary" href="${WEDDING_DETAILS_IMAGE_URL_EN}">See details</a>
-      <button class="btn btn-secondary" type="button" data-save-photo="es">Guardar invitación en Fotos</button>
-      <button class="btn btn-secondary" type="button" data-save-photo="en">Save invitation to Photos</button>
     </div>
-    <p class="details-help">En iPhone/Android usa los botones de guardar para abrir el menú de compartir y elegir “Guardar imagen” (Save Image).</p>
   `;
 }
 
