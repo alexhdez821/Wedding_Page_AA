@@ -272,15 +272,14 @@ function renderAlreadySubmittedMessage(resultContainer, guest, responseRecord, s
 
     <form id="phoneVerificationForm" class="rsvp-form" novalidate>
       <div>
-        <label for="verificationPhoneCountry">Tipo de teléfono</label>
-        <select id="verificationPhoneCountry" name="verificationPhoneCountry">
-          <option value="us">US (+1)</option>
-          <option value="mx">México (+52)</option>
-        </select>
-      </div>
-      <div>
         <label for="verificationPhone">Número de teléfono</label>
-        <input id="verificationPhone" name="verificationPhone" type="tel" autocomplete="tel" inputmode="tel" required placeholder="(555) 123-4567" />
+        <div class="phone-inline-row">
+          <select id="verificationPhoneCountry" name="verificationPhoneCountry" aria-label="Código de país">
+            <option value="us">🇺🇸 +1</option>
+            <option value="mx">🇲🇽 +52</option>
+          </select>
+          <input id="verificationPhone" name="verificationPhone" type="tel" autocomplete="tel" inputmode="tel" required placeholder="(555) 123-4567" />
+        </div>
       </div>
       <button class="btn btn-primary" type="submit">Validar teléfono y mostrar detalles</button>
       <p id="verificationError" class="form-error" aria-live="polite"></p>
@@ -514,13 +513,14 @@ export function initRsvpFlow() {
           </div>
 
           <div id="rsvpPhoneWrap" hidden>
-            <label for="rsvpPhoneCountry">Tipo de teléfono</label>
-            <select id="rsvpPhoneCountry" name="rsvpPhoneCountry">
-              <option value="us">US (+1)</option>
-              <option value="mx">México (+52)</option>
-            </select>
             <label for="rsvpPhone">Teléfono para validar tu RSVP más adelante</label>
-            <input id="rsvpPhone" name="rsvpPhone" type="tel" autocomplete="tel" inputmode="tel" placeholder="(555) 123-4567" />
+            <div class="phone-inline-row">
+              <select id="rsvpPhoneCountry" name="rsvpPhoneCountry" aria-label="Código de país">
+                <option value="us">🇺🇸 +1</option>
+                <option value="mx">🇲🇽 +52</option>
+              </select>
+              <input id="rsvpPhone" name="rsvpPhone" type="tel" autocomplete="tel" inputmode="tel" placeholder="(555) 123-4567" />
+            </div>
           </div>
 
           <button class="btn btn-primary" type="submit">Enviar RSVP</button>
