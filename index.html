@@ -653,7 +653,27 @@
 
     @media (min-width: 769px) {
       .hero-brand-stack {
-        top: clamp(36px, 5vh, 72px);
+        top: clamp(26px, 3.6vh, 54px);
+        transform: translateX(-50%) translateY(0);
+        width: min(86vw, 760px);
+      }
+
+      .hero-aa-logo {
+        width: clamp(240px, 26vw, 420px);
+        margin-bottom: clamp(2px, 0.45vw, 6px);
+      }
+
+      .hero-names {
+        margin: 0 0 clamp(8px, 0.9vw, 14px);
+        font-size: clamp(1.55rem, 3.2vw, 3.15rem);
+        letter-spacing: clamp(0.09em, 0.18vw, 0.18em);
+        line-height: 1.1;
+        width: 100%;
+      }
+
+      .hero-date {
+        font-size: clamp(0.95rem, 1.5vw, 1.45rem);
+        letter-spacing: 0.14em;
       }
     }
 
