@@ -14,6 +14,18 @@ function normalizePhone(value) {
   return value.replace(/\D/g, "").trim();
 }
 
+function normalizePhoneForComparison(value) {
+  const digits = normalizePhone(value);
+  if (!digits) return "";
+
+  if (digits.length > 10) {
+    if (digits.startsWith("52")) return digits.slice(2);
+    if (digits.startsWith("1")) return digits.slice(1);
+  }
+
+  return digits;
+}
+
 function normalizePhoneByCountry(rawPhone, countryCode) {
   const digits = normalizePhone(rawPhone);
   const country = countryCode === "mx" ? "mx" : "us";
@@ -320,7 +332,7 @@ function renderAlreadySubmittedMessage(resultContainer, guest, responseRecord, s
       return;
     }
 
-    if (normalizePhone(responseRecord.phone || "") !== phone) {
+    if (normalizePhoneForComparison(responseRecord.phone || "") !== normalizePhoneForComparison(phone)) {
       verificationError.textContent = "Ese teléfono no coincide con el que usamos en tu RSVP.";
       return;
     }
