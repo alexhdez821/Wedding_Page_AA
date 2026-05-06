@@ -1964,9 +1964,15 @@
       }
 
       .greeting-content-inner {
-        width: min(76%, 430px);
-        padding: clamp(1.95rem, 6.6vw, 2.4rem) clamp(0.2rem, 1vw, 0.45rem) clamp(1.95rem, 6vw, 2.4rem);
+        width: min(72%, 300px);
+        margin: 0 auto;
+        padding: clamp(2.25rem, 7.2vw, 2.7rem) clamp(0.85rem, 2.8vw, 1.05rem) clamp(2.25rem, 7vw, 2.7rem);
+        box-sizing: border-box;
         text-align: center;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
       }
 
       .greeting-image img {
@@ -1981,9 +1987,10 @@
       z-index: 1;
     }
 
-    .greeting-title {
-        font-size: clamp(2.6rem, 13.2vw, 3.9rem);
-        line-height: 0.8;
+      .greeting-title {
+        width: 100%;
+        font-size: clamp(2.45rem, 12.3vw, 3.5rem);
+        line-height: 0.85;
         margin-bottom: 0.7rem;
         text-align: center;
       }
@@ -1993,9 +2000,10 @@
       }
 
       .greeting-copy {
-        max-width: min(100%, 300px);
-        font-size: 0.79rem;
-        line-height: 1.2;
+        width: 100%;
+        max-width: min(100%, 280px);
+        font-size: 0.75rem;
+        line-height: 1.28;
         text-align: center;
       }
 
@@ -2004,8 +2012,9 @@
       }
 
       .greeting-date {
+        width: 100%;
         margin-top: 0.7rem;
-        font-size: clamp(1.28rem, 6.9vw, 1.72rem);
+        font-size: clamp(1.22rem, 6.2vw, 1.58rem);
         line-height: 1;
         font-family: "Pinyon Script", cursive;
         text-align: center;
