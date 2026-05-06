@@ -1068,36 +1068,9 @@
       overflow: hidden;
     }
 
-    #historia::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background-image: url("./images/lacepg2.png");
-      background-repeat: no-repeat;
-      background-position: center;
-      background-size: contain;
-      pointer-events: none;
-      z-index: 0;
-    }
-
     #historia .container {
       position: relative;
       z-index: 1;
-    }
-
-    @media (max-width: 768px) {
-      #historia::before {
-        top: 50%;
-        left: 50%;
-        width: 100vh;
-        height: 100vw;
-        inset: auto;
-        transform: translate(-50%, -50%) rotate(90deg) scale(1.35);
-        transform-origin: center;
-        background-repeat: no-repeat;
-        background-position: center;
-        background-size: contain;
-      }
     }
 
     .greeting-section {
@@ -1305,7 +1278,19 @@
     .history-content {
       grid-area: content;
       text-align: center;
+      width: 100%;
       max-width: 620px;
+      background-image: url("./images/lace3corrected.png");
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: 100% 100%;
+      padding: clamp(4.4rem, 8vw, 5.4rem) clamp(2.8rem, 5vw, 3.6rem);
+      min-height: clamp(720px, 80vw, 920px);
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      margin: 0 auto;
     }
 
     .history-content .section-title,
@@ -2038,7 +2023,9 @@
       }
 
       .history-content {
-        max-width: 100%;
+        max-width: min(100%, 560px);
+        min-height: clamp(700px, 180vw, 860px);
+        padding: clamp(4.1rem, 15vw, 5.1rem) clamp(2rem, 9vw, 2.8rem);
         text-align: center;
       }
 
