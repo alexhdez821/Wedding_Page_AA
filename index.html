@@ -2182,32 +2182,37 @@
         position: relative;
         width: min(98vw, 430px);
         max-width: 98vw;
+        height: min(98vw, 430px);
         margin: 0 auto 1.25rem;
-        display: flex;
-        justify-content: center;
-        align-items: center;
+        padding: 0;
+        display: block;
         overflow: visible;
+        left: auto;
+        right: auto;
+        transform: none;
       }
 
       .nuestra-historia-title-bg {
-        display: block;
+        position: absolute;
+        top: 50%;
+        left: 50%;
         width: 100%;
         max-width: 100%;
         height: auto;
-        margin: 0 auto;
-        transform: rotate(90deg);
-        transform-origin: center;
+        margin: 0;
+        transform: translate(-50%, -50%) rotate(90deg);
+        transform-origin: center center;
       }
 
       .nuestra-historia-title {
         position: absolute;
         top: 50%;
         left: 50%;
-        transform: translate(-50%, -50%);
         width: 58%;
         max-width: 58%;
         margin: 0;
         text-align: center;
+        transform: translate(-50%, -50%);
         font-size: clamp(1.45rem, 7vw, 2.15rem);
         line-height: 1.05;
         letter-spacing: 0.1em;
