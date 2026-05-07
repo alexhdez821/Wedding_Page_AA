@@ -598,6 +598,8 @@ export function initRsvpFlow() {
         const wasPhoneHidden = rsvpPhoneWrap?.hidden;
         const wasAdditionalGuestsHidden = additionalGuestsWrap?.hidden;
         const wasPlusOneDecisionHidden = plusOneDecisionWrap?.hidden;
+        const activeElement = document.activeElement;
+        const isTypingAdditionalGuestName = additionalGuestInputs.some((input) => input === activeElement);
 
         let isAttending = false;
         let shouldShowPhone = false;
@@ -688,7 +690,12 @@ export function initRsvpFlow() {
           focusRevealedQuestion(additionalGuestsWrap, additionalGuestInputs[0]);
         }
 
-        if (wasPhoneHidden && rsvpPhoneWrap && !rsvpPhoneWrap.hidden) {
+        if (
+          wasPhoneHidden &&
+          rsvpPhoneWrap &&
+          !rsvpPhoneWrap.hidden &&
+          !isTypingAdditionalGuestName
+        ) {
           focusRevealedQuestion(rsvpPhoneWrap, rsvpPhoneInput);
         }
       };
