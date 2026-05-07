@@ -2372,13 +2372,15 @@
     background-image: url("./images/emboss 2.png") !important;
     background-repeat: no-repeat !important;
     background-size: contain !important;
-
-    /* Keep this centered, but compensate for the image file's visual imbalance */
-    background-position: 45% center !important;
+    background-position: 42% center !important;
+    transform: none !important;
   }
 
   .nuestra-historia-title-bg {
     display: none !important;
+    transform: none !important;
+    width: auto !important;
+    max-width: 100% !important;
   }
 
   .nuestra-historia-title {
@@ -2391,6 +2393,12 @@
     margin: 0 auto !important;
     text-align: center !important;
     z-index: 2 !important;
+  }
+
+  .nuestra-historia-title span {
+    display: block !important;
+    white-space: nowrap !important;
+    text-align: center !important;
   }
 }
 
