@@ -2130,11 +2130,11 @@
       }
 
       .nuestra-historia-title-wrap {
-        width: 100%;
-        max-width: 100%;
+        width: 100vw;
+        max-width: 100vw;
         padding-left: 0;
         padding-right: 0;
-        margin: 0 auto 1.2rem;
+        margin: 0 calc(50% - 50vw) 1.2rem;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -2142,7 +2142,7 @@
       }
 
       .nuestra-historia-title-bg {
-        width: 100vw;
+        width: min(100vw, 100%);
         max-width: 100vw;
         height: auto;
         display: block;
