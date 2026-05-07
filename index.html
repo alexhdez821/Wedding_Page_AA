@@ -2193,15 +2193,7 @@
       }
 
       .nuestra-historia-title-bg {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        width: 100%;
-        max-width: 100%;
-        height: auto;
-        margin: 0;
-        transform: translate(-50%, -50%) rotate(90deg);
-        transform-origin: center center;
+        display: none;
       }
 
       .nuestra-historia-title {
@@ -2376,16 +2368,13 @@
     display: flex !important;
     justify-content: center !important;
     align-items: center !important;
-    align-self: center !important;
-    box-sizing: border-box !important;
     overflow: visible !important;
     background-image: url("./images/emboss 2.png") !important;
     background-repeat: no-repeat !important;
-    background-position: center center !important;
     background-size: contain !important;
-    transform: none !important;
-    left: auto !important;
-    right: auto !important;
+
+    /* Keep this centered, but compensate for the image file's visual imbalance */
+    background-position: 45% center !important;
   }
 
   .nuestra-historia-title-bg {
@@ -2401,16 +2390,7 @@
     max-width: 58% !important;
     margin: 0 auto !important;
     text-align: center !important;
-    font-size: clamp(1.45rem, 7vw, 2.15rem) !important;
-    line-height: 1.05 !important;
-    letter-spacing: 0.1em !important;
     z-index: 2 !important;
-  }
-
-  .nuestra-historia-title span {
-    display: block !important;
-    white-space: nowrap !important;
-    text-align: center !important;
   }
 }
 
