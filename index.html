@@ -2088,11 +2088,10 @@
 
       .history-content,
       .nuestra-historia-text {
-        width: 100vw;
-        max-width: 100vw;
-        padding: 1.5rem 0;
-        margin-left: calc(50% - 50vw);
-        margin-right: calc(50% - 50vw);
+        width: 100%;
+        max-width: min(100%, 640px);
+        padding: 1.5rem clamp(1rem, 5vw, 1.5rem);
+        margin: 0 auto;
         text-align: center;
         overflow: visible;
         box-sizing: border-box;
@@ -2111,8 +2110,9 @@
       }
 
       .history-content .section-copy,
-    .story-text {
-        margin: 0;
+      .story-text {
+        margin: 0 auto;
+        max-width: 42ch;
       }
 
       .history-content .section-title,
