@@ -2369,18 +2369,29 @@
     justify-content: center !important;
     align-items: center !important;
     overflow: visible !important;
+    background: none !important;
+    transform: none !important;
+  }
+
+  .nuestra-historia-title-wrap::before {
+    content: "" !important;
+    position: absolute !important;
+    top: 50% !important;
+    left: 42% !important;
+    width: 100% !important;
+    height: 100% !important;
     background-image: url("./images/emboss 2.png") !important;
     background-repeat: no-repeat !important;
+    background-position: center center !important;
     background-size: contain !important;
-    background-position: 42% center !important;
-    transform: none !important;
+    transform: translate(-50%, -50%) rotate(90deg) !important;
+    transform-origin: center center !important;
+    z-index: 1 !important;
+    pointer-events: none !important;
   }
 
   .nuestra-historia-title-bg {
     display: none !important;
-    transform: none !important;
-    width: auto !important;
-    max-width: 100% !important;
   }
 
   .nuestra-historia-title {
