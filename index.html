@@ -2442,6 +2442,49 @@
       font-weight: 400 !important;
       color: #556b2f !important;
     }
+
+
+.story-text p {
+  text-align: justify !important;
+  text-align-last: left !important;
+  color: #2b211c !important;
+}
+
+.story-text p:not(.story-date) {
+  text-align: justify !important;
+  text-align-last: left !important;
+}
+
+.story-text .story-date {
+  text-align: center !important;
+  text-align-last: center !important;
+  color: #3f4a24 !important;
+  font-family: "Pinyon Script", cursive !important;
+  font-size: clamp(1.7rem, 4vw, 2.35rem) !important;
+  line-height: 1.1 !important;
+  margin-top: 1rem !important;
+}
+
+.nuestra-historia-title {
+  color: #3f4a24 !important;
+}
+
+.nuestra-historia-title .story-title-coterie {
+  font-family: "Coterie", "Cinzel", serif !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.12em !important;
+  font-weight: 400 !important;
+  color: #3f4a24 !important;
+}
+
+.nuestra-historia-title .story-title-script {
+  font-family: "Pinyon Script", cursive !important;
+  text-transform: lowercase !important;
+  letter-spacing: 0.02em !important;
+  font-weight: 400 !important;
+  color: #3f4a24 !important;
+}
+
 </style>
 </head>
 <body>
@@ -2588,9 +2631,9 @@
             <div class="nuestra-historia-title-wrap reveal reveal-delay-1">
               <img class="nuestra-historia-title-bg" src="./images/emboss 2.png" alt="" aria-hidden="true" />
               <h2 class="section-title story-title nuestra-historia-title">
-                <span>Un Amor</span>
-                <span class="story-title-script">Escrito</span>
-                <span>Por Dios</span>
+                <span class="story-title-coterie">UN AMOR</span>
+                <span class="story-title-script">escrito</span>
+                <span class="story-title-coterie">POR DIOS</span>
               </h2>
             </div>
             <div class="section-copy story-text reveal reveal-delay-2">
@@ -2602,7 +2645,7 @@
 
               <p>Hoy, con amor y gratitud, esperamos con alegría el día en que, ante Dios y nuestros seres queridos, uniremos nuestras vidas para siempre.</p>
 
-              <p class="story-date">17 de octubre de 2026</p>
+              <p class="story-date">17 de Octubre de 2026</p>
             </div>
           </div>
         </div>
