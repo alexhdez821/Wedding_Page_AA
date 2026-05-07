@@ -580,6 +580,7 @@ export function initRsvpFlow() {
       const additionalGuestsWrap = document.getElementById("additionalGuestsWrap");
       const additionalGuestInputs = Array.from(responseForm?.querySelectorAll('input[name^="additionalGuest"]') || []);
       const needsPlusOneInputs = responseForm?.querySelectorAll('input[name="needsPlusOne"]');
+      const submitButton = responseForm?.querySelector('button[type="submit"]');
       const rsvpPhoneWrap = document.getElementById("rsvpPhoneWrap");
       const rsvpPhoneInput = document.getElementById("rsvpPhone");
       const rsvpPhoneCountryInput = document.getElementById("rsvpPhoneCountry");
@@ -588,68 +589,107 @@ export function initRsvpFlow() {
         responseForm?.querySelectorAll(`input[name="pairAttending${index}"]`)
       );
 
-      if (!responseForm || !submitError || !rsvpPhoneInput) {
+      if (!responseForm || !submitError || !rsvpPhoneInput || !submitButton) {
         lookupError.textContent = "El formulario de RSVP no está disponible temporalmente. Recarga la página e inténtalo de nuevo.";
         return;
       }
 
       const updateConditionalFields = () => {
-        const attendingCount = isGroupInvite
-          ? invitedGuests.filter(
-              (_, index) => responseForm.querySelector(`input[name="pairAttending${index}"]:checked`)?.value === "true"
-            ).length
-          : responseForm.querySelector('input[name="attending"]:checked')?.value === "true"
-            ? 1
-            : 0;
-        const isAttending = attendingCount > 0;
         const wasPhoneHidden = rsvpPhoneWrap?.hidden;
         const wasAdditionalGuestsHidden = additionalGuestsWrap?.hidden;
+        const wasPlusOneDecisionHidden = plusOneDecisionWrap?.hidden;
 
-        if (rsvpPhoneWrap && rsvpPhoneInput) {
-          rsvpPhoneWrap.hidden = !isAttending;
-          rsvpPhoneInput.required = isAttending;
+        let isAttending = false;
+        let shouldShowPhone = false;
+        let shouldShowSubmit = false;
 
-          if (!isAttending) {
-            rsvpPhoneInput.value = "";
+        if (isGroupInvite) {
+          const allGroupAttendanceAnswered = invitedGuests.every(
+            (_, index) => responseForm.querySelector(`input[name="pairAttending${index}"]:checked`)
+          );
+          const attendingCount = invitedGuests.filter(
+            (_, index) => responseForm.querySelector(`input[name="pairAttending${index}"]:checked`)?.value === "true"
+          ).length;
+
+          isAttending = attendingCount > 0;
+          shouldShowPhone = allGroupAttendanceAnswered && isAttending;
+          shouldShowSubmit = allGroupAttendanceAnswered && (!isAttending || shouldShowPhone);
+
+          if (plusOneDecisionWrap) plusOneDecisionWrap.hidden = true;
+          if (additionalGuestsWrap) {
+            additionalGuestsWrap.hidden = true;
+            additionalGuestInputs.forEach((input) => {
+              input.required = false;
+              input.value = "";
+            });
+          }
+        } else {
+          const attendanceSelection = responseForm.querySelector('input[name="attending"]:checked');
+          const attendanceAnswered = Boolean(attendanceSelection);
+          isAttending = attendanceSelection?.value === "true";
+
+          const needsPlusOneSelected = responseForm.querySelector('input[name="needsPlusOne"]:checked')?.value;
+          const needsPlusOneAnswered = needsPlusOneSelected === "true" || needsPlusOneSelected === "false";
+          const shouldShowPlusOneDecision = attendanceAnswered && isAttending && shouldAskNeedPlusOneFirst;
+
+          if (plusOneDecisionWrap) {
+            plusOneDecisionWrap.hidden = !shouldShowPlusOneDecision;
           }
 
-          if (wasPhoneHidden && !rsvpPhoneWrap.hidden) {
-            focusRevealedQuestion(rsvpPhoneWrap, rsvpPhoneInput);
+          if (!shouldShowPlusOneDecision) {
+            needsPlusOneInputs?.forEach((input) => {
+              input.checked = false;
+            });
+          }
+
+          const shouldShowAdditionalGuests =
+            attendanceAnswered &&
+            isAttending &&
+            additionalGuestSlots > 0 &&
+            (shouldAutoAskAdditionalGuestNames || (shouldShowPlusOneDecision && needsPlusOneSelected === "true"));
+
+          if (additionalGuestsWrap) {
+            additionalGuestsWrap.hidden = !shouldShowAdditionalGuests;
+          }
+
+          additionalGuestInputs.forEach((input) => {
+            input.required = false;
+            if (!shouldShowAdditionalGuests) input.value = "";
+          });
+
+          const additionalGuestNamesComplete =
+            !shouldShowAdditionalGuests ||
+            additionalGuestInputs.every((input) => (input.value || "").trim().length > 0);
+
+          shouldShowPhone =
+            attendanceAnswered &&
+            isAttending &&
+            (!shouldAskNeedPlusOneFirst || (needsPlusOneAnswered && additionalGuestNamesComplete));
+
+          shouldShowSubmit = attendanceAnswered && (!isAttending || shouldShowPhone);
+        }
+
+        if (rsvpPhoneWrap && rsvpPhoneInput) {
+          rsvpPhoneWrap.hidden = !shouldShowPhone;
+          rsvpPhoneInput.required = shouldShowPhone;
+
+          if (!shouldShowPhone) {
+            rsvpPhoneInput.value = "";
           }
         }
 
-        if (additionalGuestsWrap) {
-          const needsPlusOneSelected = responseForm.querySelector('input[name="needsPlusOne"]:checked')?.value;
-          const showPlusOneDecision = isAttending && shouldAskNeedPlusOneFirst;
-          const showAdditionalGuests =
-            isAttending &&
-            additionalGuestSlots > 0 &&
-            (shouldAutoAskAdditionalGuestNames || (showPlusOneDecision && needsPlusOneSelected === "true"));
+        submitButton.hidden = !shouldShowSubmit;
 
-          if (plusOneDecisionWrap) {
-            const wasPlusOneDecisionHidden = plusOneDecisionWrap.hidden;
-            plusOneDecisionWrap.hidden = !showPlusOneDecision;
+        if (wasPlusOneDecisionHidden && plusOneDecisionWrap && !plusOneDecisionWrap.hidden) {
+          focusRevealedQuestion(plusOneDecisionWrap, needsPlusOneInputs?.[0]);
+        }
 
-            if (!showPlusOneDecision) {
-              needsPlusOneInputs?.forEach((input) => {
-                input.checked = false;
-              });
-            }
+        if (wasAdditionalGuestsHidden && additionalGuestsWrap && !additionalGuestsWrap.hidden) {
+          focusRevealedQuestion(additionalGuestsWrap, additionalGuestInputs[0]);
+        }
 
-            if (wasPlusOneDecisionHidden && !plusOneDecisionWrap.hidden) {
-              focusRevealedQuestion(plusOneDecisionWrap, needsPlusOneInputs?.[0]);
-            }
-          }
-
-          additionalGuestsWrap.hidden = !showAdditionalGuests;
-          additionalGuestInputs.forEach((input) => {
-            input.required = false;
-            if (!showAdditionalGuests) input.value = "";
-          });
-
-          if (wasAdditionalGuestsHidden && !additionalGuestsWrap.hidden) {
-            focusRevealedQuestion(additionalGuestsWrap, additionalGuestInputs[0]);
-          }
+        if (wasPhoneHidden && rsvpPhoneWrap && !rsvpPhoneWrap.hidden) {
+          focusRevealedQuestion(rsvpPhoneWrap, rsvpPhoneInput);
         }
       };
 
@@ -658,6 +698,10 @@ export function initRsvpFlow() {
         inputs?.forEach((input) => input.addEventListener("change", updateConditionalFields))
       );
       needsPlusOneInputs?.forEach((input) => input.addEventListener("change", updateConditionalFields));
+      additionalGuestInputs.forEach((input) => {
+        input.addEventListener("input", updateConditionalFields);
+      });
+      submitButton.hidden = true;
       updateConditionalFields();
 
       responseForm.addEventListener("submit", async (submitEvent) => {
