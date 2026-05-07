@@ -2413,7 +2413,36 @@
   }
 }
 
-  </style>
+  
+
+    .story-text p {
+      text-align: justify;
+      text-align-last: left;
+      color: #2b211c !important;
+    }
+
+    .story-text .story-date {
+      text-align: center !important;
+      text-align-last: center !important;
+      color: #556b2f !important;
+      font-family: "Allura", cursive;
+      font-size: clamp(1.45rem, 3.05vw, 2rem);
+      line-height: 1;
+      margin-top: 1rem;
+    }
+
+    .nuestra-historia-title {
+      color: #556b2f !important;
+    }
+
+    .nuestra-historia-title .story-title-script {
+      font-family: "Pinyon Script", cursive !important;
+      text-transform: none !important;
+      letter-spacing: 0.02em !important;
+      font-weight: 400 !important;
+      color: #556b2f !important;
+    }
+</style>
 </head>
 <body>
   <div class="intro-overlay" aria-hidden="true" style="display: none;">
@@ -2560,7 +2589,7 @@
               <img class="nuestra-historia-title-bg" src="./images/emboss 2.png" alt="" aria-hidden="true" />
               <h2 class="section-title story-title nuestra-historia-title">
                 <span>Un Amor</span>
-                <span>Escrito</span>
+                <span class="story-title-script">Escrito</span>
                 <span>Por Dios</span>
               </h2>
             </div>
@@ -2573,7 +2602,7 @@
 
               <p>Hoy, con amor y gratitud, esperamos con alegría el día en que, ante Dios y nuestros seres queridos, uniremos nuestras vidas para siempre.</p>
 
-              <p>17 de octubre de 2026</p>
+              <p class="story-date">17 de octubre de 2026</p>
             </div>
           </div>
         </div>
