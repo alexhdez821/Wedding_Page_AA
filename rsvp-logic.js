@@ -29,21 +29,33 @@ function normalizePhoneForComparison(value) {
 function normalizePhoneByCountry(rawPhone, countryCode) {
   const digits = normalizePhone(rawPhone);
   const country = countryCode === "mx" ? "mx" : "us";
+  const trimmedRawPhone = (rawPhone || "").trim();
+  const invalidResult = {
+    phoneRaw: trimmedRawPhone,
+    phoneE164: "",
+    phoneCountry: country,
+    isValid: false
+  };
 
-  if (!digits) return { normalizedPhone: "", isValid: false };
+  if (!digits) return invalidResult;
 
-  const localLength = 10;
-  const phoneWithoutCountryPrefix =
-    country === "mx" && digits.startsWith("52") && digits.length > localLength
-      ? digits.slice(2)
-      : country === "us" && digits.startsWith("1") && digits.length > localLength
-        ? digits.slice(1)
-        : digits;
+  let nationalDigits = "";
+  if (country === "us") {
+    if (digits.length === 10) nationalDigits = digits;
+    else if (digits.length === 11 && digits.startsWith("1")) nationalDigits = digits.slice(1);
+  } else if (country === "mx") {
+    if (digits.length === 10) nationalDigits = digits;
+    else if (digits.length === 12 && digits.startsWith("52")) nationalDigits = digits.slice(2);
+  }
 
-  const isValid = phoneWithoutCountryPrefix.length >= localLength;
-  const normalizedPhone = isValid ? `+${country === "mx" ? "52" : "1"}${phoneWithoutCountryPrefix}` : "";
+  if (nationalDigits.length !== 10) return invalidResult;
 
-  return { normalizedPhone, isValid };
+  return {
+    phoneRaw: trimmedRawPhone,
+    phoneE164: `+${country === "mx" ? "52" : "1"}${nationalDigits}`,
+    phoneCountry: country,
+    isValid: true
+  };
 }
 
 function getResponseGroupKey(guest) {
@@ -273,7 +285,8 @@ function renderVerifiedDetailsCard(resultContainer) {
 }
 
 function renderAlreadySubmittedMessage(resultContainer, guest, responseRecord, supabase) {
-  const hasPhoneOnRecord = Boolean(responseRecord?.phone);
+  const savedPhone = responseRecord?.phone_e164 || responseRecord?.phone || "";
+  const hasPhoneOnRecord = Boolean(savedPhone);
   resultContainer.innerHTML = `
     <div class="result-card warning" role="status" aria-live="polite">
       <p>Tu RSVP ya fue recibido. Si deseas ver los detalles, ingresa tu teléfono.</p>
@@ -307,10 +320,10 @@ function renderAlreadySubmittedMessage(resultContainer, guest, responseRecord, s
     const phoneInput = document.getElementById("verificationPhone");
     const phoneCountryInput = document.getElementById("verificationPhoneCountry");
     const rawPhone = phoneInput?.value ?? "";
-    const { normalizedPhone: phone, isValid } = normalizePhoneByCountry(rawPhone, phoneCountryInput?.value);
+    const { phoneRaw, phoneE164, phoneCountry, isValid } = normalizePhoneByCountry(rawPhone, phoneCountryInput?.value);
 
     if (!isValid) {
-      verificationError.textContent = "Por favor ingresa un teléfono válido (mínimo 10 dígitos).";
+      verificationError.textContent = "Por favor ingresa un número de teléfono válido.";
       return;
     }
 
@@ -318,7 +331,14 @@ function renderAlreadySubmittedMessage(resultContainer, guest, responseRecord, s
     if (!hasPhoneOnRecord) {
       const { error: updateError } = await supabase
         .from("rsvp_responses")
-        .update({ phone })
+        .update({
+          phone: phoneE164,
+          phone_raw: phoneRaw,
+          phone_e164: phoneE164,
+          phone_country: phoneCountry,
+          phone_verified: true,
+          updated_at: new Date().toISOString()
+        })
         .eq("id", responseRecord.id);
 
       if (updateError) {
@@ -332,9 +352,20 @@ function renderAlreadySubmittedMessage(resultContainer, guest, responseRecord, s
       return;
     }
 
-    if (normalizePhoneForComparison(responseRecord.phone || "") !== normalizePhoneForComparison(phone)) {
+    if (normalizePhoneForComparison(savedPhone) !== normalizePhoneForComparison(phoneE164)) {
       verificationError.textContent = "Ese teléfono no coincide con el que usamos en tu RSVP.";
       return;
+    }
+
+    const { error: verificationUpdateError } = await supabase
+      .from("rsvp_responses")
+      .update({
+        phone_verified: true,
+        updated_at: new Date().toISOString()
+      })
+      .eq("id", responseRecord.id);
+    if (verificationUpdateError) {
+      console.warn("Phone verification flag update failed", verificationUpdateError);
     }
 
     renderVerifiedDetailsCard(resultContainer);
@@ -438,7 +469,7 @@ export function initRsvpFlow() {
 
       const { data: existingResponse, error: responseError } = await supabase
         .from("rsvp_responses")
-        .select("id, guest_id, phone")
+        .select("id, guest_id, phone, phone_e164, phone_raw, phone_country, sms_opt_in, phone_verified")
         .eq("response_group", responseGroup)
         .maybeSingle();
 
@@ -529,6 +560,10 @@ export function initRsvpFlow() {
                 <option value="mx">🇲🇽 +52</option>
               </select>
               <input id="rsvpPhone" name="rsvpPhone" type="tel" autocomplete="tel" inputmode="tel" placeholder="(555) 123-4567" />
+            </div>
+            <div class="sms-consent-row">
+              <input id="smsOptIn" name="smsOptIn" type="checkbox" checked />
+              <label for="smsOptIn">Acepto recibir mensajes relacionados con la boda, como recordatorios, cambios importantes y detalles del evento.</label>
             </div>
           </div>
 
@@ -634,10 +669,12 @@ export function initRsvpFlow() {
         const attendingValue = responseForm.querySelector('input[name="attending"]:checked')?.value;
         let guestCount = attendingValue === "true" ? 1 : 0;
         let normalizedAttending = guestCount > 0;
-        const { normalizedPhone: rsvpPhone, isValid: isPhoneValid } = normalizePhoneByCountry(
+        const { phoneRaw, phoneE164, phoneCountry, isValid: isPhoneValid } = normalizePhoneByCountry(
           rsvpPhoneInput.value || "",
           rsvpPhoneCountryInput?.value
         );
+        const smsOptInInput = document.getElementById("smsOptIn");
+        const smsOptIn = Boolean(smsOptInInput?.checked);
 
         if (isGroupInvite) {
           const groupSelections = invitedGuests.map((_, index) =>
@@ -685,13 +722,13 @@ export function initRsvpFlow() {
         guestCount += additionalGuestNames.length;
 
         if (!isPhoneValid && normalizedAttending) {
-          submitError.textContent = "Por favor ingresa un teléfono válido (mínimo 10 dígitos).";
+          submitError.textContent = "Por favor ingresa un número de teléfono válido.";
           return;
         }
 
         const { data: duplicateResponse, error: duplicateLookupError } = await supabase
           .from("rsvp_responses")
-          .select("id, guest_id, phone")
+          .select("id, guest_id, phone, phone_e164, phone_raw, phone_country, sms_opt_in, phone_verified")
           .eq("response_group", responseGroup)
           .maybeSingle();
 
@@ -723,8 +760,14 @@ export function initRsvpFlow() {
           attending: normalizedAttending,
           guest_count: guestCount,
           plus_one_name: isSinglePlusOneResponse ? additionalGuestNames[0] : null,
-          phone: normalizedAttending ? rsvpPhone : null,
-          submitted_at: new Date().toISOString()
+          phone: normalizedAttending ? phoneE164 : null,
+          phone_raw: normalizedAttending ? phoneRaw : null,
+          phone_e164: normalizedAttending ? phoneE164 : null,
+          phone_country: normalizedAttending ? phoneCountry : null,
+          sms_opt_in: normalizedAttending ? smsOptIn : false,
+          phone_verified: false,
+          submitted_at: new Date().toISOString(),
+          updated_at: new Date().toISOString()
         };
         if (additionalGuestNames.length > 0 && !isSinglePlusOneResponse) {
           insertPayload.additional_guest_names = additionalGuestNames;
