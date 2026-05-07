@@ -217,71 +217,20 @@ function hideDeadlineNote() {
 function getDetailsButtonsMarkup() {
   return `
     <div class="details-actions">
-      <a class="btn details-action-btn" href="${WEDDING_DETAILS_IMAGE_URL_ES}">Ver detalles</a>
-      <a class="btn details-action-btn" href="${WEDDING_DETAILS_IMAGE_URL_EN}">See details</a>
+      <a class="btn details-action-btn" href="${WEDDING_DETAILS_IMAGE_URL_ES}" target="_blank" rel="noopener">Ver detalles</a>
+      <a class="btn details-action-btn" href="${WEDDING_DETAILS_IMAGE_URL_EN}" target="_blank" rel="noopener">See details</a>
     </div>
   `;
-}
-
-async function saveInvitationToPhotoLibrary(languageKey) {
-  const imageUrl = languageKey === "en" ? WEDDING_DETAILS_IMAGE_URL_EN : WEDDING_DETAILS_IMAGE_URL_ES;
-  const fileName = languageKey === "en" ? "WEDDING_INVITATION_ENGLISH.png" : "INVITACION_FINAL_ESPANOL.png";
-
-  if (!navigator.share) {
-    window.open(imageUrl, "_blank", "noopener");
-    return;
-  }
-
-  const response = await fetch(imageUrl);
-  if (!response.ok) {
-    throw new Error("No se pudo descargar la imagen.");
-  }
-
-  const blob = await response.blob();
-  const imageFile = new File([blob], fileName, { type: blob.type || "image/png" });
-
-  if (navigator.canShare && !navigator.canShare({ files: [imageFile] })) {
-    window.open(imageUrl, "_blank", "noopener");
-    return;
-  }
-
-  await navigator.share({
-    files: [imageFile],
-    title: "Invitación de boda",
-    text: "Guárdala en tu galería/fotos.",
-  });
-}
-
-function attachSavePhotoHandlers(resultContainer) {
-  const savePhotoButtons = resultContainer.querySelectorAll("[data-save-photo]");
-  savePhotoButtons.forEach((button) => {
-    button.addEventListener("click", async () => {
-      const languageKey = button.getAttribute("data-save-photo") || "es";
-      try {
-        await saveInvitationToPhotoLibrary(languageKey);
-      } catch (error) {
-        if (error?.name === "AbortError") return;
-        console.error("Save invitation to photo library failed", error);
-        window.open(
-          languageKey === "en" ? WEDDING_DETAILS_IMAGE_URL_EN : WEDDING_DETAILS_IMAGE_URL_ES,
-          "_blank",
-          "noopener"
-        );
-      }
-    });
-  });
 }
 
 function renderVerifiedDetailsCard(resultContainer) {
   resultContainer.innerHTML += `
     <div class="result-card success" role="status" aria-live="polite">
       <h3>✅ Teléfono verificado</h3>
-      <p>Ya puedes abrir los detalles en español o en inglés.</p>
+      <p>Elige tu idioma para abrir los detalles de la boda.</p>
       ${getDetailsButtonsMarkup()}
     </div>
   `;
-
-  attachSavePhotoHandlers(resultContainer);
 }
 
 function renderAlreadySubmittedMessage(resultContainer, guest, responseRecord, supabase) {
@@ -847,7 +796,7 @@ export function initRsvpFlow() {
           ? `
             <div class="result-card success" role="status" aria-live="polite">
               <h3>Detalles de la boda</h3>
-              <p>Elige tu idioma para abrir la imagen y guardarla en tu librería de fotos.</p>
+              <p>Elige tu idioma para abrir los detalles de la boda.</p>
               ${getDetailsButtonsMarkup()}
             </div>
           `
