@@ -2098,13 +2098,20 @@
       }
 
       .nuestra-historia-text {
+        position: relative;
         width: 100%;
         max-width: 100%;
         margin: 0 auto;
         padding-left: 1rem;
         padding-right: 1rem;
         box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
         text-align: center;
+        left: auto;
+        right: auto;
+        transform: none;
       }
 
       .nuestra-historia-section {
@@ -2115,12 +2122,15 @@
         min-height: 100%;
       }
 
-      .nuestra-historia-text p {
+      .nuestra-historia-text p,
+      .nuestra-historia-body,
+      .nuestra-historia-copy {
+        width: 100%;
+        max-width: 34rem;
         margin-left: auto;
         margin-right: auto;
         text-align: justify;
-        width: 100%;
-        max-width: 42ch;
+        box-sizing: border-box;
       }
 
       .history-content .section-copy,
@@ -2146,28 +2156,46 @@
       }
 
       .nuestra-historia-title-wrap {
+        position: relative;
         width: 100%;
         max-width: 100%;
-        margin: 0 auto 1.2rem;
+        margin: 0 auto 1rem;
         padding: 0;
-        overflow: visible;
         display: flex;
         justify-content: center;
         align-items: center;
-        box-sizing: border-box;
+        left: auto;
+        right: auto;
+        transform: none;
+        overflow: visible;
       }
 
       .nuestra-historia-title-bg {
+        display: block;
         width: 96vw;
         max-width: 96vw;
         height: auto;
-        display: block;
-        margin: 0 auto;
+        margin-left: auto;
+        margin-right: auto;
+        position: relative;
+        left: auto;
+        right: auto;
+        transform: none;
       }
 
       .nuestra-historia-title {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
         width: 52%;
-        max-width: 52%;
+        margin: 0;
+        text-align: center;
+      }
+
+      .nuestra-historia-title span {
+        display: block;
+        text-align: center;
       }
 
       .history-image img {
