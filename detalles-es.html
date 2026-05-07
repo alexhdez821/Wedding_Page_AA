@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Detalles de la boda</title>
+    <style>
+      :root {
+        --ivory: #f8f4ea;
+        --text: #4a3f35;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        background: var(--ivory);
+        color: var(--text);
+        font-family: "Cormorant Garamond", Georgia, serif;
+      }
+
+      .page {
+        max-width: 980px;
+        margin: 0 auto;
+        padding: 1rem 0.75rem 2rem;
+      }
+
+      .back-link {
+        display: inline-block;
+        margin: 0.25rem 0 1rem;
+        color: var(--text);
+        text-decoration: none;
+        font-size: 1.1rem;
+        letter-spacing: 0.02em;
+      }
+
+      .back-link:hover,
+      .back-link:focus-visible {
+        text-decoration: underline;
+      }
+
+      .invitation {
+        display: block;
+        width: 100%;
+        height: auto;
+        margin: 0 auto;
+        border-radius: 8px;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="page">
+      <a class="back-link" href="rsvp.html">← Volver</a>
+      <img
+        class="invitation"
+        src="images/INVITACION_FINAL_ESPANOL.png"
+        alt="Invitación con detalles de la boda"
+      />
+    </main>
+  </body>
+</html>

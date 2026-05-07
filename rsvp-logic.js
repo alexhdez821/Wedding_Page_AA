@@ -1,6 +1,3 @@
-const WEDDING_DETAILS_IMAGE_URL_ES = "images/INVITACION_FINAL_ESPANOL.png";
-const WEDDING_DETAILS_IMAGE_URL_EN = "images/INVITACION_FINAL_INGLES.png";
-
 function normalizeName(value) {
   return value
     .trim()
@@ -217,8 +214,8 @@ function hideDeadlineNote() {
 function getDetailsButtonsMarkup() {
   return `
     <div class="details-actions">
-      <a class="btn details-action-btn" href="${WEDDING_DETAILS_IMAGE_URL_ES}" target="_blank" rel="noopener">Ver detalles</a>
-      <a class="btn details-action-btn" href="${WEDDING_DETAILS_IMAGE_URL_EN}" target="_blank" rel="noopener">See details</a>
+      <a class="btn details-action-btn" href="detalles-es.html">Ver detalles</a>
+      <a class="btn details-action-btn" href="detalles-en.html">See details</a>
     </div>
   `;
 }
@@ -227,7 +224,7 @@ function renderVerifiedDetailsCard(resultContainer) {
   resultContainer.innerHTML += `
     <div class="result-card success" role="status" aria-live="polite">
       <h3>✅ Teléfono verificado</h3>
-      <p>Elige tu idioma para abrir los detalles de la boda.</p>
+      <p>Elige tu idioma para abrir los detalles de la boda.<br>Choose your language to open the wedding details.</p>
       ${getDetailsButtonsMarkup()}
     </div>
   `;
@@ -796,7 +793,7 @@ export function initRsvpFlow() {
           ? `
             <div class="result-card success" role="status" aria-live="polite">
               <h3>Detalles de la boda</h3>
-              <p>Elige tu idioma para abrir los detalles de la boda.</p>
+              <p>Elige tu idioma para abrir los detalles de la boda.<br>Choose your language to open the wedding details.</p>
               ${getDetailsButtonsMarkup()}
             </div>
           `
