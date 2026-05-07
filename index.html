@@ -7,7 +7,7 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Allura&family=Cinzel:wght@500;600&family=Cormorant+Garamond:wght@400;500;600;700&family=Great+Vibes&family=Inter:wght@300;400;500;600&family=Monsieur+La+Doulaise&family=Bodoni+Moda:wght@400;500&family=Pinyon+Script&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Allura&family=Cinzel:wght@500;600&family=Cormorant+Garamond:wght@400;500;600;700&family=Amiko:wght@400;600;700&family=Great+Vibes&family=Inter:wght@300;400;500;600&family=Monsieur+La+Doulaise&family=Bodoni+Moda:wght@400;500&family=Pinyon+Script&display=swap" rel="stylesheet">
 
   <style>
     :root {
@@ -2619,6 +2619,22 @@ section.nuestra-historia-section,
   background-size: auto !important;
   background-color: #f8f3ed !important;
 }
+
+.history-caption {
+  color: #2b211c !important;
+  font-family: "Cormorant Garamond", serif !important;
+}
+
+.history-caption-date {
+  color: #556b2f !important;
+  font-family: "Amiko", sans-serif !important;
+  font-weight: 600 !important;
+}
+
+.history-caption-text {
+  color: #2b211c !important;
+  font-family: "Cormorant Garamond", serif !important;
+}
 </style>
 </head>
 <body>
@@ -2758,7 +2774,8 @@ section.nuestra-historia-section,
               <button class="history-nav next" id="historyNext" type="button" aria-label="Foto siguiente">&#10095;</button>
             </div>
             <figcaption class="history-caption" id="historyCaption">
-              Nuestro comienzo: una foto que nos recuerda los primeros momentos de nuestra historia.
+              <span class="history-caption-date">17/8/24:</span>
+              <span class="history-caption-text">Nuestra segunda cita fue en el acuario, donde Alejandro me llevó a ver a nuestros animales favoritos. Todavía estábamos nerviosos, conociéndonos poco a poquito, y yo tenía mariposas en el estómago de la emoción. Fue un día lleno de risas, momentos bonitos y esa ilusión tan especial de empezar a descubrirnos el uno al otro.</span>
             </figcaption>
           </figure>
           <div class="history-content nuestra-historia-text reveal reveal-delay-1">
@@ -3016,52 +3033,62 @@ section.nuestra-historia-section,
       {
         src: "./images/dating8.png",
         alt: "Nuestra historia - foto 1",
-        description: "17/8/24: En nuestra segunda cita, Alejandro me llevó al acuario para ver a nuestros animales favoritos."
+        date: "17/8/24:",
+        description: "Nuestra segunda cita fue en el acuario, donde Alejandro me llevó a ver a nuestros animales favoritos. Todavía estábamos nerviosos, conociéndonos poco a poquito, y yo tenía mariposas en el estómago de la emoción. Fue un día lleno de risas, momentos bonitos y esa ilusión tan especial de empezar a descubrirnos el uno al otro."
       },
       {
         src: "./images/NH_1.jpg",
         alt: "Nuestra historia - foto 2",
-        description: "30/9/24: El segundo de muchos conciertos que íbamos a vivir juntos: Danny Ocean."
+        date: "30/9/24:",
+        description: "Nuestro segundo concierto juntos: Danny Ocean. Esa noche cantamos, reímos y seguimos descubriendo lo bonito que era compartir la vida el uno con el otro."
       },
       {
         src: "./images/dating1.jpeg",
         alt: "Nuestra historia - foto 3",
-        description: "19/10/24: El día que Alejandro me pidió que fuera su novia y terminamos la noche bailando bajo la lluvia."
+        date: "19/10/24:",
+        description: "El día en que Alejandro me pidió que fuera su novia. Terminamos la noche bailando bajo la lluvia, y desde entonces entendí que con él hasta los momentos más simples podían sentirse como una película."
       },
       {
         src: "./images/dating6.png",
         alt: "Nuestra historia - foto 4",
-        description: "26/10/24: Celebrando nuestra época favorita del año: otoño."
+        date: "26/10/24:",
+        description: "Celebrando nuestra época favorita del año: el otoño. Entre calabazas, risas y colores cálidos, seguimos creando recuerdos que guardaríamos para siempre."
       },
       {
         src: "./images/dating4.jpeg",
         alt: "Nuestra historia - foto 5",
-        description: "23/11/24: En este día tan frío, le enseñé a Alejandro mi cachito del cielo en Payson, AZ."
+        date: "23/11/24:",
+        description: "En un día frío, le enseñé a Alejandro mi cachito del cielo en Payson, Arizona. Fue muy especial compartir con él un lugar que siempre ha significado tanto para mí."
       },
       {
         src: "./images/dating9.png",
         alt: "Nuestra historia - foto 6",
-        description: "21/12/24: Nuestros primeros retratos navideños juntos."
+        date: "21/12/24:",
+        description: "Nuestros primeros retratos navideños juntos. Una pequeña tradición que marcó nuestra primera Navidad como pareja y que llenó nuestro corazón de ilusión."
       },
       {
         src: "./images/dating5.png",
         alt: "Nuestra historia - foto 7",
-        description: "25/5/25: Visitando nuestro restaurante favorito: In-N-Out."
+        date: "25/5/25:",
+        description: "Visitando nuestro restaurante favorito: In-N-Out. Porque nuestra historia también está hecha de planes sencillos, antojos compartidos y momentos que nos hacen sonreír."
       },
       {
         src: "./images/dating2.png",
         alt: "Nuestra historia - foto 8",
-        description: "22/6/25: Sirviendo juntos en el retiro \"Abran las Puertas\"."
+        date: "22/6/25:",
+        description: "Sirviendo juntos en el retiro “Abran las Puertas”. Un día que nos recordó lo hermoso que es caminar juntos no solo en amor, sino también en fe y servicio."
       },
       {
         src: "./images/dating3.jpeg",
         alt: "Nuestra historia - foto 9",
-        description: "18/10/25: Un día lleno de muchas sonrisas, lágrimas y bendiciones: el día en que Alejandro me pidió que fuera su esposa."
+        date: "18/10/25:",
+        description: "Un día lleno de sonrisas, lágrimas y bendiciones: el día en que Alejandro me pidió que fuera su esposa. Un momento que siempre vivirá en mi corazón."
       },
       {
         src: "./images/dating10.jpeg",
         alt: "Nuestra historia - foto 10",
-        description: "23/11/25: Nuestra cena de compromiso, rodeados por las personas que más amamos."
+        date: "23/11/25:",
+        description: "Nuestra cena de compromiso, una noche que guardaremos con mucho cariño. Compartimos este momento con personas muy especiales para nosotros, sintiendo tanto amor, gratitud y emoción por todo lo que Dios ha ido escribiendo en nuestra historia."
       }
     ];
 
@@ -3085,7 +3112,7 @@ section.nuestra-historia-section,
       const slide = historySlides[index];
       historyImage.src = slide.src;
       historyImage.alt = slide.alt;
-      historyCaption.textContent = slide.description;
+      historyCaption.innerHTML = `<span class="history-caption-date">${slide.date}</span> <span class="history-caption-text">${slide.description}</span>`;
     }
 
     function transitionToHistorySlide(nextIndex) {
@@ -3191,10 +3218,3 @@ section.nuestra-historia-section,
   </script>
 </body>
 </html>
-    .greeting-content-inner {
-      width: min(78%, 520px);
-      margin: 0 auto;
-      padding: clamp(2.15rem, 4.2vw, 3rem) clamp(0.4rem, 1vw, 0.85rem) clamp(2.1rem, 4vw, 2.9rem);
-      box-sizing: border-box;
-      text-align: center;
-    }
