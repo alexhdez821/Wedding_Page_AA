@@ -1133,18 +1133,18 @@
     }
 
     .greeting-content {
-      width: 100%;
-      max-width: 560px;
+      width: fit-content !important;
+      max-width: 100% !important;
       text-align: center;
-      background-image: url("images/correctedlace1pt2.png");
+      background-image: url("./images/lacenew.png") !important;
       background-color: transparent;
-      background-repeat: no-repeat;
-      background-position: center;
-      background-size: contain;
-      padding: clamp(2.15rem, 4.6vw, 2.9rem) clamp(1.35rem, 3.3vw, 2rem);
+      background-repeat: no-repeat !important;
+      background-position: center !important;
+      background-size: 100% 100% !important;
+      padding: clamp(2.15rem, 4.6vw, 2.9rem) clamp(1.35rem, 3.3vw, 2rem) !important;
       position: relative;
       z-index: 1;
-      margin: 0 auto;
+      margin: 0 auto !important;
     }
 
 
@@ -2024,11 +2024,11 @@
       }
 
       .greeting-content {
-        width: 100%;
-        max-width: min(100%, 540px);
-        min-height: clamp(640px, 132vw, 760px);
-        padding: clamp(1.85rem, 5.6vw, 2.35rem) clamp(1.1rem, 4.6vw, 1.55rem);
-        background-size: 100% 100%;
+        width: fit-content !important;
+        max-width: 100% !important;
+        min-height: auto;
+        padding: clamp(1.85rem, 5.6vw, 2.35rem) clamp(1.1rem, 4.6vw, 1.55rem) !important;
+        background-size: 100% 100% !important;
         text-align: center;
         display: flex;
         align-items: center;
