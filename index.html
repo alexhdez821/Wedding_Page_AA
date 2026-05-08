@@ -7,7 +7,7 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Allura&family=Cinzel:wght@500;600&family=Cormorant+Garamond:wght@400;500;600;700&family=Amiko:wght@400;600;700&family=Great+Vibes&family=Inter:wght@300;400;500;600&family=Monsieur+La+Doulaise&family=Bodoni+Moda:wght@400;500&family=Pinyon+Script&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Allura&family=Cinzel:wght@500;600&family=Cormorant+Garamond:wght@400;500;600;700&family=Amiko:wght@400;600;700&family=Great+Vibes&family=Inter:wght@300;400;500;600&family=Monsieur+La+Doulaise&family=Bodoni+Moda:wght@400;500&family=Pinyon+Script&family=Frunchy+Sage&display=swap" rel="stylesheet">
 
   <style>
     :root {
@@ -2622,18 +2622,25 @@ section.nuestra-historia-section,
 
 .history-caption {
   color: #2b211c !important;
-  font-family: "Cormorant Garamond", serif !important;
+  font-family: "Cinzel", serif !important;
+  text-align: justify !important;
+  text-align-last: left !important;
 }
 
 .history-caption-date {
   color: #556b2f !important;
-  font-family: "Amiko", sans-serif !important;
-  font-weight: 600 !important;
+  font-family: "Frunchy Sage", cursive !important;
+  font-weight: 400 !important;
 }
 
 .history-caption-text {
   color: #2b211c !important;
-  font-family: "Cormorant Garamond", serif !important;
+  font-family: "Cinzel", serif !important;
+}
+
+.history-slide-subtle-crop {
+  transform: scale(1.045);
+  transform-origin: center center;
 }
 </style>
 </head>
@@ -3088,7 +3095,9 @@ section.nuestra-historia-section,
         src: "./images/dating10.jpeg",
         alt: "Nuestra historia - foto 10",
         date: "23/11/25:",
-        description: "Nuestra cena de compromiso, una noche que guardaremos con mucho cariño. Compartimos este momento con personas muy especiales para nosotros, sintiendo tanto amor, gratitud y emoción por todo lo que Dios ha ido escribiendo en nuestra historia."
+        description: "Nuestra cena de compromiso, una noche que guardaremos con mucho cariño. Compartimos este momento con personas muy especiales para nosotros, sintiendo tanto amor, gratitud y emoción por todo lo que Dios ha ido escribiendo en nuestra historia.",
+        objectPosition: "50% 50%",
+        zoomClass: "history-slide-subtle-crop"
       }
     ];
 
@@ -3112,6 +3121,8 @@ section.nuestra-historia-section,
       const slide = historySlides[index];
       historyImage.src = slide.src;
       historyImage.alt = slide.alt;
+      historyImage.style.objectPosition = slide.objectPosition || "50% 50%";
+      historyImage.classList.toggle("history-slide-subtle-crop", Boolean(slide.zoomClass));
       historyCaption.innerHTML = `<span class="history-caption-date">${slide.date}</span> <span class="history-caption-text">${slide.description}</span>`;
     }
 
