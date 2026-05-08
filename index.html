@@ -1269,11 +1269,19 @@
     }
 
     .history-nav.prev {
-      left: 12px;
+      left: 12px !important;
     }
 
     .history-nav.next {
-      right: 12px;
+      right: 12px !important;
+    }
+
+    .history-nav.prev,
+    .history-nav.next {
+      display: inline-flex !important;
+      visibility: visible !important;
+      opacity: 1 !important;
+      z-index: 5 !important;
     }
 
     .history-caption {
