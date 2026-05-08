@@ -2747,9 +2747,52 @@ section.nuestra-historia-section,
 .faq-photo img {
   border: 1.25px solid #556b2f !important;
   object-fit: cover !important;
-  object-position: center 58% !important;
+  object-position: center 54% !important;
   transform: scale(1.12) !important;
   transform-origin: center center !important;
+}
+
+#confirmar .confirm-button {
+  position: relative !important;
+  isolation: isolate !important;
+  background: linear-gradient(180deg, #fffef9 0%, #f9f4ea 100%) !important;
+  border: 1px solid rgba(192, 173, 143, 0.6) !important;
+  box-shadow: 0 10px 22px rgba(39, 50, 24, 0.16) !important;
+  color: #111111 !important;
+  font-family: "Times New Roman", "Bodoni Moda", serif !important;
+  text-align: center !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.035em !important;
+  border-radius: 0 !important;
+  overflow: visible !important;
+}
+
+#confirmar .confirm-button::before,
+#confirmar .confirm-button::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+}
+
+#confirmar .confirm-button::before {
+  inset: 7px;
+  border: 1px solid rgba(190, 171, 141, 0.56);
+}
+
+#confirmar .confirm-button::after {
+  inset: -7px;
+  background:
+    radial-gradient(circle at 8px 50%, rgba(255, 252, 245, 0.96) 58%, transparent 61%) left center / 16px 14px repeat-y,
+    radial-gradient(circle at calc(100% - 8px) 50%, rgba(255, 252, 245, 0.96) 58%, transparent 61%) right center / 16px 14px repeat-y,
+    radial-gradient(circle at 50% 8px, rgba(255, 252, 245, 0.96) 58%, transparent 61%) center top / 14px 16px repeat-x,
+    radial-gradient(circle at 50% calc(100% - 8px), rgba(255, 252, 245, 0.96) 58%, transparent 61%) center bottom / 14px 16px repeat-x;
+  filter: drop-shadow(0 2px 1px rgba(157, 140, 116, 0.24));
+  z-index: -1;
+}
+
+#confirmar .confirm-button:hover {
+  background: #efe7dd !important;
+  transform: translateY(-1px) !important;
 }
 
 .confirmar-title-script {
