@@ -2746,13 +2746,16 @@ section.nuestra-historia-section,
 
 .faq-photo img {
   border: 1.25px solid #556b2f !important;
+  box-sizing: border-box !important;
   object-fit: cover !important;
-  object-position: center 54% !important;
+  object-position: center 48% !important;
   transform: scale(1.12) !important;
   transform-origin: center center !important;
 }
 
 #confirmar .confirm-button {
+  margin-top: auto !important;
+  transform: translateY(1.5rem) !important;
   position: relative !important;
   isolation: isolate !important;
   background: linear-gradient(180deg, #fffef9 0%, #f9f4ea 100%) !important;
@@ -2792,7 +2795,7 @@ section.nuestra-historia-section,
 
 #confirmar .confirm-button:hover {
   background: #efe7dd !important;
-  transform: translateY(-1px) !important;
+  transform: translateY(calc(1.5rem - 1px)) !important;
 }
 
 .confirmar-title-script {
