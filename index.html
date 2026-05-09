@@ -2014,7 +2014,11 @@
       }
 
       .greeting-section {
-        padding: 84px 0 68px;
+        padding: 3rem 1rem;
+        background: #f5f3ef !important;
+        background-image: none !important;
+        display: flex;
+        justify-content: center;
       }
 
       .greeting-wrapper {
@@ -2024,22 +2028,20 @@
       }
 
       .greeting-content {
-        width: fit-content !important;
+        width: min(88vw, 360px) !important;
         max-width: 100% !important;
         min-height: auto;
-        padding: clamp(1.85rem, 5.6vw, 2.35rem) clamp(1.1rem, 4.6vw, 1.55rem) !important;
+        margin: 0 auto !important;
+        padding: 3.8rem 2.2rem 3.6rem !important;
         background-size: 100% 100% !important;
         text-align: center;
-        display: flex;
-        align-items: center;
-        justify-content: center;
       }
 
       .greeting-content-inner {
-        width: min(72%, 300px);
+        width: 100%;
         margin: 0 auto;
-        min-height: clamp(470px, 95vw, 555px);
-        padding: clamp(2.6rem, 8.2vw, 3.2rem) clamp(0.85rem, 2.8vw, 1.05rem) clamp(2.6rem, 8vw, 3.2rem);
+        min-height: auto;
+        padding: 0;
         box-sizing: border-box;
         text-align: center;
         display: flex;
@@ -2062,9 +2064,9 @@
 
       .greeting-title {
         width: 100%;
-        font-size: clamp(2.45rem, 12.3vw, 3.5rem);
-        line-height: 0.85;
-        margin-bottom: 0.7rem;
+        font-size: clamp(2.2rem, 10.8vw, 2.8rem);
+        line-height: 1;
+        margin-bottom: 1rem;
         text-align: center;
       }
 
@@ -2074,9 +2076,9 @@
 
       .greeting-copy {
         width: 100%;
-        max-width: min(100%, 280px);
-        font-size: 0.75rem;
-        line-height: 1.28;
+        max-width: min(100%, 285px);
+        font-size: 0.95rem;
+        line-height: 1.45;
         text-align: center;
       }
 
@@ -2086,9 +2088,9 @@
 
       .greeting-date {
         width: 100%;
-        margin-top: 0.7rem;
-        font-size: clamp(1.22rem, 6.2vw, 1.58rem);
-        line-height: 1;
+        margin-top: 1rem;
+        font-size: clamp(1.55rem, 7.2vw, 1.7rem);
+        line-height: 1.1;
         font-family: "Pinyon Script", cursive;
         text-align: center;
       }
@@ -2873,6 +2875,27 @@ section.nuestra-historia-section,
   z-index: 3 !important;
 }
 
+
+@media (max-width: 768px) {
+  .greeting-section {
+    background: #f5f3ef !important;
+    background-image: none !important;
+    padding: 3rem 1rem !important;
+    display: flex !important;
+    justify-content: center !important;
+  }
+
+  .greeting-content {
+    width: min(88vw, 360px) !important;
+    margin: 0 auto !important;
+    padding: 3.8rem 2.2rem 3.6rem !important;
+    background-image: url("./images/lacenew.png") !important;
+    background-repeat: no-repeat !important;
+    background-position: center !important;
+    background-size: 100% 100% !important;
+    text-align: center !important;
+  }
+}
 
 #confirmar .confirm-button {
   min-width: 195px !important;
