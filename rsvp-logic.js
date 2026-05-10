@@ -22,9 +22,33 @@ function formatPhoneInputValue(value) {
 
 function attachPhoneInputFormatter(phoneInput) {
   if (!phoneInput) return;
+  let shouldDeleteAreaCodeDigit = false;
+
+  phoneInput.addEventListener("keydown", (event) => {
+    if (event.key !== "Backspace") {
+      shouldDeleteAreaCodeDigit = false;
+      return;
+    }
+
+    const selectionStart = phoneInput.selectionStart ?? 0;
+    const selectionEnd = phoneInput.selectionEnd ?? 0;
+    const isCaretSelection = selectionStart === selectionEnd;
+    const charBeforeCursor = phoneInput.value.charAt(selectionStart - 1);
+
+    shouldDeleteAreaCodeDigit = isCaretSelection && charBeforeCursor === ")";
+  });
 
   phoneInput.addEventListener("input", () => {
+    const digits = normalizePhone(phoneInput.value);
+
+    if (shouldDeleteAreaCodeDigit && digits.length === 3) {
+      phoneInput.value = formatPhoneInputValue(digits.slice(0, 2));
+      shouldDeleteAreaCodeDigit = false;
+      return;
+    }
+
     phoneInput.value = formatPhoneInputValue(phoneInput.value);
+    shouldDeleteAreaCodeDigit = false;
   });
 }
 
