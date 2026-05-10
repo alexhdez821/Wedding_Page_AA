@@ -1000,6 +1000,26 @@
     import { initRsvpFlow } from "./rsvp-logic.js";
 
     initRsvpFlow();
+
+    const confirmationPattern = /(\d+\s+(?:invitado(?:s)?|guest(?:s)?))/i;
+    const rsvpResult = document.getElementById("rsvpResult");
+
+    if (rsvpResult) {
+      const observer = new MutationObserver(() => {
+        const confirmation = rsvpResult.querySelector(".invite-confirmation");
+        if (!confirmation) return;
+
+        const message = confirmation.textContent || "";
+        if (!message || confirmationPattern.test(confirmation.innerHTML)) return;
+
+        confirmation.innerHTML = message.replace(
+          confirmationPattern,
+          "<strong>$1</strong>"
+        );
+      });
+
+      observer.observe(rsvpResult, { childList: true, subtree: true });
+    }
   </script>
 </body>
 </html>
