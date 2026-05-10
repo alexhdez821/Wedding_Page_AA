@@ -358,9 +358,7 @@ export function initRsvpFlow() {
         .from("guest_list")
         .select("id, first_name, last_name, allowed_plus_one, max_guests, rsvp_pair_id")
         .eq("invited", true)
-        .ilike("first_name", firstName)
-        .ilike("last_name", lastName)
-        .limit(10);
+        .limit(1000);
 
       if (guestError) {
         console.error("Guest lookup failed", guestError);
