@@ -142,6 +142,9 @@
 
     .btn-secondary {
       justify-self: end;
+      position: relative;
+      z-index: 20;
+      pointer-events: auto;
       color: var(--terracotta-dark);
       background: rgba(255, 250, 244, 0.54);
     }
@@ -910,7 +913,7 @@
       <nav>
         <div class="brand">Alejandro y Alejandra</div>
 
-        <a class="btn btn-secondary header-home-btn" href="index.html" aria-label="Volver al inicio">
+        <a class="btn btn-secondary header-home-btn" href="./index.html" aria-label="Volver al inicio">
           ⌂ <span class="desktop-word">Volver al inicio</span>
         </a>
       </nav>
@@ -1001,25 +1004,6 @@
 
     initRsvpFlow();
 
-    const confirmationPattern = /(\d+\s+(?:invitado(?:s)?|guest(?:s)?))/i;
-    const rsvpResult = document.getElementById("rsvpResult");
-
-    if (rsvpResult) {
-      const observer = new MutationObserver(() => {
-        const confirmation = rsvpResult.querySelector(".invite-confirmation");
-        if (!confirmation) return;
-
-        const message = confirmation.textContent || "";
-        if (!message || confirmationPattern.test(confirmation.innerHTML)) return;
-
-        confirmation.innerHTML = message.replace(
-          confirmationPattern,
-          "<strong>$1</strong>"
-        );
-      });
-
-      observer.observe(rsvpResult, { childList: true, subtree: true });
-    }
   </script>
 </body>
 </html>
