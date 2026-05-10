@@ -828,8 +828,8 @@ export function initRsvpFlow() {
           : "Te vamos a extrañar en nuestro gran día, pero agradecemos mucho tu cariño y buenos deseos.";
         const confirmedGuestLabel = guestCount === 1 ? "persona" : "personas";
         const confirmedGuestMessage = normalizedAttending
-          ? `Quedó confirmada la asistencia de ${guestCount} ${confirmedGuestLabel} en tu RSVP.`
-          : `Quedó registrado tu RSVP con ${guestCount} ${confirmedGuestLabel} asistiendo.`;
+          ? `Se confirmaron <strong>${guestCount} ${confirmedGuestLabel}</strong>.`
+          : `Quedó registrado tu RSVP con <strong>${guestCount} ${confirmedGuestLabel}</strong> asistiendo.`;
 
         const detailsButtons = normalizedAttending
           ? `
