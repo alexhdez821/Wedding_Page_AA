@@ -11,6 +11,22 @@ function normalizePhone(value) {
   return value.replace(/\D/g, "").trim();
 }
 
+function formatPhoneInputValue(value) {
+  const digits = normalizePhone(value).slice(0, 10);
+  if (!digits) return "";
+  if (digits.length <= 3) return `(${digits}`;
+  if (digits.length <= 6) return `(${digits.slice(0, 3)}) ${digits.slice(3)}`;
+  return `(${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6)}`;
+}
+
+function attachPhoneInputFormatter(phoneInput) {
+  if (!phoneInput) return;
+
+  phoneInput.addEventListener("input", () => {
+    phoneInput.value = formatPhoneInputValue(phoneInput.value);
+  });
+}
+
 function normalizePhoneForComparison(value) {
   const digits = normalizePhone(value);
   if (!digits) return "";
@@ -256,8 +272,10 @@ function renderAlreadySubmittedMessage(resultContainer, guest, responseRecord, s
 
   const verificationForm = document.getElementById("phoneVerificationForm");
   const verificationError = document.getElementById("verificationError");
+  const verificationPhoneInput = document.getElementById("verificationPhone");
 
   if (!verificationForm || !verificationError) return;
+  attachPhoneInputFormatter(verificationPhoneInput);
 
   verificationForm.addEventListener("submit", async (event) => {
     event.preventDefault();
@@ -537,6 +555,7 @@ export function initRsvpFlow() {
         lookupError.textContent = "El formulario de RSVP no está disponible temporalmente. Recarga la página e inténtalo de nuevo.";
         return;
       }
+      attachPhoneInputFormatter(rsvpPhoneInput);
 
       const updateConditionalFields = () => {
         const wasPhoneHidden = rsvpPhoneWrap?.hidden;
