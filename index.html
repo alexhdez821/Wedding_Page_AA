@@ -1321,14 +1321,32 @@
       outline-offset: 2px;
     }
 
+    .history-caption-box {
+      width: min(100%, 520px);
+      margin: 12px auto 0;
+      background: #f7f3ea;
+      padding: 0.55rem;
+      box-sizing: border-box;
+    }
+
+    .history-caption-border {
+      border: 1px solid rgba(95, 107, 56, 0.72);
+      padding: 0.4rem;
+    }
+
+    .history-caption-border.inner {
+      border: 1px solid rgba(95, 107, 56, 0.72);
+      padding: 0.85rem 1.15rem;
+    }
+
     .history-caption {
-      margin-top: 12px;
+      margin: 0;
       text-align: center;
       font-size: 0.92rem;
       color: rgba(89, 71, 61, 0.76);
       min-height: 2.2em;
       line-height: 1.55;
-      padding: 0 10px;
+      padding: 0;
       letter-spacing: 0.01em;
       font-family: "Cormorant Garamond", serif;
       transition: opacity 0.35s ease, transform 0.35s ease;
@@ -2304,12 +2322,15 @@
         margin: 0 auto;
       }
 
-      .history-caption {
+      .history-caption-box {
         width: min(88vw, 420px);
         max-width: 88vw;
         margin-left: auto;
         margin-right: auto;
-        text-align: center;
+      }
+
+      .history-caption-border.inner {
+        padding: 0.75rem 1rem;
       }
 
       .history-nav {
@@ -2667,8 +2688,7 @@ section.nuestra-historia-section,
 .history-caption {
   color: #2b211c !important;
   font-family: "Baskervville", serif !important;
-  text-align: justify !important;
-  text-align-last: left !important;
+  text-align: center !important;
 }
 
 .history-caption-date {
@@ -3215,10 +3235,16 @@ section.nuestra-historia-section,
               <button class="history-nav next" id="historyNext" type="button" aria-label="Imagen siguiente">›</button>
             </div>
             <div class="history-dots" id="historyDots" aria-label="Indicadores de fotos de nuestra historia"></div>
-            <figcaption class="history-caption" id="historyCaption">
-              <span class="history-caption-date">17/8/24:</span>
-              <span class="history-caption-text">Nuestra segunda cita fue en el acuario, donde Alejandro me llevó a ver a nuestros animales favoritos. Todavía estábamos nerviosos, conociéndonos poco a poquito, y yo tenía mariposas en el estómago de la emoción. Fue un día lleno de risas, momentos bonitos y esa ilusión tan especial de empezar a descubrirnos el uno al otro.</span>
-            </figcaption>
+            <div class="history-caption-box">
+              <div class="history-caption-border">
+                <div class="history-caption-border inner">
+                  <figcaption class="history-caption" id="historyCaption">
+                    <span class="history-caption-date">17/8/24:</span>
+                    <span class="history-caption-text">Nuestra segunda cita fue en el acuario, donde Alejandro me llevó a ver a nuestros animales favoritos. Todavía estábamos nerviosos, conociéndonos poco a poquito, y yo tenía mariposas en el estómago de la emoción. Fue un día lleno de risas, momentos bonitos y esa ilusión tan especial de empezar a descubrirnos el uno al otro.</span>
+                  </figcaption>
+                </div>
+              </div>
+            </div>
           </figure>
           <div class="history-content nuestra-historia-text reveal reveal-delay-1">
             <div class="nuestra-historia-title-wrap reveal reveal-delay-1">
