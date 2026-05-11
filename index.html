@@ -2860,14 +2860,16 @@ section.nuestra-historia-section,
 .greeting-content {
   position: relative !important;
   z-index: 2 !important;
-  background-image: url("./images/lacenew1.png") !important;
+  background-image: url("./images/lacenew3.png") !important;
   background-repeat: no-repeat !important;
   background-position: center center !important;
-  background-size: 100% 100% !important;
+  background-size: contain !important;
   background-color: transparent !important;
   isolation: isolate !important;
-  min-height: auto !important;
-  padding: clamp(2.2rem, 4.8vw, 3rem) clamp(1.4rem, 3.5vw, 2.2rem) !important;
+  width: min(88vw, 420px) !important;
+  min-height: 760px !important;
+  margin: 0 auto !important;
+  padding: clamp(4.2rem, 6vw, 5rem) clamp(2rem, 4vw, 2.5rem) clamp(4rem, 6vw, 4.8rem) !important;
 }
 
 .greeting-content > * {
@@ -2888,14 +2890,14 @@ section.nuestra-historia-section,
   }
 
   .greeting-content {
-    width: min(88vw, 380px) !important;
-    min-height: 820px !important;
+    width: min(90vw, 390px) !important;
+    min-height: 740px !important;
     margin: 0 auto !important;
-    padding: 4.8rem 2.3rem 4.5rem !important;
-    background-image: url("./images/lacenew1.png") !important;
+    padding: 4.2rem 2rem 4rem !important;
+    background-image: url("./images/lacenew3.png") !important;
     background-repeat: no-repeat !important;
     background-position: center !important;
-    background-size: 100% 100% !important;
+    background-size: contain !important;
     text-align: center !important;
     background-color: rgba(246, 239, 225, 0.22) !important;
     background-blend-mode: multiply !important;
@@ -2940,12 +2942,11 @@ section.nuestra-historia-section,
 
 @media (max-width: 768px) {
   .greeting-content {
-    background-image: url("./images/lacenew1.png") !important;
+    background-image: url("./images/lacenew3.png") !important;
     background-repeat: no-repeat !important;
     background-position: center center !important;
 
-    /* Keep the width, but reduce the height so it is less stretched */
-    background-size: 100% 88% !important;
+    background-size: contain !important;
 
     padding-top: clamp(1.8rem, 5vw, 2.4rem) !important;
     padding-bottom: clamp(1.8rem, 5vw, 2.4rem) !important;
