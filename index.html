@@ -2959,6 +2959,7 @@ section.nuestra-historia-section,
     display: flex !important;
     justify-content: center !important;
     align-items: center !important;
+    overflow-x: hidden !important;
   }
 
   .greeting-wrapper {
@@ -2966,6 +2967,9 @@ section.nuestra-historia-section,
     justify-items: center !important;
     row-gap: 1.8rem !important;
     margin: 0 auto !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
   }
 
   .greeting-content {
@@ -2987,23 +2991,8 @@ section.nuestra-historia-section,
 
   .greeting-content::before,
   .greeting-content::after {
-    content: "" !important;
-    position: absolute !important;
-    left: 4px !important;
-    right: 4px !important;
-    height: 16px !important;
-    background: radial-gradient(circle, #ffffff 62%, transparent 64%) 0 0 / 20px 16px repeat-x !important;
-    z-index: 1 !important;
-    pointer-events: none !important;
-  }
-
-  .greeting-content::before {
-    top: -9px !important;
-  }
-
-  .greeting-content::after {
-    bottom: -9px !important;
-    transform: scaleY(-1) !important;
+    content: none !important;
+    display: none !important;
   }
 
   .greeting-inner-border {
@@ -3024,11 +3013,12 @@ section.nuestra-historia-section,
   }
 
   .greeting-olive-card {
-    width: min(92vw, 424px) !important;
+    width: min(88vw, 390px) !important;
     min-height: auto !important;
     padding: 0 !important;
     margin: 0 auto !important;
     box-shadow: none !important;
+    display: block !important;
   }
 
   .greeting-content-inner {
@@ -3059,7 +3049,7 @@ section.nuestra-historia-section,
 
 
   .greeting-image {
-    width: 100% !important;
+    width: min(88vw, 390px) !important;
     text-align: center !important;
     margin: 0 auto !important;
     display: flex !important;
@@ -3069,9 +3059,12 @@ section.nuestra-historia-section,
   }
 
   .greeting-image img {
+    width: 100% !important;
+    max-width: 100% !important;
     border: 1px solid #f7f3ea !important;
     box-sizing: border-box !important;
     margin: 0 auto !important;
+    display: block !important;
   }
 
   .greeting-date {
