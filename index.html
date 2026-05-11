@@ -2931,7 +2931,7 @@ section.nuestra-historia-section,
 
 @media (max-width: 768px) {
   .greeting-section {
-    background-image: url("./images/linen3.png") !important;
+    background-image: url("./images/linen1.png") !important;
     background-repeat: repeat !important;
     background-position: center !important;
     background-size: auto !important;
@@ -2944,16 +2944,56 @@ section.nuestra-historia-section,
     width: min(100%, 414px) !important;
     min-height: 780px !important;
     margin: 0 auto !important;
-    padding: 4rem 1.35rem 3.8rem !important;
-    background-image: url("./images/lacenew3.png") !important;
-    background-repeat: no-repeat !important;
-    background-position: center !important;
-    background-size: 100% 100% !important;
+    padding: 1rem !important;
+    background: #f3ecdf !important;
+    border-radius: 28px !important;
     text-align: center !important;
-    background-color: rgba(246, 239, 225, 0.22) !important;
-    background-blend-mode: multiply !important;
     display: flex !important;
     flex-direction: column !important;
+    justify-content: center !important;
+    align-items: center !important;
+    position: relative !important;
+    overflow: hidden !important;
+    clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0 100%) !important;
+  }
+
+  .greeting-content::before,
+  .greeting-content::after {
+    content: "" !important;
+    position: absolute !important;
+    top: 14px !important;
+    bottom: 14px !important;
+    width: 18px !important;
+    background: radial-gradient(circle at left center, transparent 8px, #f3ecdf 8.3px) center/100% 24px repeat-y !important;
+    z-index: 1 !important;
+    pointer-events: none !important;
+  }
+
+  .greeting-content::before {
+    left: -7px !important;
+    transform: scaleX(-1) !important;
+  }
+
+  .greeting-content::after {
+    right: -7px !important;
+  }
+
+  .greeting-inner-border {
+    width: 100% !important;
+    min-height: 100% !important;
+    border: 1px solid rgba(95, 107, 56, 0.9) !important;
+    padding: 0.38rem !important;
+    border-radius: 20px !important;
+    position: relative !important;
+    z-index: 2 !important;
+  }
+
+  .greeting-inner-border.second-border {
+    border: 1px solid rgba(95, 107, 56, 0.9) !important;
+    border-radius: 16px !important;
+    padding: 2.8rem 1.3rem 2.6rem !important;
+    min-height: 730px !important;
+    display: flex !important;
     justify-content: center !important;
   }
 
@@ -2964,8 +3004,11 @@ section.nuestra-historia-section,
   }
 
   .greeting-content-inner {
-    max-width: 340px !important;
+    max-width: 100% !important;
     margin: 0 auto !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
   }
 
   .greeting-title {
@@ -2978,7 +3021,7 @@ section.nuestra-historia-section,
   .greeting-copy {
     max-width: 100% !important;
     font-size: 0.86rem !important;
-    line-height: 1.3 !important;
+    line-height: 1.38 !important;
     text-align: center !important;
   }
 
@@ -2998,15 +3041,6 @@ section.nuestra-historia-section,
   padding: 0.9rem 2.45rem !important;
   font-size: 0.8rem !important;
   transform: translateY(1.5rem) !important;
-}
-
-@media (max-width: 768px) {
-  .greeting-content {
-    background-image: url("./images/lacenew3.png") !important;
-    background-repeat: no-repeat !important;
-    background-position: center center !important;
-    background-size: 100% 100% !important;
-  }
 }
 </style>
 </head>
@@ -3081,7 +3115,9 @@ section.nuestra-historia-section,
         <div class="greeting-wrapper">
           <div class="greeting-olive-card reveal">
             <div class="greeting-content">
-              <div class="greeting-content-inner">
+              <div class="greeting-inner-border">
+                <div class="greeting-inner-border second-border">
+                  <div class="greeting-content-inner">
                 <h2 class="greeting-title reveal reveal-delay-1"><span class="greeting-title-line">¡Estas</span> <span class="greeting-title-line">Invitado!</span></h2>
                 <div class="greeting-copy reveal reveal-delay-2">
                   <p>Con la bendición de Dios<br>
@@ -3104,6 +3140,8 @@ section.nuestra-historia-section,
                   corazones ante Su presencia.</p>
                 </div>
                 <p class="greeting-date reveal reveal-delay-3">Sábado 17 de Octubre de 2026</p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
