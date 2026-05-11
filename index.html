@@ -1284,8 +1284,45 @@
       z-index: 5 !important;
     }
 
-    .history-caption {
+    .history-dots {
       margin-top: 14px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 0.52rem;
+    }
+
+    .history-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 999px;
+      border: 1px solid rgba(126, 110, 81, 0.55);
+      background: rgba(244, 236, 224, 0.78);
+      padding: 0;
+      cursor: pointer;
+      transition: transform 0.2s ease, background-color 0.2s ease, border-color 0.2s ease, opacity 0.2s ease;
+      opacity: 0.9;
+    }
+
+    .history-dot:hover {
+      transform: scale(1.06);
+      opacity: 1;
+    }
+
+    .history-dot.is-active {
+      background: rgba(116, 100, 71, 0.92);
+      border-color: rgba(116, 100, 71, 0.95);
+      transform: scale(1.12);
+      opacity: 1;
+    }
+
+    .history-dot:focus-visible {
+      outline: 2px solid rgba(116, 100, 71, 0.7);
+      outline-offset: 2px;
+    }
+
+    .history-caption {
+      margin-top: 12px;
       text-align: center;
       font-size: 0.92rem;
       color: rgba(89, 71, 61, 0.76);
@@ -3107,11 +3144,12 @@ section.nuestra-historia-section,
       <div class="container">
         <div class="history-wrapper">
           <figure class="history-image reveal-scale">
-            <div class="history-slideshow">
+            <div class="history-slideshow" id="historySlideshow">
               <button class="history-nav prev" id="historyPrev" type="button" aria-label="Imagen anterior">‹</button>
               <img id="historySlideImage" src="./images/aquarium.png" alt="Nuestra historia - foto 1" />
               <button class="history-nav next" id="historyNext" type="button" aria-label="Imagen siguiente">›</button>
             </div>
+            <div class="history-dots" id="historyDots" aria-label="Indicadores de fotos de nuestra historia"></div>
             <figcaption class="history-caption" id="historyCaption">
               <span class="history-caption-date">17/8/24:</span>
               <span class="history-caption-text">Nuestra segunda cita fue en el acuario, donde Alejandro me llevó a ver a nuestros animales favoritos. Todavía estábamos nerviosos, conociéndonos poco a poquito, y yo tenía mariposas en el estómago de la emoción. Fue un día lleno de risas, momentos bonitos y esa ilusión tan especial de empezar a descubrirnos el uno al otro.</span>
@@ -3437,18 +3475,33 @@ section.nuestra-historia-section,
       }
     ];
 
+    const historySlideshow = document.getElementById("historySlideshow");
     const historyImage = document.getElementById("historySlideImage");
     const historyCaption = document.getElementById("historyCaption");
+    const historyDots = document.getElementById("historyDots");
     const historyPrev = document.getElementById("historyPrev");
     const historyNext = document.getElementById("historyNext");
     const historyTransitionDuration = 220;
+    const historySwipeThreshold = 42;
     let historyTransitionTimer = null;
     let currentHistorySlide = 0;
+    let historyTouchStartX = null;
+    let historyTouchStartY = null;
 
     function preloadHistorySlides() {
       historySlides.forEach((slide) => {
         const image = new Image();
         image.src = slide.src;
+      });
+    }
+
+    function updateHistoryDots(activeIndex) {
+      if (!historyDots) return;
+      const dots = historyDots.querySelectorAll(".history-dot");
+      dots.forEach((dot, index) => {
+        const isActive = index === activeIndex;
+        dot.classList.toggle("is-active", isActive);
+        dot.setAttribute("aria-current", isActive ? "true" : "false");
       });
     }
 
@@ -3460,6 +3513,24 @@ section.nuestra-historia-section,
       historyImage.style.objectPosition = slide.objectPosition || "50% 50%";
       historyImage.classList.toggle("history-slide-subtle-crop", Boolean(slide.zoomClass));
       historyCaption.innerHTML = `<span class="history-caption-date">${slide.date}</span> <span class="history-caption-text">${slide.description}</span>`;
+      updateHistoryDots(index);
+    }
+
+    function setupHistoryDots() {
+      if (!historyDots) return;
+      historyDots.innerHTML = "";
+      historySlides.forEach((slide, index) => {
+        const dot = document.createElement("button");
+        dot.type = "button";
+        dot.className = "history-dot";
+        dot.setAttribute("aria-label", `Ir a ${slide.alt.toLowerCase()}`);
+        dot.addEventListener("click", () => {
+          if (index === currentHistorySlide) return;
+          transitionToHistorySlide(index);
+        });
+        historyDots.appendChild(dot);
+      });
+      updateHistoryDots(currentHistorySlide);
     }
 
     function transitionToHistorySlide(nextIndex) {
@@ -3491,8 +3562,44 @@ section.nuestra-historia-section,
       transitionToHistorySlide(nextSlide);
     }
 
+    function handleHistoryTouchStart(event) {
+      const touch = event.changedTouches[0];
+      historyTouchStartX = touch.clientX;
+      historyTouchStartY = touch.clientY;
+    }
+
+    function handleHistoryTouchEnd(event) {
+      if (historyTouchStartX === null || historyTouchStartY === null) return;
+      const touch = event.changedTouches[0];
+      const deltaX = touch.clientX - historyTouchStartX;
+      const deltaY = touch.clientY - historyTouchStartY;
+
+      historyTouchStartX = null;
+      historyTouchStartY = null;
+
+      if (Math.abs(deltaX) < historySwipeThreshold || Math.abs(deltaX) <= Math.abs(deltaY)) {
+        return;
+      }
+
+      if (deltaX < 0) {
+        showNextHistorySlide();
+      } else {
+        showPreviousHistorySlide();
+      }
+    }
+
+    setupHistoryDots();
+
     if (historyPrev) historyPrev.addEventListener("click", showPreviousHistorySlide);
     if (historyNext) historyNext.addEventListener("click", showNextHistorySlide);
+    if (historySlideshow) {
+      historySlideshow.addEventListener("touchstart", handleHistoryTouchStart, { passive: true });
+      historySlideshow.addEventListener("touchend", handleHistoryTouchEnd, { passive: true });
+      historySlideshow.addEventListener("touchcancel", () => {
+        historyTouchStartX = null;
+        historyTouchStartY = null;
+      }, { passive: true });
+    }
     preloadHistorySlides();
     renderHistorySlide(currentHistorySlide);
 
