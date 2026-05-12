@@ -192,16 +192,18 @@ async function insertRsvpWithSchemaFallback(supabase, payload) {
   const { error } = await supabase.from("rsvp_responses").insert([payload]);
   if (!error) return { error: null };
 
-  if (isMissingColumnError(error, "additional_guest_names")) {
-    const fallbackPayload = { ...payload };
-    delete fallbackPayload.additional_guest_names;
-    const fallbackResult = await supabase.from("rsvp_responses").insert([fallbackPayload]);
-    if (!fallbackResult.error) {
-      console.warn(
-        "Inserted RSVP without additional_guest_names because the column is missing in the database schema."
-      );
+  for (const fallbackColumn of ["named_guest_responses", "additional_guest_names"]) {
+    if (isMissingColumnError(error, fallbackColumn)) {
+      const fallbackPayload = { ...payload };
+      delete fallbackPayload[fallbackColumn];
+      const fallbackResult = await supabase.from("rsvp_responses").insert([fallbackPayload]);
+      if (!fallbackResult.error) {
+        console.warn(
+          `Inserted RSVP without ${fallbackColumn} because the column is missing in the database schema.`
+        );
+      }
+      return fallbackResult;
     }
-    return fallbackResult;
   }
 
   return { error };
@@ -737,6 +739,14 @@ export function initRsvpFlow() {
           }
         }
 
+        const namedGuestResponses = invitedGuests.map((invitedGuest, index) => ({
+          guest_id: invitedGuest.id,
+          name: getGuestDisplayName(invitedGuest),
+          attending: isGroupInvite
+            ? responseForm.querySelector(`input[name="pairAttending${index}"]:checked`)?.value === "true"
+            : normalizedAttending
+        }));
+
         const additionalGuestNames = additionalGuestInputs
           .map((input) => input.value.trim())
           .filter(Boolean);
@@ -801,6 +811,7 @@ export function initRsvpFlow() {
           guest_id: guest.id,
           response_group: responseGroup,
           attending: normalizedAttending,
+          named_guest_responses: namedGuestResponses,
           guest_count: guestCount,
           plus_one_name: isSinglePlusOneResponse ? additionalGuestNames[0] : null,
           phone: normalizedAttending ? phoneE164 : null,
