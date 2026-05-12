@@ -680,11 +680,15 @@ export function initRsvpFlow() {
           focusRevealedQuestion(plusOneDecisionWrap, needsPlusOneInputs?.[0]);
         }
 
-        if (wasAdditionalGuestsHidden && additionalGuestsWrap && !additionalGuestsWrap.hidden) {
+        const didRevealAdditionalGuests =
+          wasAdditionalGuestsHidden && additionalGuestsWrap && !additionalGuestsWrap.hidden;
+
+        if (didRevealAdditionalGuests) {
           focusRevealedQuestion(additionalGuestsWrap, additionalGuestInputs[0]);
         }
 
         if (
+          !didRevealAdditionalGuests &&
           wasPhoneHidden &&
           rsvpPhoneWrap &&
           !rsvpPhoneWrap.hidden &&
