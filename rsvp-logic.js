@@ -600,19 +600,27 @@ export function initRsvpFlow() {
           const attendingCount = invitedGuests.filter(
             (_, index) => responseForm.querySelector(`input[name="pairAttending${index}"]:checked`)?.value === "true"
           ).length;
+          const shouldShowGroupAdditionalGuests =
+            allGroupAttendanceAnswered && attendingCount > 0 && additionalGuestSlots > 0;
 
           isAttending = attendingCount > 0;
-          shouldShowPhone = allGroupAttendanceAnswered && isAttending;
+          if (additionalGuestsWrap) {
+            additionalGuestsWrap.hidden = !shouldShowGroupAdditionalGuests;
+          }
+          additionalGuestInputs.forEach((input) => {
+            input.required = shouldShowGroupAdditionalGuests;
+            if (!shouldShowGroupAdditionalGuests) input.value = "";
+          });
+
+          const additionalGuestNamesComplete =
+            !shouldShowGroupAdditionalGuests ||
+            additionalGuestInputs.every((input) => (input.value || "").trim().length > 0);
+
+          shouldShowPhone =
+            allGroupAttendanceAnswered && isAttending && additionalGuestNamesComplete;
           shouldShowSubmit = allGroupAttendanceAnswered && (!isAttending || shouldShowPhone);
 
           if (plusOneDecisionWrap) plusOneDecisionWrap.hidden = true;
-          if (additionalGuestsWrap) {
-            additionalGuestsWrap.hidden = true;
-            additionalGuestInputs.forEach((input) => {
-              input.required = false;
-              input.value = "";
-            });
-          }
         } else {
           const attendanceSelection = responseForm.querySelector('input[name="attending"]:checked');
           const attendanceAnswered = Boolean(attendanceSelection);
@@ -755,6 +763,16 @@ export function initRsvpFlow() {
 
         if (additionalGuestNames.length > additionalGuestSlots) {
           submitError.textContent = "Solo puedes agregar el número de invitados permitidos en tu invitación.";
+          return;
+        }
+
+        if (
+          isGroupInvite &&
+          normalizedAttending &&
+          additionalGuestSlots > 0 &&
+          additionalGuestNames.length !== additionalGuestSlots
+        ) {
+          submitError.textContent = "Por favor comparte el nombre de todos tus invitados adicionales.";
           return;
         }
 
