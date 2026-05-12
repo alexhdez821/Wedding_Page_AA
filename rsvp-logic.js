@@ -608,16 +608,11 @@ export function initRsvpFlow() {
             additionalGuestsWrap.hidden = !shouldShowGroupAdditionalGuests;
           }
           additionalGuestInputs.forEach((input) => {
-            input.required = shouldShowGroupAdditionalGuests;
+            input.required = false;
             if (!shouldShowGroupAdditionalGuests) input.value = "";
           });
 
-          const additionalGuestNamesComplete =
-            !shouldShowGroupAdditionalGuests ||
-            additionalGuestInputs.every((input) => (input.value || "").trim().length > 0);
-
-          shouldShowPhone =
-            allGroupAttendanceAnswered && isAttending && additionalGuestNamesComplete;
+          shouldShowPhone = allGroupAttendanceAnswered && isAttending;
           shouldShowSubmit = allGroupAttendanceAnswered && (!isAttending || shouldShowPhone);
 
           if (plusOneDecisionWrap) plusOneDecisionWrap.hidden = true;
@@ -763,16 +758,6 @@ export function initRsvpFlow() {
 
         if (additionalGuestNames.length > additionalGuestSlots) {
           submitError.textContent = "Solo puedes agregar el número de invitados permitidos en tu invitación.";
-          return;
-        }
-
-        if (
-          isGroupInvite &&
-          normalizedAttending &&
-          additionalGuestSlots > 0 &&
-          additionalGuestNames.length !== additionalGuestSlots
-        ) {
-          submitError.textContent = "Por favor comparte el nombre de todos tus invitados adicionales.";
           return;
         }
 
