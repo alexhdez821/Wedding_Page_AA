@@ -528,13 +528,17 @@ export function initRsvpFlow() {
           </div>
 
           <div id="additionalGuestsWrap" ${additionalGuestSlots > 0 ? "hidden" : "hidden"}>
-            <p class="person-label">¿Traerás invitados adicionales?</p>
-            <p>Si usarás espacios adicionales, escribe sus nombres aquí. Si no, déjalos en blanco.</p>
+            ${shouldAskNeedPlusOneFirst
+              ? `<p class="person-label">Nombre de tu invitado +1</p>`
+              : `
+                  <p class="person-label">¿Traerás invitados adicionales?</p>
+                  <p>Si usarás espacios adicionales, escribe sus nombres aquí. Si no, déjalos en blanco.</p>
+                `}
             ${Array.from({ length: additionalGuestSlots })
               .map(
                 (_, index) => `
                   <div>
-                    <label for="additionalGuest${index}">Invitado ${index + 1}</label>
+                    <label for="additionalGuest${index}">${shouldAskNeedPlusOneFirst ? "Invitado +1" : `Invitado ${index + 1}`}</label>
                     <input id="additionalGuest${index}" name="additionalGuest${index}" type="text" placeholder="Nombre completo" />
                   </div>
                 `
