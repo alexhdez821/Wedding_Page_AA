@@ -2643,7 +2643,7 @@
   margin-bottom: 0 !important;
 }
 
-@media (min-width: 769px) {
+@media (max-width: 768px) {
   .nuestra-historia-title-wrap {
     position: relative !important;
     display: flex !important;
@@ -3234,20 +3234,6 @@ section.nuestra-historia-section,
     box-sizing: border-box !important;
   }
 
-  .history-nav,
-  .history-nav.prev,
-  .history-nav.next {
-    opacity: 0.95 !important;
-    background: rgba(255, 255, 255, 0.9) !important;
-  }
-
-  .history-nav:hover,
-  .history-nav.prev:hover,
-  .history-nav.next:hover {
-    opacity: 1 !important;
-    background: rgba(255, 255, 255, 1) !important;
-  }
-
   .history-caption-box {
     background: #ffffff !important;
   }
@@ -3255,6 +3241,25 @@ section.nuestra-historia-section,
   .history-caption {
     text-align: justify !important;
     text-align-last: left !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .history-slideshow .history-nav,
+  .history-slideshow .history-nav.prev,
+  .history-slideshow .history-nav.next {
+    opacity: 0.95 !important;
+    background: rgba(255, 255, 255, 0.9) !important;
+    box-shadow: 0 8px 20px rgba(70, 52, 43, 0.26) !important;
+    width: 44px !important;
+    height: 44px !important;
+  }
+
+  .history-slideshow .history-nav:hover,
+  .history-slideshow .history-nav.prev:hover,
+  .history-slideshow .history-nav.next:hover {
+    opacity: 1 !important;
+    background: rgba(255, 255, 255, 1) !important;
   }
 }
 
