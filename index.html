@@ -3094,6 +3094,79 @@ section.nuestra-historia-section,
   font-size: 0.8rem !important;
   transform: translateY(1.5rem) !important;
 }
+
+
+@media (min-width: 769px) {
+  .greeting-section {
+    background: #556b2f !important;
+    background-image: none !important;
+  }
+
+  .greeting-wrapper {
+    justify-items: center;
+  }
+
+  .greeting-image {
+    justify-self: center;
+  }
+
+  .greeting-content {
+    position: relative;
+    width: min(460px, 92%) !important;
+    border-radius: 48% / 42%;
+    background: #ffffff !important;
+    background-image:
+      radial-gradient(circle at 50% -7px, #ffffff 13px, transparent 14px),
+      radial-gradient(circle at 50% calc(100% + 7px), #ffffff 13px, transparent 14px);
+    background-repeat: repeat-x;
+    background-size: 28px 28px;
+    background-position: top center, bottom center;
+    padding: clamp(2.8rem, 5vw, 3.6rem) clamp(2rem, 4vw, 2.8rem) !important;
+    box-shadow: 0 14px 32px rgba(44, 33, 28, 0.15);
+  }
+
+  .greeting-content::before,
+  .greeting-content::after {
+    content: "";
+    position: absolute;
+    left: 16px;
+    right: 16px;
+    pointer-events: none;
+  }
+
+  .greeting-content::before {
+    top: 14px;
+    bottom: 14px;
+    border: 1px solid rgba(85, 107, 47, 0.75);
+  }
+
+  .greeting-content::after {
+    top: 22px;
+    bottom: 22px;
+    left: 24px;
+    right: 24px;
+    border: 1px solid rgba(85, 107, 47, 0.75);
+  }
+
+  .history-nav.prev,
+  .history-nav.next {
+    opacity: 0.5 !important;
+  }
+
+  .history-nav.prev:hover,
+  .history-nav.next:hover {
+    opacity: 0.72 !important;
+  }
+
+  .history-caption-box {
+    background: #ffffff !important;
+  }
+
+  .history-caption {
+    text-align: justify !important;
+    text-align-last: left !important;
+  }
+}
 </style>
 </head>
 <body>
