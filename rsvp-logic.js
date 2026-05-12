@@ -529,7 +529,7 @@ export function initRsvpFlow() {
 
           <div id="additionalGuestsWrap" ${additionalGuestSlots > 0 ? "hidden" : "hidden"}>
             <p class="person-label">¿Traerás invitados adicionales?</p>
-            <p>Si deseas usar alguno de los espacios adicionales incluidos en tu invitación, escribe sus nombres aquí. Si no traerás invitados adicionales, puedes dejar estos campos en blanco.</p>
+            <p>Si usarás espacios adicionales, escribe sus nombres aquí. Si no, déjalos en blanco.</p>
             ${Array.from({ length: additionalGuestSlots })
               .map(
                 (_, index) => `
