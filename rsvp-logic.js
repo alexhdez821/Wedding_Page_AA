@@ -11,8 +11,18 @@ function normalizePhone(value) {
   return value.replace(/\D/g, "").trim();
 }
 
-function formatPhoneInputValue(value) {
-  const digits = normalizePhone(value).slice(0, 10);
+function getNationalPhoneDigits(value, countryCode) {
+  const digits = normalizePhone(value);
+  const country = countryCode === "mx" ? "mx" : "us";
+
+  if (country === "us" && digits.length === 11 && digits.startsWith("1")) return digits.slice(1);
+  if (country === "mx" && digits.length === 12 && digits.startsWith("52")) return digits.slice(2);
+
+  return digits;
+}
+
+function formatPhoneInputValue(value, countryCode) {
+  const digits = getNationalPhoneDigits(value, countryCode).slice(0, 10);
   if (!digits) return "";
   if (digits.length < 3) return `(${digits}`;
   if (digits.length === 3) return `(${digits})`;
@@ -20,9 +30,10 @@ function formatPhoneInputValue(value) {
   return `(${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6)}`;
 }
 
-function attachPhoneInputFormatter(phoneInput) {
+function attachPhoneInputFormatter(phoneInput, countrySelect) {
   if (!phoneInput) return;
   let shouldDeleteAreaCodeDigit = false;
+  const getCountryCode = () => countrySelect?.value;
 
   phoneInput.addEventListener("keydown", (event) => {
     if (event.key !== "Backspace") {
@@ -39,16 +50,20 @@ function attachPhoneInputFormatter(phoneInput) {
   });
 
   phoneInput.addEventListener("input", () => {
-    const digits = normalizePhone(phoneInput.value);
+    const digits = getNationalPhoneDigits(phoneInput.value, getCountryCode());
 
     if (shouldDeleteAreaCodeDigit && digits.length === 3) {
-      phoneInput.value = formatPhoneInputValue(digits.slice(0, 2));
+      phoneInput.value = formatPhoneInputValue(digits.slice(0, 2), getCountryCode());
       shouldDeleteAreaCodeDigit = false;
       return;
     }
 
-    phoneInput.value = formatPhoneInputValue(phoneInput.value);
+    phoneInput.value = formatPhoneInputValue(phoneInput.value, getCountryCode());
     shouldDeleteAreaCodeDigit = false;
+  });
+
+  countrySelect?.addEventListener("change", () => {
+    phoneInput.value = formatPhoneInputValue(phoneInput.value, getCountryCode());
   });
 }
 
@@ -302,7 +317,8 @@ function renderAlreadySubmittedMessage(resultContainer, guest, responseRecord, s
   const verificationPhoneInput = document.getElementById("verificationPhone");
 
   if (!verificationForm || !verificationError) return;
-  attachPhoneInputFormatter(verificationPhoneInput);
+  const verificationPhoneCountryInput = document.getElementById("verificationPhoneCountry");
+  attachPhoneInputFormatter(verificationPhoneInput, verificationPhoneCountryInput);
 
   verificationForm.addEventListener("submit", async (event) => {
     event.preventDefault();
@@ -587,7 +603,7 @@ export function initRsvpFlow() {
         lookupError.textContent = "El formulario de RSVP no está disponible temporalmente. Recarga la página e inténtalo de nuevo.";
         return;
       }
-      attachPhoneInputFormatter(rsvpPhoneInput);
+      attachPhoneInputFormatter(rsvpPhoneInput, rsvpPhoneCountryInput);
 
       const updateConditionalFields = () => {
         const wasPhoneHidden = rsvpPhoneWrap?.hidden;
