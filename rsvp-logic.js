@@ -257,8 +257,8 @@ function hideDeadlineNote() {
 function getDetailsButtonsMarkup() {
   return `
     <div class="details-actions">
-      <a class="btn details-action-btn" href="detalles-es.html">Ver detalles</a>
-      <a class="btn details-action-btn" href="detalles-en.html">See details</a>
+      <a class="btn details-action-btn" href="detalles-es.html">Español</a>
+      <a class="btn details-action-btn" href="detalles-en.html">English</a>
     </div>
   `;
 }
