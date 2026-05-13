@@ -2482,60 +2482,6 @@
       }
     }
   
-@media (max-width: 768px) {
-  .nuestra-historia-title-wrap {
-    position: relative !important;
-    width: min(98vw, 430px) !important;
-    height: min(98vw, 430px) !important;
-    max-width: 98vw !important;
-    margin: 0 auto 1.25rem !important;
-    padding: 0 !important;
-    display: flex !important;
-    justify-content: center !important;
-    align-items: center !important;
-    overflow: visible !important;
-    background: none !important;
-    transform: none !important;
-  }
-
-  .nuestra-historia-title-wrap::before {
-    content: "" !important;
-    position: absolute !important;
-    top: 50% !important;
-    left: 44% !important;
-    width: 100% !important;
-    height: 100% !important;
-    background-image: url("./images/emboss 2.png") !important;
-    background-repeat: no-repeat !important;
-    background-position: center center !important;
-    background-size: contain !important;
-    transform: translate(-50%, -50%) rotate(90deg) !important;
-    transform-origin: center center !important;
-    z-index: 1 !important;
-    pointer-events: none !important;
-  }
-
-  .nuestra-historia-title-bg {
-    display: none !important;
-  }
-
-  .nuestra-historia-title {
-    position: relative !important;
-    top: auto !important;
-    left: auto !important;
-    transform: none !important;
-    width: 58% !important;
-    max-width: 58% !important;
-    margin: 0 auto !important;
-    text-align: center !important;
-    z-index: 2 !important;
-  }
-
-  .nuestra-historia-title span {
-    display: block !important;
-    white-space: nowrap !important;
-    text-align: center !important;
-  }
 }
 
   
@@ -2646,17 +2592,26 @@
 @media (max-width: 768px) {
   .nuestra-historia-title-wrap {
     position: relative !important;
+    width: min(98vw, 430px) !important;
+    height: auto !important;
+    max-width: 98vw !important;
+    margin: 0 auto 1.25rem !important;
+    padding: 0 !important;
     display: flex !important;
     justify-content: center !important;
     align-items: center !important;
-    margin-left: auto !important;
-    margin-right: auto !important;
     text-align: center !important;
+    overflow: visible !important;
   }
 
   .nuestra-historia-title-bg {
     display: block !important;
+    width: 100% !important;
+    max-width: min(98vw, 430px) !important;
+    height: auto !important;
     margin: 0 auto !important;
+    transform: rotate(90deg) !important;
+    transform-origin: center !important;
   }
 
   .nuestra-historia-title {
@@ -2665,7 +2620,7 @@
     left: 50% !important;
     right: auto !important;
     bottom: auto !important;
-    transform: translate(calc(-50% + 1.2rem), -50%) !important;
+    transform: translate(-50%, -50%) !important;
     width: 52% !important;
     max-width: 52% !important;
     margin: 0 !important;
