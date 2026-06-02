@@ -156,3 +156,73 @@ The front-end now computes:
 - `guest:<guest_id>` for solo guests
 
 This allows any member of a linked household to find the invitation and submit once, while still limiting one final RSVP per response group.
+
+## Private pending-actions page
+
+The repository now includes `pending-actions.html`, a private-by-obscurity page for Alejandro and Alejandra to manage wedding tasks together. It is intentionally not linked from `index.html` and includes a `noindex` meta tag, so the only people who should know it exists are the people who receive the exact URL.
+
+> Important: an unlinked static HTML page is not the same thing as authentication. Anyone with the exact URL can open it. If you need stronger privacy, put the site behind host-level password protection or add a real authenticated backend.
+
+### Shared editing URL
+
+Use a shared list key in the URL so both browsers load the same task list:
+
+```text
+https://your-domain.com/pending-actions.html?list=choose-a-long-private-key
+```
+
+Replace `choose-a-long-private-key` with a long, hard-to-guess phrase. Share that exact URL only between the two of you. If no `list` value is provided, the page uses a default local list key.
+
+### Supabase table for shared tasks
+
+If `rsvp-config.js` has your Supabase URL and anon key, create this table so tasks sync between both of your devices:
+
+```sql
+create table if not exists wedding_actions (
+  id uuid primary key default gen_random_uuid(),
+  list_key text not null,
+  title text not null,
+  notes text not null default '',
+  assignee text not null default 'Both',
+  due_date date,
+  status text not null default 'open',
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+create index if not exists wedding_actions_list_key_idx
+  on wedding_actions (list_key);
+```
+
+### Row Level Security policies
+
+For a simple private-by-obscurity setup, enable Row Level Security and allow the public anon key to operate on this table. The page always filters updates/deletes by `list_key` and `id`, but this is still not a replacement for real authentication.
+
+```sql
+alter table wedding_actions enable row level security;
+
+create policy "Allow anon wedding action reads"
+  on wedding_actions for select
+  to anon
+  using (true);
+
+create policy "Allow anon wedding action inserts"
+  on wedding_actions for insert
+  to anon
+  with check (true);
+
+create policy "Allow anon wedding action updates"
+  on wedding_actions for update
+  to anon
+  using (true)
+  with check (true);
+
+create policy "Allow anon wedding action deletes"
+  on wedding_actions for delete
+  to anon
+  using (true);
+```
+
+### Local fallback
+
+If Supabase is not configured or unavailable, `pending-actions.html` still works with browser `localStorage`, but changes will only exist on that one browser/device and will not sync between you.
