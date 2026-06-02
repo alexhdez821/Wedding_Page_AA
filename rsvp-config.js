@@ -6,7 +6,8 @@ export const RSVP_BACKEND = {
   supabaseAnonKey: "",
   tables: {
     guestParties: "guest_parties",
-    responses: "rsvp_responses"
+    responses: "rsvp_responses",
+    weddingActions: "wedding_actions"
   }
 };
 
