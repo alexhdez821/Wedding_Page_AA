@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Pending Actions | Alejandro &amp; Alejandra</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Allura&family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #f7f3ee;
+      --surface: rgba(255, 250, 245, 0.88);
+      --surface-solid: #fffaf6;
+      --text: #3d342f;
+      --muted: #74665e;
+      --line: rgba(110, 89, 77, 0.16);
+      --accent: #b98973;
+      --accent-dark: #9f6f59;
+      --done: #6d8b74;
+      --danger: #b56b61;
+      --shadow: 0 18px 48px rgba(77, 57, 46, 0.12);
+      --container: min(1040px, 92vw);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Inter", sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(185, 137, 115, 0.22), transparent 32rem),
+        radial-gradient(circle at bottom right, rgba(109, 139, 116, 0.16), transparent 28rem),
+        var(--bg);
+      color: var(--text);
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.22;
+      background-image: url("./images/linen1.png");
+      background-size: 420px;
+      mix-blend-mode: multiply;
+    }
+
+    main {
+      position: relative;
+      z-index: 1;
+      width: var(--container);
+      margin: 0 auto;
+      padding: clamp(28px, 6vw, 64px) 0;
+    }
+
+    .hero {
+      display: grid;
+      gap: 18px;
+      margin-bottom: 28px;
+      text-align: center;
+    }
+
+    .eyebrow {
+      margin: 0;
+      color: var(--accent-dark);
+      font-size: 0.76rem;
+      font-weight: 700;
+      letter-spacing: 0.26em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      font-family: "Allura", cursive;
+      font-size: clamp(3.7rem, 10vw, 6.8rem);
+      line-height: 0.9;
+      font-weight: 400;
+    }
+
+    .hero p {
+      max-width: 720px;
+      margin: 0 auto;
+      color: var(--muted);
+      font-family: "Cormorant Garamond", serif;
+      font-size: clamp(1.28rem, 2.4vw, 1.7rem);
+      line-height: 1.35;
+    }
+
+    .panel {
+      border: 1px solid var(--line);
+      border-radius: 30px;
+      background: var(--surface);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(8px);
+      overflow: hidden;
+    }
+
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 13px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.42);
+      color: var(--muted);
+      font-size: 0.86rem;
+      font-weight: 600;
+    }
+
+    .status-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 0 4px rgba(185, 137, 115, 0.15);
+    }
+
+    .status-dot.synced { background: var(--done); box-shadow: 0 0 0 4px rgba(109, 139, 116, 0.15); }
+    .status-dot.local { background: #d6a85f; box-shadow: 0 0 0 4px rgba(214, 168, 95, 0.18); }
+    .status-dot.error { background: var(--danger); box-shadow: 0 0 0 4px rgba(181, 107, 97, 0.16); }
+
+    .filters {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    button, input, textarea, select {
+      font: inherit;
+    }
+
+    button {
+      border: 0;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+    }
+
+    button:hover { transform: translateY(-1px); }
+
+    .filter-button, .secondary-button {
+      padding: 10px 14px;
+      background: rgba(255, 255, 255, 0.48);
+      color: var(--muted);
+      border: 1px solid var(--line);
+      font-size: 0.9rem;
+      font-weight: 700;
+    }
+
+    .filter-button.active {
+      background: var(--text);
+      color: #fffaf6;
+      border-color: var(--text);
+    }
+
+    .content {
+      display: grid;
+      grid-template-columns: minmax(280px, 0.85fr) minmax(0, 1.15fr);
+      gap: 0;
+    }
+
+    form {
+      display: grid;
+      gap: 13px;
+      padding: 22px;
+      border-right: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.22);
+    }
+
+    form h2, .list-header h2 {
+      margin: 0;
+      font-family: "Cormorant Garamond", serif;
+      font-size: 1.75rem;
+      line-height: 1.1;
+    }
+
+    label {
+      display: grid;
+      gap: 7px;
+      color: var(--muted);
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    input, textarea, select {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 12px 13px;
+      background: rgba(255, 255, 255, 0.76);
+      color: var(--text);
+      outline: none;
+    }
+
+    textarea { min-height: 92px; resize: vertical; }
+
+    input:focus, textarea:focus, select:focus {
+      border-color: rgba(185, 137, 115, 0.72);
+      box-shadow: 0 0 0 4px rgba(185, 137, 115, 0.14);
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .primary-button {
+      margin-top: 4px;
+      padding: 13px 18px;
+      background: var(--accent);
+      color: #fff;
+      font-weight: 800;
+      box-shadow: 0 12px 24px rgba(159, 111, 89, 0.22);
+    }
+
+    .primary-button:hover { background: var(--accent-dark); }
+
+    .list-area {
+      min-height: 560px;
+      padding: 22px;
+    }
+
+    .list-header {
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      align-items: flex-start;
+      margin-bottom: 18px;
+    }
+
+    .counts {
+      color: var(--muted);
+      font-size: 0.92rem;
+      line-height: 1.5;
+      text-align: right;
+    }
+
+    .task-list {
+      display: grid;
+      gap: 12px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .task-card {
+      display: grid;
+      gap: 12px;
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      background: rgba(255, 250, 246, 0.76);
+    }
+
+    .task-card.done {
+      background: rgba(109, 139, 116, 0.08);
+    }
+
+    .task-top {
+      display: flex;
+      gap: 12px;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+
+    .task-title {
+      margin: 0;
+      font-size: 1.02rem;
+      line-height: 1.35;
+      font-weight: 800;
+    }
+
+    .done .task-title { text-decoration: line-through; color: var(--muted); }
+
+    .task-notes {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.5;
+      white-space: pre-wrap;
+    }
+
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      color: var(--muted);
+      font-size: 0.82rem;
+    }
+
+    .tag {
+      padding: 6px 9px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.68);
+      border: 1px solid var(--line);
+      font-weight: 700;
+    }
+
+    .task-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .task-actions button {
+      padding: 8px 11px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.58);
+      color: var(--muted);
+      font-size: 0.82rem;
+      font-weight: 800;
+    }
+
+    .task-actions .delete { color: var(--danger); }
+
+    .empty {
+      display: grid;
+      place-items: center;
+      min-height: 320px;
+      border: 1px dashed rgba(110, 89, 77, 0.28);
+      border-radius: 24px;
+      color: var(--muted);
+      text-align: center;
+      padding: 26px;
+    }
+
+    .privacy-note {
+      margin: 18px auto 0;
+      max-width: 820px;
+      color: var(--muted);
+      font-size: 0.9rem;
+      line-height: 1.6;
+      text-align: center;
+    }
+
+    .privacy-note code {
+      padding: 2px 6px;
+      border-radius: 7px;
+      background: rgba(255, 255, 255, 0.62);
+    }
+
+    @media (max-width: 820px) {
+      .content { grid-template-columns: 1fr; }
+      form { border-right: 0; border-bottom: 1px solid var(--line); }
+      .toolbar, .list-header { align-items: stretch; flex-direction: column; }
+      .counts { text-align: left; }
+    }
+
+    @media (max-width: 540px) {
+      .form-row { grid-template-columns: 1fr; }
+      .task-top { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <section class="hero" aria-labelledby="page-title">
+      <p class="eyebrow">Private wedding planning list</p>
+      <h1 id="page-title">Pending Actions</h1>
+      <p>A shared place for the two of us to capture reminders, assign owners, and keep wedding tasks moving.</p>
+    </section>
+
+    <section class="panel" aria-label="Pending actions tracker">
+      <div class="toolbar">
+        <div class="status-pill" aria-live="polite">
+          <span class="status-dot" id="status-dot"></span>
+          <span id="storage-status">Checking shared storage…</span>
+        </div>
+        <div class="filters" role="group" aria-label="Filter tasks">
+          <button class="filter-button active" type="button" data-filter="open">Open</button>
+          <button class="filter-button" type="button" data-filter="all">All</button>
+          <button class="filter-button" type="button" data-filter="done">Done</button>
+          <button class="secondary-button" type="button" id="refresh-list">Refresh</button>
+        </div>
+      </div>
+
+      <div class="content">
+        <form id="task-form">
+          <h2 id="form-title">Add a task</h2>
+          <input type="hidden" id="task-id" />
+
+          <label>
+            Task
+            <input id="task-title" type="text" placeholder="Book final dress fitting" required maxlength="180" />
+          </label>
+
+          <div class="form-row">
+            <label>
+              Owner
+              <select id="task-assignee">
+                <option value="Both">Both</option>
+                <option value="Alejandro">Alejandro</option>
+                <option value="Alejandra">Alejandra</option>
+              </select>
+            </label>
+
+            <label>
+              Due date
+              <input id="task-due-date" type="date" />
+            </label>
+          </div>
+
+          <label>
+            Notes
+            <textarea id="task-notes" placeholder="Add links, vendor details, or the next tiny step…"></textarea>
+          </label>
+
+          <button class="primary-button" type="submit" id="submit-button">Add task</button>
+          <button class="secondary-button" type="button" id="cancel-edit" hidden>Cancel edit</button>
+        </form>
+
+        <div class="list-area">
+          <div class="list-header">
+            <h2>Wedding to-do list</h2>
+            <div class="counts" id="task-counts">No tasks yet.</div>
+          </div>
+          <ul class="task-list" id="task-list"></ul>
+          <div class="empty" id="empty-state" hidden>
+            <div>
+              <strong>No tasks to show.</strong><br />
+              Add the first wedding action item or switch filters.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <p class="privacy-note">
+      This page is not linked from the public wedding site and includes <code>noindex</code> instructions for search engines. For shared editing across devices, configure Supabase in <code>rsvp-config.js</code> and create the <code>wedding_actions</code> table described in <code>RSVP_SETUP.md</code>.
+    </p>
+  </main>
+
+  <script type="module" src="./pending-actions.js"></script>
+</body>
+</html>

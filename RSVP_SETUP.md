@@ -156,3 +156,47 @@ The front-end now computes:
 - `guest:<guest_id>` for solo guests
 
 This allows any member of a linked household to find the invitation and submit once, while still limiting one final RSVP per response group.
+
+## Private pending-actions page
+
+The repository now includes `pending-actions.html`, a private-by-obscurity page for Alejandro and Alejandra to manage wedding tasks together. It is intentionally not linked from `index.html` and includes a `noindex` meta tag, so the only people who should know it exists are the people who receive the exact URL.
+
+> Important: an unlinked static HTML page is not the same thing as authentication. Anyone with the exact URL can open it. If you need stronger privacy, put the site behind host-level password protection or add a real authenticated backend.
+
+### Shared editing URL
+
+Use a shared list key in the URL so both browsers load the same task list:
+
+```text
+https://your-domain.com/pending-actions.html?list=choose-a-long-private-key
+```
+
+Replace `choose-a-long-private-key` with a long, hard-to-guess phrase. Share that exact URL only between the two of you. If no `list` value is provided, the page uses a default local list key.
+
+### Supabase table for shared tasks
+
+If `rsvp-config.js` has your Supabase URL and anon key, create the shared task table by running `supabase/wedding-actions.sql` in your Supabase SQL Editor. The script creates the `public.wedding_actions` table, adds indexes for the exact-link `list_key`, enables Row Level Security, blocks direct anon table access, and installs exact-link RPC functions required by `pending-actions.html`.
+
+The exact-link helper functions require `list_key` to be at least 24 characters long. This keeps accidental short list names from becoming easy-to-guess shared URLs, so use a long private key in your link:
+
+```text
+https://your-domain.com/pending-actions.html?list=aa-wedding-actions-2026-private-long-key
+```
+
+### Row Level Security and exact-link access
+
+For this simple private-by-obscurity setup, the SQL file enables Row Level Security and revokes direct public access to the table. The public page can only call helper functions with the long `list_key`, which prevents casual browsing of every row while still allowing anyone with the exact URL to modify that one list. This is stronger than an unfiltered public table, but it is still not a replacement for real authentication.
+
+
+### Troubleshooting Supabase syncing
+
+If tasks appear on the page but not in Supabase, check these items first:
+
+1. `rsvp-config.js` must contain your Supabase Project URL and anon public key. If either value is blank, `pending-actions.html` saves only to browser `localStorage`.
+2. Your page URL must include a `list` value of at least 24 characters, for example `pending-actions.html?list=aa-wedding-actions-2026-private-long-key`. Shorter keys are rejected by the Supabase helper functions.
+3. Open your browser developer tools and check the Console/Network tabs for failed calls to `/rest/v1/rpc/get_wedding_actions`, `/rest/v1/rpc/upsert_wedding_action`, or `/rest/v1/rpc/delete_wedding_action`.
+4. In Supabase, verify rows in **Table Editor → wedding_actions** or run `select * from public.wedding_actions order by created_at desc;` in the SQL Editor.
+
+### Local fallback
+
+If Supabase is not configured or unavailable, `pending-actions.html` still works with browser `localStorage`, but changes will only exist on that one browser/device and will not sync between you.
