@@ -7,10 +7,13 @@ const params = new URLSearchParams(window.location.search);
 const listKey = params.get("list")?.trim() || FALLBACK_LIST_KEY;
 const localStorageKey = `${LOCAL_STORAGE_PREFIX}${listKey}`;
 
+const backendConfigured = isBackendConfigured();
+
 const state = {
   tasks: [],
   filter: "open",
-  isShared: isBackendConfigured()
+  isShared: backendConfigured,
+  backendError: null
 };
 
 const elements = {
@@ -46,6 +49,7 @@ function setStorageStatus(message, mode) {
   elements.storageStatus.textContent = message;
   elements.statusDot.classList.toggle("synced", mode === "synced");
   elements.statusDot.classList.toggle("local", mode === "local");
+  elements.statusDot.classList.toggle("error", mode === "error");
 }
 
 function normalizeTask(task) {
@@ -95,9 +99,9 @@ function saveLocalTasks() {
 }
 
 async function loadTasks() {
-  if (!state.isShared) {
+  if (!backendConfigured) {
     loadLocalTasks();
-    setStorageStatus("Local-only mode. Configure Supabase so both devices stay in sync.", "local");
+    setStorageStatus("Local-only mode: Supabase URL/key are missing from rsvp-config.js.", "local");
     render();
     return;
   }
@@ -105,18 +109,25 @@ async function loadTasks() {
   try {
     const tasks = await callSupabaseFunction("get_wedding_actions", { p_list_key: listKey });
     state.tasks = tasks.map(normalizeTask);
+    state.backendError = null;
+    state.isShared = true;
     setStorageStatus("Shared list synced with Supabase.", "synced");
   } catch (error) {
     console.error(error);
+    state.backendError = error;
     state.isShared = false;
-    loadLocalTasks();
-    setStorageStatus("Shared storage unavailable; using this browser only.", "local");
+    state.tasks = [];
+    setStorageStatus("Supabase is configured but the page cannot reach it. Check the browser console and SQL setup.", "error");
   }
 
   render();
 }
 
 async function persistTask(task) {
+  if (backendConfigured && !state.isShared) {
+    throw new Error("Supabase is configured but unavailable. The task was not saved locally to avoid hiding a sync problem.");
+  }
+
   if (!state.isShared) {
     const index = state.tasks.findIndex((item) => item.id === task.id);
     if (index >= 0) {
@@ -139,6 +150,10 @@ async function persistTask(task) {
     p_status: task.status
   });
 
+  if (!saved?.[0]) {
+    throw new Error("Supabase did not return the saved task. Check the list key and RPC function setup.");
+  }
+
   const savedTask = normalizeTask(saved[0]);
   const index = state.tasks.findIndex((item) => item.id === savedTask.id);
   if (index >= 0) {
@@ -151,6 +166,10 @@ async function persistTask(task) {
 }
 
 async function deleteTask(id) {
+  if (backendConfigured && !state.isShared) {
+    throw new Error("Supabase is configured but unavailable. The task was not deleted locally to avoid hiding a sync problem.");
+  }
+
   if (!state.isShared) {
     state.tasks = state.tasks.filter((task) => task.id !== id);
     saveLocalTasks();
