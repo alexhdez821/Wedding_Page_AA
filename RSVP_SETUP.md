@@ -175,53 +175,17 @@ Replace `choose-a-long-private-key` with a long, hard-to-guess phrase. Share tha
 
 ### Supabase table for shared tasks
 
-If `rsvp-config.js` has your Supabase URL and anon key, create this table so tasks sync between both of your devices:
+If `rsvp-config.js` has your Supabase URL and anon key, create the shared task table by running `supabase/wedding-actions.sql` in your Supabase SQL Editor. The script creates the `public.wedding_actions` table, adds indexes for the exact-link `list_key`, enables Row Level Security, blocks direct anon table access, and installs exact-link RPC functions required by `pending-actions.html`.
 
-```sql
-create table if not exists wedding_actions (
-  id uuid primary key default gen_random_uuid(),
-  list_key text not null,
-  title text not null,
-  notes text not null default '',
-  assignee text not null default 'Both',
-  due_date date,
-  status text not null default 'open',
-  created_at timestamptz not null default now(),
-  updated_at timestamptz not null default now()
-);
+The exact-link helper functions require `list_key` to be at least 24 characters long. This keeps accidental short list names from becoming easy-to-guess shared URLs, so use a long private key in your link:
 
-create index if not exists wedding_actions_list_key_idx
-  on wedding_actions (list_key);
+```text
+https://your-domain.com/pending-actions.html?list=aa-wedding-actions-2026-private-long-key
 ```
 
-### Row Level Security policies
+### Row Level Security and exact-link access
 
-For a simple private-by-obscurity setup, enable Row Level Security and allow the public anon key to operate on this table. The page always filters updates/deletes by `list_key` and `id`, but this is still not a replacement for real authentication.
-
-```sql
-alter table wedding_actions enable row level security;
-
-create policy "Allow anon wedding action reads"
-  on wedding_actions for select
-  to anon
-  using (true);
-
-create policy "Allow anon wedding action inserts"
-  on wedding_actions for insert
-  to anon
-  with check (true);
-
-create policy "Allow anon wedding action updates"
-  on wedding_actions for update
-  to anon
-  using (true)
-  with check (true);
-
-create policy "Allow anon wedding action deletes"
-  on wedding_actions for delete
-  to anon
-  using (true);
-```
+For this simple private-by-obscurity setup, the SQL file enables Row Level Security and revokes direct public access to the table. The public page can only call helper functions with the long `list_key`, which prevents casual browsing of every row while still allowing anyone with the exact URL to modify that one list. This is stronger than an unfiltered public table, but it is still not a replacement for real authentication.
 
 ### Local fallback
 

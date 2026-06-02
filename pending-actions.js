@@ -1,6 +1,5 @@
 import { RSVP_BACKEND, isBackendConfigured } from "./rsvp-config.js";
 
-const TASK_TABLE = RSVP_BACKEND.tables?.weddingActions || "wedding_actions";
 const FALLBACK_LIST_KEY = "alejandro-alejandra-wedding-actions";
 const LOCAL_STORAGE_PREFIX = "aa-wedding-actions:";
 
@@ -39,8 +38,8 @@ const supabaseHeaders = () => ({
   "Content-Type": "application/json"
 });
 
-function tableUrl(query = "") {
-  return `${RSVP_BACKEND.supabaseUrl}/rest/v1/${TASK_TABLE}${query}`;
+function rpcUrl(functionName) {
+  return `${RSVP_BACKEND.supabaseUrl}/rest/v1/rpc/${functionName}`;
 }
 
 function setStorageStatus(message, mode) {
@@ -63,13 +62,11 @@ function normalizeTask(task) {
   };
 }
 
-async function requestSupabase(url, options = {}) {
-  const response = await fetch(url, {
-    ...options,
-    headers: {
-      ...supabaseHeaders(),
-      ...(options.headers || {})
-    }
+async function callSupabaseFunction(functionName, payload) {
+  const response = await fetch(rpcUrl(functionName), {
+    method: "POST",
+    headers: supabaseHeaders(),
+    body: JSON.stringify(payload)
   });
 
   if (!response.ok) {
@@ -106,8 +103,7 @@ async function loadTasks() {
   }
 
   try {
-    const query = `?select=*&list_key=eq.${encodeURIComponent(listKey)}&order=status.asc,due_date.asc.nullslast,created_at.desc`;
-    const tasks = await requestSupabase(tableUrl(query));
+    const tasks = await callSupabaseFunction("get_wedding_actions", { p_list_key: listKey });
     state.tasks = tasks.map(normalizeTask);
     setStorageStatus("Shared list synced with Supabase.", "synced");
   } catch (error) {
@@ -133,28 +129,14 @@ async function persistTask(task) {
     return;
   }
 
-  const payload = {
-    list_key: task.list_key,
-    title: task.title,
-    notes: task.notes,
-    assignee: task.assignee,
-    due_date: task.due_date || null,
-    status: task.status,
-    updated_at: new Date().toISOString()
-  };
-
-  const isExisting = state.tasks.some((item) => item.id === task.id);
-  const url = isExisting
-    ? tableUrl(`?id=eq.${encodeURIComponent(task.id)}&list_key=eq.${encodeURIComponent(listKey)}`)
-    : tableUrl();
-
-  const method = isExisting ? "PATCH" : "POST";
-  const body = isExisting ? payload : { ...payload, id: task.id, created_at: task.created_at };
-
-  const saved = await requestSupabase(url, {
-    method,
-    body: JSON.stringify(body),
-    headers: { Prefer: "return=representation" }
+  const saved = await callSupabaseFunction("upsert_wedding_action", {
+    p_id: task.id,
+    p_list_key: task.list_key,
+    p_title: task.title,
+    p_notes: task.notes,
+    p_assignee: task.assignee,
+    p_due_date: task.due_date || null,
+    p_status: task.status
   });
 
   const savedTask = normalizeTask(saved[0]);
@@ -176,8 +158,9 @@ async function deleteTask(id) {
     return;
   }
 
-  await requestSupabase(tableUrl(`?id=eq.${encodeURIComponent(id)}&list_key=eq.${encodeURIComponent(listKey)}`), {
-    method: "DELETE"
+  await callSupabaseFunction("delete_wedding_action", {
+    p_id: id,
+    p_list_key: listKey
   });
   state.tasks = state.tasks.filter((task) => task.id !== id);
   render();
