@@ -288,7 +288,22 @@ function renderVerifiedDetailsCard(resultContainer) {
   `;
 }
 
+function renderAlreadyDeclinedMessage(resultContainer) {
+  resultContainer.innerHTML = `
+    <div class="result-card warning" role="status" aria-live="polite">
+      <h3>Tu RSVP ya fue recibido.</h3>
+      <p>Registramos que no asistirás a la boda. Gracias por avisarnos 💛</p>
+    </div>
+  `;
+}
+
 function renderAlreadySubmittedMessage(resultContainer, guest, responseRecord, supabase) {
+  // Only an affirmative RSVP may proceed to phone verification and the wedding details.
+  if (responseRecord?.attending !== true) {
+    renderAlreadyDeclinedMessage(resultContainer);
+    return;
+  }
+
   const savedPhone = responseRecord?.phone_e164 || responseRecord?.phone || "";
   const hasPhoneOnRecord = Boolean(savedPhone);
   resultContainer.innerHTML = `
@@ -474,7 +489,7 @@ export function initRsvpFlow() {
 
       const { data: existingResponse, error: responseError } = await supabase
         .from("rsvp_responses")
-        .select("id, guest_id, phone, phone_e164, phone_raw, phone_country, sms_opt_in, phone_verified")
+        .select("id, guest_id, attending, phone, phone_e164, phone_raw, phone_country, sms_opt_in, phone_verified")
         .eq("response_group", responseGroup)
         .maybeSingle();
 
@@ -805,7 +820,7 @@ export function initRsvpFlow() {
 
         const { data: duplicateResponse, error: duplicateLookupError } = await supabase
           .from("rsvp_responses")
-          .select("id, guest_id, phone, phone_e164, phone_raw, phone_country, sms_opt_in, phone_verified")
+          .select("id, guest_id, attending, phone, phone_e164, phone_raw, phone_country, sms_opt_in, phone_verified")
           .eq("response_group", responseGroup)
           .maybeSingle();
 
