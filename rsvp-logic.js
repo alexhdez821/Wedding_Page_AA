@@ -269,6 +269,11 @@ function hideDeadlineNote() {
   if (deadlineNote) deadlineNote.hidden = true;
 }
 
+const SMS_PRIVACY_POLICY_URL =
+  "https://docs.google.com/document/d/1QxhOex2E8bNLbaG6V2uozYTCMaXoRh9XYyD-QiTiICg/view";
+const SMS_TERMS_URL =
+  "https://docs.google.com/document/d/1Ht4UBLMqvuFJRrZDsNcvelVhRFxc5ZxCj81Wr2RNEMQ/view";
+
 function getDetailsButtonsMarkup() {
   return `
     <div class="details-actions">
@@ -276,6 +281,32 @@ function getDetailsButtonsMarkup() {
       <a class="btn details-action-btn" href="detalles-en.html">English</a>
     </div>
   `;
+}
+
+function getSmsConsentMarkup(checkboxId) {
+  return `
+    <div class="sms-consent-block">
+      <div class="sms-consent-row">
+        <input id="${checkboxId}" name="${checkboxId}" type="checkbox" value="true" />
+        <label for="${checkboxId}">
+          Quiero recibir mensajes de texto / SMS sobre la boda (actualizaciones y recordatorios). Frecuencia variable. Pueden aplicar tarifas de mensajes y datos. Responde STOP para cancelar o HELP para ayuda.
+          <span class="sms-consent-en" lang="en">I want to receive text / SMS messages about the wedding (updates and reminders). Message frequency varies. Msg &amp; data rates may apply. Reply STOP to cancel, HELP for help.</span>
+        </label>
+      </div>
+      <p class="sms-legal-links">
+        <a href="${SMS_PRIVACY_POLICY_URL}" target="_blank" rel="noopener noreferrer">Política de privacidad <span lang="en">/ Privacy Policy</span></a>
+        <span class="sms-legal-sep" aria-hidden="true">·</span>
+        <a href="${SMS_TERMS_URL}" target="_blank" rel="noopener noreferrer">Términos <span lang="en">/ Terms</span></a>
+      </p>
+    </div>
+  `;
+}
+
+// Returning guests already stored sms_opt_in. The unlock checkbox starts unchecked
+// so it reads as a fresh opt-in. Submitting phone verification only writes true
+// when they check it, and never clears an existing opt-in.
+function getAffirmativeSmsOptInPatch(checkbox) {
+  return checkbox?.checked ? { sms_opt_in: true } : {};
 }
 
 function renderVerifiedDetailsCard(resultContainer) {
@@ -321,6 +352,7 @@ function renderAlreadySubmittedMessage(resultContainer, guest, responseRecord, s
           </select>
           <input id="verificationPhone" name="verificationPhone" type="tel" autocomplete="tel" inputmode="tel" required placeholder="(555) 123-4567" />
         </div>
+        ${getSmsConsentMarkup("verificationSmsOptIn")}
       </div>
       <button class="btn btn-primary" type="submit">Validar teléfono y mostrar detalles</button>
       <p id="verificationError" class="form-error" aria-live="polite"></p>
@@ -349,6 +381,8 @@ function renderAlreadySubmittedMessage(resultContainer, guest, responseRecord, s
       return;
     }
 
+    const smsOptInPatch = getAffirmativeSmsOptInPatch(document.getElementById("verificationSmsOptIn"));
+
     // If the RSVP was created before we started collecting phone numbers, let the guest register it once.
     if (!hasPhoneOnRecord) {
       const { error: updateError } = await supabase
@@ -359,6 +393,7 @@ function renderAlreadySubmittedMessage(resultContainer, guest, responseRecord, s
           phone_e164: phoneE164,
           phone_country: phoneCountry,
           phone_verified: true,
+          ...smsOptInPatch,
           updated_at: new Date().toISOString()
         })
         .eq("id", responseRecord.id);
@@ -383,6 +418,7 @@ function renderAlreadySubmittedMessage(resultContainer, guest, responseRecord, s
       .from("rsvp_responses")
       .update({
         phone_verified: true,
+        ...smsOptInPatch,
         updated_at: new Date().toISOString()
       })
       .eq("id", responseRecord.id);
@@ -586,10 +622,7 @@ export function initRsvpFlow() {
               </select>
               <input id="rsvpPhone" name="rsvpPhone" type="tel" autocomplete="tel" inputmode="tel" placeholder="(555) 123-4567" />
             </div>
-            <div class="sms-consent-row">
-              <input id="smsOptIn" name="smsOptIn" type="checkbox" checked />
-              <label for="smsOptIn">Acepto recibir mensajes relacionados con la boda, como recordatorios, cambios importantes y detalles del evento.</label>
-            </div>
+            ${getSmsConsentMarkup("smsOptIn")}
           </div>
 
           <button class="btn btn-primary" type="submit">Enviar RSVP</button>
