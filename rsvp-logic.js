@@ -269,10 +269,8 @@ function hideDeadlineNote() {
   if (deadlineNote) deadlineNote.hidden = true;
 }
 
-const SMS_PRIVACY_POLICY_URL =
-  "https://docs.google.com/document/d/1QxhOex2E8bNLbaG6V2uozYTCMaXoRh9XYyD-QiTiICg/view";
-const SMS_TERMS_URL =
-  "https://docs.google.com/document/d/1Ht4UBLMqvuFJRrZDsNcvelVhRFxc5ZxCj81Wr2RNEMQ/view";
+const SMS_PRIVACY_POLICY_URL = "https://alejandroyalejandra.com/privacy.html";
+const SMS_TERMS_URL = "https://alejandroyalejandra.com/terms.html";
 
 function getDetailsButtonsMarkup() {
   return `
